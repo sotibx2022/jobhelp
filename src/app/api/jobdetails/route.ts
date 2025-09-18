@@ -1,11 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { JsonOutputParser } from "@langchain/core/output_parsers";
+import {StructuredOutputParser } from "@langchain/core/output_parsers";
 import { llmModel } from "@/app/config/llmConfig";
 import { JobBaseDetailSchema } from "@/app/types/jobDetails";
-import { extractText, findJson } from "../langchainFunctions";
+import { jobDetailsPrompts } from "../langchain/prompts/jobDetails";
+import { extractText, findJson } from "../langchain/langchainFunctions";
 export async function GET(req: NextRequest) {
     try {
-        // /api/jobdetails?jobtitle=maintenanceplanner
         const url = new URL(req.url);
         const jobTitleInput = url.searchParams.get("jobtitle");
         if (!jobTitleInput) {
@@ -14,38 +14,31 @@ export async function GET(req: NextRequest) {
                 { status: 400 }
             );
         }
-        /** Prompt for the LLM */
+        const structuredParser = StructuredOutputParser.fromZodSchema(JobBaseDetailSchema);
+        const formatInstructions = structuredParser.getFormatInstructions();
         const prompt = `
 You are an assistant that returns structured JSON about job profiles.
-### Input
-A user provides a job title (may include typos or symbols): **"${jobTitleInput}"**
-### Instructions
-1. Identify the closest valid job title if the input contains spelling mistakes or symbols.
-2. Return a JSON object strictly matching this shape:
-\`\`\`json
-{
-  "jobTitle": "string (4–50 chars, no special characters)",
-  "jobDescription": "string (100–200 chars, no special characters)",
-  "keyResponsibilities": [
-    "string (20–50 chars, no special characters)",
-    "...at least one item"
-  ]
-}
-\`\`\`
-3. Follow these constraints:
-   - **jobTitle**: 4–50 characters, letters/numbers/spaces only.
-   - **jobDescription**: 100–200 characters, no special characters except spaces, periods, or commas.
-   - **keyResponsibilities**: Array of strings, each 20–50 characters, letters/numbers/spaces only.
-Return only valid JSON.
+Input Job Title: "${jobTitleInput}"
+${formatInstructions}
+Return a JSON object with the following fields:
+- jobTitle (string)
+- jobDescription (string)
+- keyResponsibilities (array of strings)
+Return valid JSON only, do not include explanations, code fences, or extra text.
 `;
-        // Ask the model
         const rawResponse = await llmModel.invoke(prompt);
-        // Extract text from the raw response
-        const text = extractText(rawResponse);
-        // Parse JSON from LLM output
-        // Validate and ensure it matches your schema
-        // Return the validated object as JSON
-        return NextResponse.json(text);
+        const extractedText = extractText(rawResponse);
+        const jsonText = findJson(extractedText)
+        try {
+            const structuredResult = await structuredParser.parse(jsonText);
+            return NextResponse.json(structuredResult);
+        } catch (parseError) {
+            console.error("Parsing error:", parseError);
+            return NextResponse.json(
+                { error: "Failed to parse job profile according to schema." },
+                { status: 500 }
+            );
+        }
     } catch (err: any) {
         console.error("Error generating job profile:", err);
         return NextResponse.json(
