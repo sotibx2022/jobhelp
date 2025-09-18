@@ -1,5 +1,5 @@
 export const jobDetailsPrompts = (jobTitleInput: string): string => {
-  return `
+    return `
 You are an assistant that returns structured JSON about job profiles.
 ### Input
 A user provides a job title (may include typos or symbols): **"${jobTitleInput}"**
