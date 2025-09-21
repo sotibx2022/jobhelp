@@ -17,3 +17,4 @@ export const JobBaseDetailSchema = z.object({
     )
     .min(1, "At least one responsibility is required"),
 });
+export type JobBaseDetail = z.infer<typeof JobBaseDetailSchema>;
