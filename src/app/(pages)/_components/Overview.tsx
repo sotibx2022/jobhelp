@@ -13,7 +13,7 @@ const Overview: React.FC<{ jobtitle: string }> = ({ jobtitle }) => {
     <div>
       <h1 className='primaryHeading'>{jobBaseDetails?.jobTitle}</h1>
       <p className='primaryParagraph'>{jobBaseDetails?.jobDescription}</p>
-      <StringList stringArray={jobBaseDetails?.keyResponsibilities}/>
+      <StringList stringArray={jobBaseDetails?.keyResponsibilities} />
     </div>
   )
 }
