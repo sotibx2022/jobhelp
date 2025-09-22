@@ -1,9 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import {StructuredOutputParser } from "@langchain/core/output_parsers";
-import { llmModel } from "@/app/config/llmConfig";
+import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { JobBaseDetailSchema } from "@/app/types/jobDetails";
-import { jobDetailsPrompts } from "../langchain/prompts/jobDetails";
 import { extractText, findJson } from "../langchain/langchainFunctions";
+import { llmModel } from "@/app/config/llmConfig";
 export async function GET(req: NextRequest) {
     try {
         const url = new URL(req.url);
