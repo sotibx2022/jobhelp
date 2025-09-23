@@ -8,7 +8,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
         <main className="container">
             <SidebarProvider>
             <AppSidebar/>
-           <main>
+           <main className="pagesContent">
              <PagesHeader />
             <div className="childrenPages">{children}</div>
             <CommonFooter />

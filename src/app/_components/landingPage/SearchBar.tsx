@@ -8,7 +8,7 @@ export default function SearchBar() {
     const router = useRouter();
     const doSubmit = () => {
         if (!searchValue.trim()) return;
-        router.push(`/jobdetails?jobtitle=${encodeURIComponent(searchValue)}`);
+        router.push(`/overview?jobtitle=${encodeURIComponent(searchValue)}`);
     };
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {

@@ -149,6 +149,9 @@
   .childrenPages{
     @apply min-h-[80vh]
   }
+  .pagesContent{
+    @apply w-full
+  }
 }
 @layer base {
   * {

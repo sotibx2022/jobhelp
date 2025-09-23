@@ -19,17 +19,18 @@ import {
   Briefcase,
   FileText,
 } from "lucide-react"
+import { SidebarItem } from "./SidebarItem";
 const sidebarItems = [
-  { label: "Overview", icon: LayoutDashboard },
-  { label: "Salary", icon: Wallet },
-  { label: "Skills", icon: BadgeCheck },
-  { label: "Tools", icon: Wrench },
-  { label: "Education", icon: GraduationCap },
-  { label: "Roadmap", icon: Route },
-  { label: "Checklist", icon: CheckSquare },
-  { label: "Jobs", icon: Briefcase },
-  { label: "Resume", icon: FileText },
-]
+  { label: "Overview", icon: LayoutDashboard, href: "/overview" },
+  { label: "Salary", icon: Wallet, href: "/salary" },
+  { label: "Skills", icon: BadgeCheck, href: "/skills" },
+  { label: "Tools", icon: Wrench, href: "/tools" },
+  { label: "Education", icon: GraduationCap, href: "/education" },
+  { label: "Roadmap", icon: Route, href: "/roadmap" },
+  { label: "Checklist", icon: CheckSquare, href: "/checklist" },
+  { label: "Jobs", icon: Briefcase, href: "/jobs" },
+  { label: "Resume", icon: FileText, href: "/resume" },
+];
 const AppSidebar = () => {
   const { state, isMobile } = useSidebar()
   const showText = state === "expanded" || isMobile
@@ -41,18 +42,8 @@ const AppSidebar = () => {
       <SidebarContent>
         <SidebarGroup>
           <ul className="space-y-2">
-            {sidebarItems.map(({ label, icon: Icon }) => (
-              <li
-                key={label}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted cursor-pointer"
-              >
-                <Icon className="w-5 h-5 text-muted-foreground shrink-0" />
-                {showText && (
-                  <span className="text-sm font-medium text-muted-foreground">
-                    {label}
-                  </span>
-                )}
-              </li>
+            {sidebarItems.map((item) => (
+              <SidebarItem key={item.label} {...item} showText={showText} />
             ))}
           </ul>
         </SidebarGroup>
