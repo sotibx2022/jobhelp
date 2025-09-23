@@ -2,14 +2,22 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
+import { useDispatch, useSelector } from "react-redux";
+import { addJobDetails, removeJobDetails } from "@/app/redux/jobdetailsSlice";
+import { RootState } from "@/app/redux/store";
 export default function SearchBar() {
-    const [searchValue, setSearchValue] = useState("");
+    const jobTitleState = useSelector((state: RootState) => state.jobDetails.jobTitle)
+    const dispatch = useDispatch()
+    const [searchValue, setSearchValue] = useState(jobTitleState ?? "");
     const router = useRouter();
     const doSubmit = () => {
         if (!searchValue.trim()) return;
+        dispatch(addJobDetails({ jobTitle: searchValue }))
         router.push(`/overview?jobtitle=${encodeURIComponent(searchValue)}`);
     };
+    const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchValue(e.target.value);
+    }
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -23,7 +31,7 @@ export default function SearchBar() {
                     type="text"
                     placeholder="eg. Maintenance Planner"
                     value={searchValue}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
+                    onChange={changeHandler}
                     onKeyDown={handleKeyDown}
                     className="text-base h-12"
                 />
