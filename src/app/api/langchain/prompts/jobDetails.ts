@@ -1,21 +1,15 @@
-export const jobDetailsPrompts = (jobTitleInput: string): string => {
-    return `
+export function jobBasicDetailsPrompt(
+  jobTitleInput: string,
+  formatInstructions: string
+): string {
+  return `
 You are an assistant that returns structured JSON about job profiles.
-### Input
-A user provides a job title (may include typos or symbols): **"${jobTitleInput}"**
-### Example Output
-\`\`\`json
-{
-  "jobTitle": "Backend Developer",
-  "jobDescription": "Responsible for designing, building, and maintaining server-side logic, databases, and APIs.",
-  "keyResponsibilities": [
-    "Develop and maintain server-side logic and APIs",
-    "Optimize database performance and ensure data security",
-    "Collaborate with frontend developers to integrate user-facing elements"
-  ]
-}
-\`\`\`
-### Instructions
-Return only valid JSON strictly matching the structure above. Do not include code, explanations, or extra text.
+Input Job Title: "${jobTitleInput}"
+${formatInstructions}
+Return a JSON object with the following fields:
+- jobTitle (string)
+- jobDescription (string)
+- keyResponsibilities (array of strings)
+Return valid JSON only, do not include explanations, code fences, or extra text.
 `;
-};
+}

@@ -1,8 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { JobBaseDetailSchema } from "@/app/types/jobDetails";
-import { extractText, findJson } from "../langchain/langchainFunctions";
+import { extractText, findJson } from "../../langchain/langchainFunctions";
 import { llmModel } from "@/app/config/llmConfig";
+import { jobBasicDetailsPrompt } from "../../langchain/prompts/jobDetails";
 export async function GET(req: NextRequest) {
     try {
         const url = new URL(req.url);
@@ -15,16 +16,7 @@ export async function GET(req: NextRequest) {
         }
         const structuredParser = StructuredOutputParser.fromZodSchema(JobBaseDetailSchema);
         const formatInstructions = structuredParser.getFormatInstructions();
-        const prompt = `
-You are an assistant that returns structured JSON about job profiles.
-Input Job Title: "${jobTitleInput}"
-${formatInstructions}
-Return a JSON object with the following fields:
-- jobTitle (string)
-- jobDescription (string)
-- keyResponsibilities (array of strings)
-Return valid JSON only, do not include explanations, code fences, or extra text.
-`;
+        const prompt = jobBasicDetailsPrompt(jobTitleInput, formatInstructions)
         const rawResponse = await llmModel.invoke(prompt);
         const extractedText = extractText(rawResponse);
         const jsonText = findJson(extractedText)

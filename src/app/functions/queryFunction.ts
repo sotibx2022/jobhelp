@@ -3,7 +3,7 @@ import { JobBaseDetail } from "../types/jobDetails";
 import axios from 'axios'
 export const getJobOverview = async (jobtitle: string): Promise<JobBaseDetail> => {
     try {
-        const response = await axios.get(`${config.websiteUrl}/api/jobdetails?jobtitle=${jobtitle}`,);
+        const response = await axios.get(`${config.websiteUrl}/api/overview?jobtitle=${jobtitle}`,);
         return response.data;
     } catch (error) {
         return {

@@ -42,7 +42,7 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
                 <AbsoluteIcon left="20px" icon={<Search/>} />
                 <Input
                     type="text"
-                    placeholder="eg. Maintenance Planner"
+                    placeholder="eg. Event Planner"
                     value={searchValue}
                     onChange={changeHandler}
                     onKeyDown={handleKeyDown}
