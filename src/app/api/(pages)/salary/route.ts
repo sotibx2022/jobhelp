@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     const searchParams = url.searchParams;
     const jobtitle = searchParams.get('jobtitle');
     const country = searchParams.get('country');
-    console.log(jobtitle,country)
+    console.log(jobtitle, country)
     if (!jobtitle || !country) {
         return NextResponse.json(
             { message: "Job Title and Country are required", success: false },
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     const rawResponse = await llmModel.invoke(prompt);
     const extractedText = extractText(rawResponse);
     const jsonText = findJson(extractedText)
-    const cleanedJson = jsonText?.trim(); 
+    const cleanedJson = jsonText?.trim();
     const structuredResult = await structuredParser.parse(cleanedJson);
-    return NextResponse.json({ message: "success", structuredResult })
+    return NextResponse.json({ message: "success", status: 200, success: true, data: structuredResult })
 }

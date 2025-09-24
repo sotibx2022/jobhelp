@@ -1,10 +1,10 @@
 import { CommonFooter, PagesHeader } from '@/app/_components'
-import { getJobOverview } from '@/app/functions/queryFunction';
 import { getQueryClient } from '@/hooks/getQueryClient';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import React from 'react'
 import { Overview } from '../_components';
 import { Metadata } from 'next';
+import { getJobOverview } from '@/app/functions/queryFunctions/getJobOverview';
 interface ISearchParams {
   searchParams: Promise<{
     jobtitle?: string,
