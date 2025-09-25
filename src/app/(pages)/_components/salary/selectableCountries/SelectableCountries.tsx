@@ -41,7 +41,7 @@ export default function SelectableCountries() {
   const handleCountryChange = (newCountry: string) => {
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.set("country", newCountry);
-    router.replace(`${pathname}?${currentParams.toString()}`, { scroll: false });
+    router.push(`${pathname}?${currentParams.toString()}`, { scroll: false });
   };
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
