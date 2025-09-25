@@ -33,11 +33,6 @@ export default function SelectableCountries() {
       }
     }
   })
-  useEffect(() => {
-    if (countryName) {
-      setInitialCountry(countryName)
-    }
-  }, [countryName, isPending])
   const handleCountryChange = (newCountry: string) => {
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.set("country", newCountry);
@@ -52,6 +47,12 @@ export default function SelectableCountries() {
       return response.data;
     },
   });
+  useEffect(() => {
+    if (countryName) {
+      setInitialCountry(countryName)
+      setValue(countryName)
+    }
+  }, [countryName, isPending])
   useEffect(() => {
      handleCountryChange(value)
    }, [value,isPending])
