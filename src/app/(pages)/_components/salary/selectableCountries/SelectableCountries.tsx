@@ -16,8 +16,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 const countriesFetchUrl = "https://restcountries.com/v3.1/all?fields=name,flags";
 export default function SelectableCountries() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [initialCountry, setInitialCountry] = useState('Loading...')
   const { data: countryName, isPending } = useQuery({
     queryKey: ['country'], queryFn: async () => {
@@ -34,6 +38,11 @@ export default function SelectableCountries() {
       setInitialCountry(countryName)
     }
   }, [countryName, isPending])
+  const handleCountryChange = (newCountry: string) => {
+    const currentParams = new URLSearchParams(searchParams.toString());
+    currentParams.set("country", newCountry);
+    router.replace(`${pathname}?${currentParams.toString()}`, { scroll: false });
+  };
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   const { data: countriesData, isPending: isLoading } = useQuery({
@@ -43,6 +52,9 @@ export default function SelectableCountries() {
       return response.data;
     },
   });
+  useEffect(() => {if(value){
+     handleCountryChange(value)
+  } }, [value])
   if (isLoading) return <div>Loading countries...</div>;
   return (
     <div className="w-full max-w-sm p-6">
