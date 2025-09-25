@@ -1,9 +1,15 @@
 "use client"
 import type { jobSalaryType } from "@/app/types/jobSalary"
 import type React from "react"
-import { Card, CardHeader} from "@/components/ui/card"
-import { type ChartConfig,} from "@/components/ui/chart"
-import { Select, SelectItem,SelectContent, SelectTrigger } from "@/components/ui/select"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { type ChartConfig } from "@/components/ui/chart"
+import { 
+  Select, 
+  SelectItem, 
+  SelectContent, 
+  SelectTrigger,
+  SelectValue 
+} from "@/components/ui/select"
 import { useState } from "react"
 import BarChartContent from "./BarChartContent"
 import { IChartData } from "./barChartTypes"
@@ -11,7 +17,7 @@ interface ISalaryData {
   salaryData: jobSalaryType
 }
 const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
-  const [salaryDuration, setSalaryDuration] = useState<"Hourly" | "Monthly" | "Annually">("Hourly")
+  const [salaryDuration, setSalaryDuration] = useState<"Hour" | "Month" | "Annual">("Hour")
   const { salaryByExperience } = salaryData
   const { intern, mid, junior, senior, expert, currency } = salaryByExperience
   // Map roles to minimum years of experience
@@ -23,20 +29,18 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
     expert: 8,
   }
   const experienceColors: Record<string, string> = {
-    intern: "#E3F2FD",
-    junior: "#90CAF9",
-    mid: "#42A5F5",
-    senior: "#1976D2",
-    expert: "#0D47A1",
-  }
+  intern: "#ADD8E6",
+  junior: "#87CEEB",
+  senior: "#1E3A8A",
+  expert: "#00008B",
+}
   const experienceLabels: Record<string, string> = {
     intern: "Intern",
     junior: "Junior",
-    mid: "Mid",
     senior: "Senior",
     expert: "Expert",
   }
-  const chartData:IChartData[] = [
+  const chartData: IChartData[] = [
     {
       experience: "intern",
       label: experienceLabels["intern"],
@@ -50,13 +54,6 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
       years: experienceYears["junior"],
       salary: Number.parseInt(junior.replace(/,/g, ""), 10),
       fill: experienceColors["junior"],
-    },
-    {
-      experience: "mid",
-      label: experienceLabels["mid"],
-      years: experienceYears["mid"],
-      salary: Number.parseInt(mid.replace(/,/g, ""), 10),
-      fill: experienceColors["mid"],
     },
     {
       experience: "senior",
@@ -76,23 +73,43 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
   const chartConfig = {
     salary: {
       label: "Salary",
-      color: "var(--chart-1)",
+      color: "hsl(var(--primary))",
     },
   } satisfies ChartConfig
   return (
-     <>
-      <Select defaultValue="Hourly" onValueChange={(value) => setSalaryDuration(value as 'Hourly' || 'Monthly' || 'Annually')}>
-      <SelectTrigger className="w-[180px]">
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="Hourly">Hourly</SelectItem>
-        <SelectItem value="Monthly">Monthly</SelectItem>
-        <SelectItem value="Annually">Annually</SelectItem>
-      </SelectContent>
-    </Select>
-      <BarChartContent chartConfig={chartConfig} chartData={chartData} salaryDuration={salaryDuration}
-      salaryByExperience={salaryByExperience}/>
-      </>
+    <Card className="max-w-[500px]  flex flex-col">
+      <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+        <div>
+          <CardTitle className="secondaryHeading">Salary by Experience</CardTitle>
+          <p className="primaryParagraph">
+            Across different experience levels
+          </p>
+        </div>
+        <Select 
+          value={salaryDuration} 
+          onValueChange={(value: "Hour" | "Month" | "Annual") => setSalaryDuration(value)}
+        >
+          <SelectTrigger className="w-[120px] sm:w-[140px]">
+            <SelectValue placeholder="Duration" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Hour">Hourly</SelectItem>
+            <SelectItem value="Month">Monthly</SelectItem>
+            <SelectItem value="Annual">Annually</SelectItem>
+          </SelectContent>
+        </Select>
+      </CardHeader>
+      <CardContent className="flex-1 p-0">
+        <BarChartContent 
+          chartConfig={chartConfig} 
+          chartData={chartData} 
+          salaryDuration={salaryDuration}
+          salaryByExperience={salaryByExperience}
+          currency={currency}
+          averageSalary ={mid}
+        />
+      </CardContent>
+    </Card>
   )
 }
 export default SalaryBarChart

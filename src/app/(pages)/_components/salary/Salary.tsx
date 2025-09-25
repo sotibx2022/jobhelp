@@ -15,12 +15,13 @@ const Salary: React.FC<SalaryProps> =  ({ jobTitle, country }) => {
   queryKey: ["jobSalaryDetails", jobTitle, country],
   queryFn: () =>
     getJobDetails<jobSalaryType>(
-      `${config.websiteUrl}/api/salary?jobtitle=${jobTitle}&country=${country}`
+      `/api/salary?jobtitle=${jobTitle}&country=${country}`
     ),
 });
   return (
     <div>
       <SelectableCountries />
+   <section className="twoColumnSection">
     {(salaryData && salaryData.data)
   ? <SalaryTrendChart chartData={salaryData.data}/>
   : <h1>No Data</h1>
@@ -28,6 +29,7 @@ const Salary: React.FC<SalaryProps> =  ({ jobTitle, country }) => {
       {(salaryData && salaryData.data)
   ?<SalaryBarChart salaryData={salaryData.data} />
 : <h1>No Data</h1>}
+</section>
     </div>
   );
 };

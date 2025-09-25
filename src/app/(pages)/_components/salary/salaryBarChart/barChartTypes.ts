@@ -17,11 +17,13 @@ export interface IChartData {
   fill: string
 }
 // Allowed salary durations
-export type SalaryDuration = "Hourly" | "Monthly" | "Annually"
+export type SalaryDuration = "Hour" | "Month" | "Annual"
 // Props for BarChartContent
 export interface BarChartContentProps {
   chartConfig: ChartConfig
   chartData: IChartData[]
   salaryDuration: SalaryDuration
-  salaryByExperience: ISalaryByExperience
+  salaryByExperience: ISalaryByExperience,
+  currency:string,
+  averageSalary:string,
 }
