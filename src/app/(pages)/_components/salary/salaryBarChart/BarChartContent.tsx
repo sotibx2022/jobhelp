@@ -4,27 +4,23 @@ import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Badge } from "@/components/ui/badge"
 import React from 'react'
-import { BarChartContentProps } from "./barChartTypes"
+import { BarChartContentProps, IChartData } from "./barChartTypes"
 const BarChartContent: React.FC<BarChartContentProps> = ({ chartConfig, chartData, salaryDuration, salaryByExperience }) => {
     const { intern, mid, junior, senior, expert, currency } = salaryByExperience
     const formatCurrency = (value: number) => {
         return `${value.toLocaleString()}`
     }
-    let modifiedChartData = []
-    switch (salaryDuration) {
-        case 'Hourly':
-            modifiedChartData = chartData.map((data: any, index: number) => {
-                return data.salary / (12 * 30 * 22 * 8)
-            })
-            break;
-        case 'Monthly':
-            modifiedChartData = chartData.map((data: any, index: number) => {
-                return data.salary / 12
-            })
-            break;
-        default:
-            modifiedChartData = chartData
-    }
+    const modifiedChartData = chartData.map((data: IChartData) => {
+        return {
+            ...data,
+            salary:
+                salaryDuration === "Hourly"
+                    ? data.salary / (12 * 30 * 22 * 8)
+                    : salaryDuration === "Monthly"
+                        ? data.salary / 12
+                        : data.salary,
+        }
+    })
     return (
         <>
             <CardContent>
