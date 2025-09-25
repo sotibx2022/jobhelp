@@ -44,6 +44,7 @@ const Page = async ({ searchParams: mySearchParams }: ISearchParams) => {
   const jobSalaryData = await getJobDetails<jobSalaryType>(
     `${config.websiteUrl}/salary?jobtitle=${jobTitle}&country=${country}`
   );
+  console.log(jobSalaryData)
   return (
     <div>
       <p>Job Title: {jobTitle}</p>
