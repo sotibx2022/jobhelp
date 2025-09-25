@@ -52,9 +52,9 @@ export default function SelectableCountries() {
       return response.data;
     },
   });
-  useEffect(() => {if(value){
+  useEffect(() => {
      handleCountryChange(value)
-  } }, [value])
+   }, [value])
   if (isLoading) return <div>Loading countries...</div>;
   return (
     <div className="w-full max-w-sm p-6">
