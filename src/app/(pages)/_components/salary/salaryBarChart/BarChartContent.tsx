@@ -4,13 +4,8 @@ import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Badge } from "@/components/ui/badge"
 import React from 'react'
-interface BarChartProps {
-    chartConfig: any
-    chartData: any
-    salaryDuration: string
-    salaryByExperience: any,
-}
-const BarChartContent: React.FC<BarChartProps> = ({ chartConfig, chartData, salaryDuration, salaryByExperience }) => {
+import { BarChartContentProps } from "./barChartTypes"
+const BarChartContent: React.FC<BarChartContentProps> = ({ chartConfig, chartData, salaryDuration, salaryByExperience }) => {
     const { intern, mid, junior, senior, expert, currency } = salaryByExperience
     const formatCurrency = (value: number) => {
         return `${value.toLocaleString()}`

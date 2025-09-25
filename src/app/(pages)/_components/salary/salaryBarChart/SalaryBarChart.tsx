@@ -1,20 +1,17 @@
 "use client"
 import type { jobSalaryType } from "@/app/types/jobSalary"
 import type React from "react"
-import { Banknote, Clock, CurrencyIcon, DollarSignIcon, TimerIcon, TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardHeader} from "@/components/ui/card"
+import { type ChartConfig,} from "@/components/ui/chart"
 import { Select, SelectItem,SelectContent, SelectTrigger } from "@/components/ui/select"
 import { useState } from "react"
 import BarChartContent from "./BarChartContent"
+import { IChartData } from "./barChartTypes"
 interface ISalaryData {
   salaryData: jobSalaryType
 }
-export const description = "A bar chart showing salary by experience level"
 const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
-  const[salaryDuration,setSalaryDuration] = useState("Hourly")
+  const [salaryDuration, setSalaryDuration] = useState<"Hourly" | "Monthly" | "Annually">("Hourly")
   const { salaryByExperience } = salaryData
   const { intern, mid, junior, senior, expert, currency } = salaryByExperience
   // Map roles to minimum years of experience
@@ -39,8 +36,7 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
     senior: "Senior",
     expert: "Expert",
   }
-  // Fixed: Properly format currency function
-  const chartData = [
+  const chartData:IChartData[] = [
     {
       experience: "intern",
       label: experienceLabels["intern"],
@@ -88,7 +84,7 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
       <CardHeader>
         <div className="salarySelection flex gap-2">
           <p className="secondaryHeading"> {`${currency} ${mid}`}</p>
-        <Select defaultValue="Hourly" onValueChange={(value) => setSalaryDuration(value)}>
+        <Select defaultValue="Hourly" onValueChange={(value) => setSalaryDuration(value as 'Hourly' || 'Monthly' || 'Annually')}>
       <SelectTrigger className="w-[180px]">
       </SelectTrigger>
       <SelectContent>
@@ -100,7 +96,8 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
         </div>
         <p className="primaryParagraph">{`Avg. Base Hourly Rate ${currency}`}</p>
       </CardHeader>
-      <BarChartContent chartConfig={chartConfig} chartData={chartData}/>
+      <BarChartContent chartConfig={chartConfig} chartData={chartData} salaryDuration={salaryDuration}
+      salaryByExperience={salaryByExperience}/>
     </Card>
   )
 }
