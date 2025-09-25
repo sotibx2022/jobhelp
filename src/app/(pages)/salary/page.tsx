@@ -1,6 +1,9 @@
 import { config } from "@/app/config/envConfiguration";
 import { getJobDetails } from "@/app/functions/queryFunctions/getJobDetails";
 import { jobSalaryType } from "@/app/types/jobSalary";
+import { Salary } from "../_components";
+import { getQueryClient } from "@/hooks/getQueryClient";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 interface ISearchParams {
   searchParams: Promise<{
     jobtitle: string;
@@ -40,24 +43,16 @@ const Page = async ({ searchParams: mySearchParams }: ISearchParams) => {
   const searchParams = await mySearchParams;
   const jobTitle = searchParams.jobtitle;
   const country = searchParams.country;
-  // Fetch salary data if needed
-  const jobSalaryData = await getJobDetails<jobSalaryType>(
-    `${config.websiteUrl}/api/salary?jobtitle=${jobTitle}&country=${country}`
-  );
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery({
+    queryKey:['jobSalaryDetails',jobTitle,country],
+    queryFn:()=> getJobDetails<jobSalaryType>(
+    `${config.websiteUrl}/api/salary?jobtitle=${jobTitle}&country=${country}`)})
+    const dehydratedState = dehydrate(queryClient)
   return (
-    <div>
-      <p>Job Title: {jobTitle}</p>
-      <p>Country: {country}</p>
-      {jobSalaryData.success && jobSalaryData.data?.salaryByExperience && (
-        <div>
-          <p>Intern: {jobSalaryData.data.salaryByExperience.intern} {jobSalaryData.data.salaryByExperience.currency}</p>
-          <p>Junior: {jobSalaryData.data.salaryByExperience.junior} {jobSalaryData.data.salaryByExperience.currency}</p>
-          <p>Mid: {jobSalaryData.data.salaryByExperience.mid} {jobSalaryData.data.salaryByExperience.currency}</p>
-          <p>Senior: {jobSalaryData.data.salaryByExperience.senior} {jobSalaryData.data.salaryByExperience.currency}</p>
-          <p>Expert: {jobSalaryData.data.salaryByExperience.expert} {jobSalaryData.data.salaryByExperience.currency}</p>
-        </div>
-      )}
-    </div>
+    <HydrationBoundary state={dehydratedState}>
+    <Salary/>
+    </HydrationBoundary>
   );
 };
 export default Page;

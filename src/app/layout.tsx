@@ -7,7 +7,7 @@ const inter = Inter({
   variable: "--font-inter",
 });
 export const metadata: Metadata = {
-  title: "Job Role Profile Generator",
+  title: "JobRise | Career Planning & Job Search Support",
   description:
     "Enter a job role to instantly fetch or generate its profile, responsibilities, checklist, roadmap, and related job postings.",
 };

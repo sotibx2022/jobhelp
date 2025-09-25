@@ -152,6 +152,11 @@
   .pagesContent{
     @apply w-full
   }
+  .logoContainer {
+  position: relative;
+  width: 200px;
+  height: 50px;
+}
 }
 @layer base {
   * {
