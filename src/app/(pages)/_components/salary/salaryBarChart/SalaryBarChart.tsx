@@ -80,11 +80,8 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
     },
   } satisfies ChartConfig
   return (
-    <Card className="max-w-sm">
-      <CardHeader>
-        <div className="salarySelection flex gap-2">
-          <p className="secondaryHeading"> {`${currency} ${mid}`}</p>
-        <Select defaultValue="Hourly" onValueChange={(value) => setSalaryDuration(value as 'Hourly' || 'Monthly' || 'Annually')}>
+     <>
+      <Select defaultValue="Hourly" onValueChange={(value) => setSalaryDuration(value as 'Hourly' || 'Monthly' || 'Annually')}>
       <SelectTrigger className="w-[180px]">
       </SelectTrigger>
       <SelectContent>
@@ -93,12 +90,9 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
         <SelectItem value="Annually">Annually</SelectItem>
       </SelectContent>
     </Select>
-        </div>
-        <p className="primaryParagraph">{`Avg. Base Hourly Rate ${currency}`}</p>
-      </CardHeader>
       <BarChartContent chartConfig={chartConfig} chartData={chartData} salaryDuration={salaryDuration}
       salaryByExperience={salaryByExperience}/>
-    </Card>
+      </>
   )
 }
 export default SalaryBarChart
