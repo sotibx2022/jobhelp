@@ -51,7 +51,7 @@ const Page = async ({ searchParams: mySearchParams }: ISearchParams) => {
     const dehydratedState = dehydrate(queryClient)
   return (
     <HydrationBoundary state={dehydratedState}>
-    <Salary/>
+    <Salary jobTitle={jobTitle} country={country}/>
     </HydrationBoundary>
   );
 };
