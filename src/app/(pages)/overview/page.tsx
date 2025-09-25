@@ -23,7 +23,7 @@ export async function generateMetadata({ searchParams: mySearchParams }: ISearch
     const { jobTitle, jobDescription } = jobOverview.data;
     if (jobTitle && jobDescription) {
       return {
-        title: jobTitle,
+        title: `JobRise | Overview of ${jobTitle}`,
         description: jobDescription,
       };
     } else {

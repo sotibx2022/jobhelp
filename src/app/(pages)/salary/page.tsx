@@ -18,7 +18,7 @@ export async function generateMetadata({ searchParams: mySearchParams }: ISearch
     if (jobSalaryData.success && jobSalaryData.data?.salaryByExperience) {
       const { intern, junior, mid, senior, expert, currency } = jobSalaryData.data.salaryByExperience;
       return {
-        title: jobTitle,
+        title: `JobRise | Salary of ${jobTitle} in ${country}`,
         description: `Discover the salary range for a ${jobTitle} in ${country}. 
 Starting from ${intern} ${currency} for interns, ${junior} ${currency} for junior-level, ${mid} ${currency} for mid-level, ${senior} ${currency} for senior-level, to ${expert} ${currency} for expert-level professionals.`,
       };
