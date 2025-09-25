@@ -12,7 +12,7 @@ export async function generateMetadata({ searchParams: mySearchParams }: ISearch
   const searchParams = await mySearchParams;
   const jobTitle = searchParams.jobtitle;
   const country = searchParams.country;
-  const urlToFetchSalary = `${config.websiteUrl}/salary?jobtitle=${jobTitle}&country=${country}`;
+  const urlToFetchSalary = `${config.websiteUrl}/api/salary?jobtitle=${jobTitle}&country=${country}`;
   try {
     const jobSalaryData = await getJobDetails<jobSalaryType>(urlToFetchSalary);
     if (jobSalaryData.success && jobSalaryData.data?.salaryByExperience) {
@@ -42,9 +42,8 @@ const Page = async ({ searchParams: mySearchParams }: ISearchParams) => {
   const country = searchParams.country;
   // Fetch salary data if needed
   const jobSalaryData = await getJobDetails<jobSalaryType>(
-    `${config.websiteUrl}/salary?jobtitle=${jobTitle}&country=${country}`
+    `${config.websiteUrl}/api/salary?jobtitle=${jobTitle}&country=${country}`
   );
-  console.log(jobSalaryData)
   return (
     <div>
       <p>Job Title: {jobTitle}</p>
