@@ -1,5 +1,5 @@
 "use client"
-import { PagesHeader, StringList } from '@/app/_components'
+import { Loading, PagesHeader, StringList } from '@/app/_components'
 import { config } from '@/app/config/envConfiguration'
 import { getJobDetails } from '@/app/functions/queryFunctions/getJobDetails'
 import { addJobDetails } from '@/app/redux/jobdetailsSlice'
@@ -19,9 +19,8 @@ const Overview: React.FC<{ jobtitle: string }> = ({ jobtitle }) => {
   })
   console.log(jobBaseDetails);
   const { jobTitle, jobDescription, keyResponsibilities } = jobBaseDetails?.data|| {}
-  console.log(jobTitle,jobDescription,keyResponsibilities);
   return isPending ? (
-    <h1>Loading</h1>
+   <Loading/>
   ) : (
     <div>
       <h1 className="primaryHeading">{jobTitle}</h1>
