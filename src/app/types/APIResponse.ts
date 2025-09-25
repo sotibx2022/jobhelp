@@ -1,20 +1,34 @@
-import { AxiosError } from "axios";
-export interface APIResponseSuccess<T> {
-  data?: T;
-  message: string;
-  status: number;
-  success: true;
+import { AxiosError, isAxiosError } from "axios";
+interface BaseResponse{
+  message:string,
+  status:number,
+  success:boolean,
+  data:any;
 }
-export interface APIResponseError {
-  message: string;
-  status: number;
-  success: false;
+export interface APIResponseSuccess<T> extends BaseResponse {
+  success:true,
+  data: T;
 }
-interface UnknownError{
-    message:"Unknown error occured",
-    status:500,
-    success:false,
+export interface APIResponseError extends BaseResponse {
+  success:false,
+  data:undefined
 }
+export const returnErrorObject = (error: unknown):BaseResponse => {
+  if (isAxiosError(error)) {
+    const data = error.response?.data as { message?: string };
+    return {
+      success: false,
+      status: error.response?.status ?? 500,
+      message: data?.message || error.message || "Axios Error Occurred",
+      data:undefined
+    };
+  } else {
+    return {
+      success: false,
+      status: 500,
+      message: "Unknown Error Occurred",
+      data:undefined
+    };
+  }
+};
 export type APIResponse<T> = APIResponseSuccess<T> | APIResponseError;
-type QueryError = UnknownError | AxiosError
-export type APIResult<T> = APIResponse<T> | QueryError;
