@@ -77,13 +77,10 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
     },
   } satisfies ChartConfig
   return (
-    <Card className="max-w-[500px]  flex flex-col">
-      <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+    <Card className="flex-1 md:max-w-[400px] w-full">
+      <CardHeader className="pb-2 flex flex-col items-center">
         <div>
           <CardTitle className="secondaryHeading">Salary by Experience</CardTitle>
-          <p className="primaryParagraph">
-            Across different experience levels
-          </p>
         </div>
         <Select 
           value={salaryDuration} 

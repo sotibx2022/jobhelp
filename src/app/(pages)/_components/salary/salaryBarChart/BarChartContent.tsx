@@ -118,7 +118,7 @@ const BarChartContent: React.FC<BarChartContentProps> = ({
             </CardContent>
             {/* Footer with badges */}
             <CardFooter className="p-4 sm:p-6 border-t bg-muted/30">
-                <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="w-full flex flex-col  flexCenter gap-3">
                     <span className="primaryParagraph">
                         Salary breakdown by experience level
                     </span>

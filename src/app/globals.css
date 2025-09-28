@@ -156,7 +156,7 @@
     @apply relative w-[200px] h-[50px]
 }
 .twoColumnSection{
-  @apply flex
+  @apply flex flex-col gap-4 md:flex-row justify-between
 }
 }
 @layer base {

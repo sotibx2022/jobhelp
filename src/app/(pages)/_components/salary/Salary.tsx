@@ -22,13 +22,12 @@ const Salary: React.FC<SalaryProps> =  ({ jobTitle, country }) => {
     <div>
       <SelectableCountries />
    <section className="twoColumnSection">
-    {(salaryData && salaryData.data)
-  ? <SalaryTrendChart chartData={salaryData.data}/>
-  : <h1>No Data</h1>
-}
-      {(salaryData && salaryData.data)
-  ?<SalaryBarChart salaryData={salaryData.data} />
-: <h1>No Data</h1>}
+  {(salaryData && salaryData.data) 
+    ? <SalaryTrendChart chartData={salaryData.data} /> 
+    : <h1>No Data</h1>}
+  {(salaryData && salaryData.data) 
+    ? <SalaryBarChart salaryData={salaryData.data} /> 
+    : <h1>No Data</h1>}
 </section>
     </div>
   );
