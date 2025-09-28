@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { jobSalaryType } from "@/app/types/jobSalary"
 import { Badge } from "@/components/ui/badge"
-import { Banknote, Clock } from "lucide-react"
+import { Banknote, Clock, Map } from "lucide-react"
 const chartConfig = {
   salary: {
     label: "Salary",
@@ -75,10 +75,18 @@ const SalaryTrendChart: React.FC<ISalaryTrendChartProps> = ({ chartData }) => {
     <Card className="flex-1 flex flex-col w-full max-w-[400px]">
       <CardHeader className="pb-2">
         <CardTitle className="secondaryHeading">
-          Salary Trend
+          Salary Trend for {chartData.jobTitle}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 p-4 pt-0">
+      <CardContent className="flex-1 flex-col items-center p-4 pt-0">
+        <div className="mb-4 text-center">
+          <p className="primaryParagraph">
+            Annual Salary Groth
+          </p>
+          <p className="text-2xl sm:text-3xl font-bold">
+            {growthPercentage}%
+          </p>
+        </div>
         <ChartContainer config={chartConfig} className="w-full h-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
@@ -129,29 +137,29 @@ const SalaryTrendChart: React.FC<ISalaryTrendChartProps> = ({ chartData }) => {
           </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
-     <CardFooter className="p-4 sm:p-6 border-t bg-muted/30">
-                <div className="w-full flex flex-col  flexCenter gap-3">
-                    <span className="primaryParagraph">
-                        Salary breakdown by experience level
-                    </span>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                        <Badge
-                            variant="secondary"
-                            className="flex items-center gap-1 text-xs"
-                        >
-                            <Banknote className="w-3 h-3" />
-                            {chartData.country}
-                        </Badge>
-                        <Badge
-                            variant="secondary"
-                            className="flex items-center gap-1 text-xs"
-                        >
-                            <Clock className="w-3 h-3" />
-                           Annual
-                        </Badge>
-                    </div>
-                </div>
-            </CardFooter>
+      <CardFooter className="p-4 sm:p-6 border-t bg-muted/30">
+        <div className="w-full flex flex-col  flexCenter gap-3">
+          <span className="primaryParagraph">
+            Salary breakdown by experience level
+          </span>
+          <div className="flex flex-wrap gap-2 justify-center">
+            <Badge
+              variant="secondary"
+              className="flex items-center gap-1 text-xs"
+            >
+              <Map className="w-3 h-3" />
+              {chartData.country}
+            </Badge>
+            <Badge
+              variant="secondary"
+              className="flex items-center gap-1 text-xs"
+            >
+              <Clock className="w-3 h-3" />
+              Annual
+            </Badge>
+          </div>
+        </div>
+      </CardFooter>
     </Card>
   )
 }
