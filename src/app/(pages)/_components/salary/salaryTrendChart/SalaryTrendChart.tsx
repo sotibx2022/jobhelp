@@ -88,7 +88,6 @@ const SalaryTrendChart: React.FC<ISalaryTrendChartProps> = ({ chartData }) => {
           </p>
         </div>
         <ChartContainer config={chartConfig} className="w-full h-full">
-          <ResponsiveContainer width="100%" height="100%">
             <LineChart
               accessibilityLayer
               data={transformedData}
@@ -134,7 +133,6 @@ const SalaryTrendChart: React.FC<ISalaryTrendChartProps> = ({ chartData }) => {
                 />
               </Line>
             </LineChart>
-          </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
       <CardFooter className="p-4 sm:p-6 border-t bg-muted/30">
