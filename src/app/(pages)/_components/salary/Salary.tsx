@@ -19,7 +19,7 @@ const Salary: React.FC<SalaryProps> =  ({ jobTitle, country }) => {
     ),
 });
   return (
-    <div>
+    <div className="flex flex-col gap-4">
    <section className="twoColumnSection">
   {(salaryData && salaryData.data) 
     ? <SalaryTrendChart chartData={salaryData.data} /> 
