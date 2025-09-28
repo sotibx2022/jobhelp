@@ -60,7 +60,7 @@ export default function SelectableCountries() {
   }, [value, isPending]);
   if (isLoading) return <div>Loading countries...</div>;
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Country Satisfaction</CardTitle>
         <CardDescription>
