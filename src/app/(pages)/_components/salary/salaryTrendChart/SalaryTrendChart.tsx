@@ -64,9 +64,9 @@ const SalaryTrendChart: React.FC<ISalaryTrendChartProps> = ({ chartData }) => {
   const firstSalary = transformedData[0].salary
   const lastSalary = transformedData[transformedData.length - 1].salary
   const years = 10;
-const growthPercentage = (
-  (Math.pow(lastSalary / firstSalary, 1 / years) - 1) * 100
-).toFixed(1);
+  const growthPercentage = (
+    (Math.pow(lastSalary / firstSalary, 1 / years) - 1) * 100
+  ).toFixed(1);
   const formatSalary = (value: number) => {
     return `${chartData.salaryByExperience.currency} ${value.toLocaleString()}`
   }
@@ -74,7 +74,7 @@ const growthPercentage = (
     <Card className="flex-1 flex flex-col w-full max-w-[400px]">
       <CardHeader className="pb-2">
         <CardTitle className="secondaryHeading">
-          Salary Trend 
+          Salary Trend
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-1 p-4 pt-0">
@@ -128,11 +128,9 @@ const growthPercentage = (
           </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-1 text-sm pt-0">
-        <div className="flex gap-2 leading-none font-medium items-center">
-          <TrendingUp className="primaryParagraph" />
-          Annual growth of <span className='text-secondary font-bold'>{growthPercentage}%</span> from intern to expert
-        </div>
+      <CardFooter className="flex gap-1">
+          <TrendingUp  />
+          <p className="primaryParagraph">Annual growth of <span className='text-secondary font-bold'>{growthPercentage}%</span></p>
       </CardFooter>
     </Card>
   )
