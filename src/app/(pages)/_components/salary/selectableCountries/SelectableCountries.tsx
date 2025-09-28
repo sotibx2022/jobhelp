@@ -19,7 +19,10 @@ import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 const countriesFetchUrl = "https://restcountries.com/v3.1/all?fields=name,flags";
-export default function SelectableCountries() {
+interface ISelectableCountriesProps {
+  selectedCountry?: (countryName: string) => void;
+}
+const SelectableCountries: React.FC<ISelectableCountriesProps> = ({ selectedCountry }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -53,6 +56,9 @@ export default function SelectableCountries() {
     if (countryName) {
       setInitialCountry(countryName);
       setValue(countryName);
+      if (selectedCountry) {
+        selectedCountry(countryName)
+      }
     }
   }, [countryName, isPending]);
   useEffect(() => {
@@ -124,3 +130,4 @@ export default function SelectableCountries() {
     </Card>
   );
 }
+export default SelectableCountries;
