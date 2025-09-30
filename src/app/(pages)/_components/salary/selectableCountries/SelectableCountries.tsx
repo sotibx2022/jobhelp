@@ -42,6 +42,9 @@ const SelectableCountries: React.FC<ISelectableCountriesProps> = ({ selectedCoun
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.set("country", newCountry);
     router.push(`${pathname}?${currentParams.toString()}`, { scroll: false });
+        if(selectedCountry){
+          selectedCountry(newCountry)
+        }
   };
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -56,9 +59,6 @@ const SelectableCountries: React.FC<ISelectableCountriesProps> = ({ selectedCoun
     if (countryName) {
       setInitialCountry(countryName);
       setValue(countryName);
-      if (selectedCountry) {
-        selectedCountry(countryName)
-      }
     }
   }, [countryName, isPending]);
   useEffect(() => {

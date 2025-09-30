@@ -20,13 +20,16 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
         dispatch(addJobDetails({ jobTitle: jobtitle }))
         setSearchValue(jobtitle)
     }, [searchParams])
+    console.log(pathName)
     const doSubmit = () => {
         if (!searchValue.trim()) return;
         dispatch(addJobDetails({ jobTitle: searchValue }));
-        if(pathName==='/'){
-router.push(`/overview?jobtitle=${encodeURIComponent(searchValue)}`);
-        }else{
-            router.refresh()
+        if (pathName === '/') {
+            router.push(`/overview?jobtitle=${encodeURIComponent(searchValue)}`);
+        } else {
+            const currentParams = new URLSearchParams(searchParams.toString());
+            currentParams.set('jobtitle', searchValue)
+            router.push(`${pathName}?${currentParams.toString()}`, { scroll: false });
         }
     };
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +47,7 @@ router.push(`/overview?jobtitle=${encodeURIComponent(searchValue)}`);
     return (
         <div className="flexCenter">
             <div className="relative p-4">
-                <AbsoluteIcon left="20px" icon={<Search/>} />
+                <AbsoluteIcon left="20px" icon={<Search />} />
                 <Input
                     type="text"
                     placeholder="eg. Event Planner"
@@ -54,7 +57,7 @@ router.push(`/overview?jobtitle=${encodeURIComponent(searchValue)}`);
                     className="text-base h-12 pl-10 pr-24" // padding left for icon, right for buttons
                 />
                 {searchValue.length > 1 && (
-                    <AbsoluteIcon right="20px" icon={<X />} onClick={handleClear}/>
+                    <AbsoluteIcon right="20px" icon={<X />} onClick={handleClear} />
                 )}
             </div>
             <Button onClick={doSubmit}>
