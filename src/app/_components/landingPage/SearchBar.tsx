@@ -14,6 +14,7 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
     const [searchValue, setSearchValue] = useState(jobTitleState ?? "");
     const router = useRouter();
     const searchParams = useSearchParams()
+    const pathName = usePathname()
     useEffect(() => {
         const jobtitle = searchParams.get('jobtitle') || '';
         dispatch(addJobDetails({ jobTitle: jobtitle }))
@@ -22,7 +23,11 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
     const doSubmit = () => {
         if (!searchValue.trim()) return;
         dispatch(addJobDetails({ jobTitle: searchValue }));
-        router.push(`/overview?jobtitle=${encodeURIComponent(searchValue)}`);
+        if(pathName==='/'){
+router.push(`/overview?jobtitle=${encodeURIComponent(searchValue)}`);
+        }else{
+            router.refresh()
+        }
     };
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
