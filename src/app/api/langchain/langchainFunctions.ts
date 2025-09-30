@@ -18,3 +18,9 @@ export const findJson = (content: string): string => {
     return jsonString
   }
 }
+export const cleanJsonString = (str: string) =>{
+  return str
+    .replace(/```json/g, "") 
+    .replace(/```/g, "")
+    .trim();
+}
