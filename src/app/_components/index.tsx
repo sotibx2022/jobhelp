@@ -7,4 +7,5 @@ import AppSidebar from './sidebar/AppSidebar'
 import AbsoluteIcon from "./structures/AbsoluteIcon";
 import StringList from "./structures/lists/StringList";
 import Loading from "./structures/loading/Loading";
-export { SearchBar, LandingPageHeader, logo, PagesHeader,CommonFooter,AppSidebar,AbsoluteIcon,StringList,Loading};
+import Navigation from "./structures/navigation/Navigation";
+export { SearchBar,Navigation, LandingPageHeader, logo, PagesHeader,CommonFooter,AppSidebar,AbsoluteIcon,StringList,Loading};
