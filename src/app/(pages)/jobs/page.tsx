@@ -1,5 +1,5 @@
 'use client'  // Client Component
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { SelectableCountries } from '../_components'
 import { useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
@@ -14,19 +14,20 @@ const Page = () => {
   const [country, setCountry] = useState<string>('')
   const [pageNumber, setPageNumber] = useState(1);
   const selectedCountry = (countryName: string) => {
-    console.log(countryName);
     setCountry(countryName)
   }
-  console.log(country);
-  const params = useMemo(() => {
-    return `jobTitle=${jobTitle}&country=${country}&page=${pageNumber}`
-  }, [jobTitle, country, pageNumber])
+  useEffect(() => {
+    setPageNumber(1);
+  }, [jobTitle, country]);
   const { data: allJobs } = useQuery({
-    queryKey: ['allJobs', params],
+    queryKey: ['allJobs', jobTitle, country, pageNumber],
     queryFn: async () => {
-      const response = await axios.get(`/api/jobs?${params}`);
+      const response = await axios.get(`/api/jobs?jobtitle=${jobTitle}&country=${country}&page=${pageNumber}`);
       return response.data;
     },
+    staleTime: 0,
+    gcTime:0,
+    retry: false,
   });
   const totalResults = parseInt(allJobs?.queries?.request[0]?.totalResults);
   const returnedPageNumber = (value: number) => {

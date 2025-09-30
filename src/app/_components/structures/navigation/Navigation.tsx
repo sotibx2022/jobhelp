@@ -15,17 +15,17 @@ const Navigation: React.FC<NavigationProps> = ({ totalResults, resultsPerPage, r
     }, [pageNumber, returnedPageNumber])
     return (
         <div className="flexCenter mt-4">
-            <Button 
-                variant="outline" 
-                disabled={pageNumber <= 1} 
+            <Button
+                variant="outline"
+                disabled={pageNumber <= 1}
                 onClick={() => setPageNumber(prev => prev - 1)}
             >
                 <ChevronLeft className="w-4 h-4" />
             </Button>
-            <span className='secondaryHeading mx-4'>{pageNumber}</span>
-            <Button 
-                variant="outline" 
-                disabled={pageNumber >= totalPages} 
+            <span className='secondaryHeading mx-4'>{pageNumber} / {totalResults}</span>
+            <Button
+                variant="outline"
+                disabled={pageNumber >= totalPages}
                 onClick={() => setPageNumber(prev => prev + 1)}
             >
                 <ChevronRight className="w-4 h-4" />
