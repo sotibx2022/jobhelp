@@ -9,7 +9,6 @@ export async function GET(req: NextRequest) {
     const searchParams = url.searchParams;
     const jobtitle = searchParams.get('jobtitle');
     const country = searchParams.get('country');
-    console.log(jobtitle, country)
     if (!jobtitle || !country) {
         return NextResponse.json(
             { message: "Job Title and Country are required", success: false },
