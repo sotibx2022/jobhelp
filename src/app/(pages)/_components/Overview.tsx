@@ -17,14 +17,12 @@ const Overview: React.FC<{ jobtitle: string }> = ({ jobtitle }) => {
     queryKey: ['jobBaseDetails', jobtitle],
     queryFn: () => getJobDetails<JobBaseDetail>(urlToFetchJobBaseData),
   })
-  console.log(jobBaseDetails);
   const { jobTitle, jobDescription, keyResponsibilities } = jobBaseDetails?.data|| {}
   return isPending ? (
    <Loading/>
   ) : (
-    <div>
-      <h1 className="primaryHeading">{jobTitle}</h1>
-      <p className="primaryParagraph">{jobDescription}</p>
+    <div className='flex flex-col gap-2'>
+      <h1 className="primaryHeading capitalize">{jobTitle}</h1>
       <StringList stringArray={keyResponsibilities} />
     </div>
   );

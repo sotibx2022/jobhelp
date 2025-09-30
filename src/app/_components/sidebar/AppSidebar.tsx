@@ -24,10 +24,7 @@ const sidebarItems = [
   { label: "Overview", icon: LayoutDashboard, href: "/overview" },
   { label: "Salary", icon: Wallet, href: "/salary" },
   { label: "Skills", icon: BadgeCheck, href: "/skills" },
-  { label: "Tools", icon: Wrench, href: "/tools" },
-  { label: "Education", icon: GraduationCap, href: "/education" },
   { label: "Roadmap", icon: Route, href: "/roadmap" },
-  { label: "Checklist", icon: CheckSquare, href: "/checklist" },
   { label: "Jobs", icon: Briefcase, href: "/jobs" },
   { label: "Resume", icon: FileText, href: "/resume" },
 ];

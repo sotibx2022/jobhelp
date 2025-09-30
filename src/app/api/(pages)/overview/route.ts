@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { JobBaseDetailSchema } from "@/app/types/jobDetails";
-import { extractText, findJson } from "../../langchain/langchainFunctions";
+import { cleanJsonString, extractText, findJson } from "../../langchain/langchainFunctions";
 import { llmModel } from "@/app/config/llmConfig";
 import { jobBasicDetailsPrompt } from "../../langchain/prompts/jobDetails";
 import { APIResponseSuccess, APIResponseError } from "@/app/types/APIResponse";
@@ -24,8 +24,10 @@ export async function GET(req: NextRequest) {
         const rawResponse = await llmModel.invoke(prompt);
         const extractedText = extractText(rawResponse);
         const jsonText = findJson(extractedText);
+        const cleanedJson = jsonText?.trim();
+            const finalCleanedJson = cleanJsonString(cleanedJson)
         try {
-            const structuredResult = await structuredParser.parse(jsonText);
+            const structuredResult = await structuredParser.parse(finalCleanedJson);
             const successResponse: APIResponseSuccess<typeof structuredResult> = {
                 success: true,
                 status: 200,

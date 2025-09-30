@@ -6,6 +6,7 @@ import { dehydrate, hydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Metadata } from 'next';
 import { title } from 'process';
 import React from 'react'
+import Skills from '../_components/Skills';
 interface ISearchParams {
   searchParams: Promise<{
     jobtitle: string
@@ -17,8 +18,16 @@ export async function generateMetadata({ searchParams: mySearchParams }: ISearch
   const urlforSkills = `${config.websiteUrl}/api/skills?jobtitle=${jobTitle}`
   const jobSkillsData = await getJobDetails<skillsType>(urlforSkills)
   if (jobSkillsData?.data?.RoleSkills) {
-    const { Fundamentals, TechnicalSkills, ToolsAndTechnologies, ProcessesAndMethods, DataAndAnalytics, SoftSkills, RegulatoryAndCompliance } = jobSkillsData.data?.RoleSkills
-    const metaDescription = `Key skills for a ${jobTitle} include ${Fundamentals.join(", ")}, ${TechnicalSkills.join(", ")}, ${ToolsAndTechnologies.join(", ")}, ${ProcessesAndMethods.join(", ")}, ${DataAndAnalytics.join(", ")}, ${SoftSkills.join(", ")}, and ${RegulatoryAndCompliance.join(", ")}.`;
+   const {
+  FundaMental_Skills,
+  Technical_Skills,
+  Tool_Skills,
+  Process_Skills,
+  Analytics_Skills,
+  Soft_Skills,
+  Compliance_Skills,
+} = jobSkillsData.data?.RoleSkills || {}
+    const metaDescription = `Key skills for a ${jobTitle} include ${FundaMental_Skills.join(", ")}, ${Technical_Skills.join(", ")}, ${Tool_Skills.join(", ")}, ${Process_Skills.join(", ")}, ${Analytics_Skills.join(", ")}, ${Soft_Skills.join(", ")}, and ${Compliance_Skills.join(", ")}.`;
     return {
       title: `Required Skills for ${jobTitle}`,
       description: metaDescription
@@ -36,13 +45,13 @@ const page: React.FC<ISearchParams> = async ({ searchParams: mySearchParams }: I
   const urlforSkills = `${config.websiteUrl}/api/skills?jobtitle=${jobTitle}`
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ['jobTitle', jobTitle],
+    queryKey: ['skills', jobTitle],
     queryFn: () => getJobDetails<skillsType>(urlforSkills)
   })
   const dehydratedState = dehydrate(queryClient)
   return (
     <HydrationBoundary state={dehydratedState}>
-      <div>{jobTitle}</div>
+      <Skills jobTitle={jobTitle}/>
     </HydrationBoundary>
   )
 }
