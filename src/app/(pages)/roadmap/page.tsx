@@ -1,10 +1,15 @@
 import React from 'react'
 import { Roadmap } from '../_components'
-const page = () => {
+interface ISearchParams {
+  searchParams: Promise<{
+    jobtitle: string
+  }>
+}
+const page: React.FC<ISearchParams> = async ({ searchParams: mySearchParams }: ISearchParams) => {
+  const searchParams = await mySearchParams;
+  const jobTitle = searchParams.jobtitle;
   return (
-    <div>
-      <Roadmap/>
-    </div>
+    <Roadmap jobTitle={jobTitle} />
   )
 }
 export default page
