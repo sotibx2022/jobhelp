@@ -9,6 +9,13 @@ export const extractText = (response: any): string => {
     }
   }
 }
+export const findJsonArray = (content: string): string | null => {
+  const jsonMatch = content.match(/\[[\s\S]*\]/);
+  if (!jsonMatch) {
+    return null; 
+  }
+  return jsonMatch[0];
+};
 export const findJson = (content: string): string => {
   const jsonMatch = content.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
