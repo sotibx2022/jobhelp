@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Accordion } from "@/components/ui/accordion"
 import React, { useEffect, useState } from 'react'
 import SingleRoadMap from './SingleRoadMap'
+import AddTopic from './AddTopic'
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const { data } = useQuery<APIResponse<ContentsType>>({
     queryKey: ['jobContent', jobTitle],
@@ -27,9 +28,10 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
       setOverallLength(totalLength)
     }
   }, [jobContents])
+  const score = Math.floor((overallScore/overallLength)*100)
   return (
     <div className="w-full">
-      <h1 className="primaryHeading">ProgressMeter: {(overallScore/overallLength)*100} %</h1>
+      <h1 className="primaryHeading">ProgressMeter: {score} %</h1>
       {jobContents && (
         <Accordion
           type="multiple"
@@ -46,6 +48,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
           ))}
         </Accordion>
       )}
+      <AddTopic/>
     </div>
   )
 }

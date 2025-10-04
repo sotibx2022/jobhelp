@@ -3,6 +3,7 @@ import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/
 import StringCheckList from './StringCheckList'
 import { ContentType } from '@/app/types/roadmapTypes'
 import { Badge } from '@/components/ui/badge'
+import { DeleteButton, EditButton } from '@/app/_components'
 interface SingleRoadMapProps {
   index: number,
   content: ContentType,
@@ -18,9 +19,13 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({ index, content, unitScore
   return (
     <div>
       <AccordionItem value={`item-${index}`}>
-        <AccordionTrigger className="secondaryHeading">
+        <AccordionTrigger className="secondaryHeading flex">
           <h6 className="secondaryHeading">
             {content.actionTitle}
+            <div className='flex gap-2'>
+              <DeleteButton/>
+              <EditButton/>
+            </div>
             <Badge variant="outline" className="ml-2">
               Score: {score}/{content.subContents.length}
             </Badge>

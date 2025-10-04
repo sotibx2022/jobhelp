@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react'
-import Logo from '../landingPage/Logo'
-import { Loading, SearchBar } from '../index'
+import { Loading, SearchBar,Logo, GuestUser } from '../index'
 const PagesHeader= () => {
   return (
     <div className='flexBetween w-full'>
@@ -8,6 +7,7 @@ const PagesHeader= () => {
       <Suspense fallback={<Loading/>}>
       <SearchBar  />
       </Suspense>
+      <GuestUser/>
     </div>
   )
 }
