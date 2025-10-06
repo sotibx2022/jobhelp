@@ -20,7 +20,6 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
         dispatch(addJobDetails({ jobTitle: jobtitle }))
         setSearchValue(jobtitle)
     }, [searchParams])
-    console.log(pathName)
     const doSubmit = () => {
         if (!searchValue.trim()) return;
         dispatch(addJobDetails({ jobTitle: searchValue }));

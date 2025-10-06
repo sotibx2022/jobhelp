@@ -5,9 +5,9 @@ import { DeleteButton, EditButton } from "@/app/_components"
 interface StringCheckListProps {
   string: string
   checkedValue: (value: boolean) => void,
-  edit:boolean,
+  edit: boolean,
 }
-const StringCheckList: React.FC<StringCheckListProps> = ({ string, checkedValue,edit }) => {
+const StringCheckList: React.FC<StringCheckListProps> = ({ string, checkedValue, edit }) => {
   const [isChecked, setIsChecked] = useState(false)
   const toggleItem = () => {
     const newValue = !isChecked
