@@ -12,6 +12,8 @@ import StringList from "./structures/lists/StringList";
 import Loading from "./structures/loading/Loading";
 import Navigation from "./structures/navigation/Navigation";
 import SaveButton from "./structures/SaveButton";
-export { SearchBar,GuestUser,Navigation,SaveButton
-,EditButton
-,DeleteButton, LandingPageHeader, Logo, PagesHeader,CommonFooter,AppSidebar,AbsoluteIcon,StringList,Loading};
+export {
+    SearchBar, GuestUser, Navigation, SaveButton
+    , EditButton
+    , DeleteButton, LandingPageHeader, Logo, PagesHeader, CommonFooter, AppSidebar, AbsoluteIcon, StringList, Loading
+};

@@ -1,47 +1,76 @@
-import React, { useState } from 'react'
-import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import StringCheckList from './StringCheckList'
-import { ContentType } from '@/app/types/roadmapTypes'
-import { Badge } from '@/components/ui/badge'
-import { DeleteButton, EditButton } from '@/app/_components'
+import React, { useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import StringCheckList from "./StringCheckList";
+import { ContentType } from "@/app/types/roadmapTypes";
+import { Badge } from "@/components/ui/badge";
+import { DeleteButton, EditButton } from "@/app/_components";
+import { AccordionHeader } from "@radix-ui/react-accordion";
 interface SingleRoadMapProps {
-  index: number,
-  content: ContentType,
-  unitScore: (args: { value: number }) => void; // only score now
+  index: number;
+  content: ContentType;
+  unitScore: (args: { value: number }) => void;
+  edit: boolean;
 }
-const SingleRoadMap: React.FC<SingleRoadMapProps> = ({ index, content, unitScore }) => {
-  const [score, setScore] = useState(0)
+const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
+  index,
+  content,
+  unitScore,
+  edit,
+}) => {
+  const [score, setScore] = useState(0);
   const handleCheckedValue = (checked: boolean) => {
-    const delta = checked ? 1 : -1
-    setScore(prev => prev + delta)
-    unitScore({ value: delta })
+    const delta = checked ? 1 : -1;
+    setScore((prev) => prev + delta);
+    unitScore({ value: delta });
+  };
+  function handleDelete() {
+    throw new Error("Function not implemented.");
+  }
+  function handleEdit() {
+    throw new Error("Function not implemented.");
   }
   return (
-    <div>
-      <AccordionItem value={`item-${index}`}>
-        <AccordionTrigger className="secondaryHeading flex">
-          <h6 className="secondaryHeading">
-            {content.actionTitle}
-            <div className='flex gap-2'>
-              <DeleteButton/>
-              <EditButton/>
+    <AccordionItem value={`item-${index + 1}`}>
+      <AccordionHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <AccordionTrigger className="flex items-center">
+        <h6 className="secondaryHeading">{content.actionTitle}</h6>
+        <Badge variant="outline" className="ml-2">
+          Score: {score}/{content.subContents.length}
+        </Badge>
+      </AccordionTrigger>
+      <div>
+        {/* Left section: title + buttons */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          {edit && (
+            <div className="flex gap-2"><DeleteButton onClick={() => {
+              handleDelete();
+            }} />
+              <EditButton onClick={() => {
+                handleEdit();
+              }} />
             </div>
-            <Badge variant="outline" className="ml-2">
-              Score: {score}/{content.subContents.length}
-            </Badge>
-          </h6>
-        </AccordionTrigger>
-        <AccordionContent>
-          {content.subContents.map((item: string, idx: number) => (
-            <StringCheckList
-              string={item}
-              checkedValue={handleCheckedValue}
-              key={idx}
-            />
-          ))}
-        </AccordionContent>
-      </AccordionItem>
-    </div>
-  )
-}
-export default SingleRoadMap
+          )}
+        </div>
+        {/* Right section: badge */}
+      </div>
+      </AccordionHeader>
+      {/* Accordion Body */}
+      <AccordionContent className="px-4 pb-4">
+        {content.subContents.map((item: string, idx: number) => (
+          <StringCheckList
+            key={idx}
+            string={item}
+            checkedValue={handleCheckedValue}
+            edit={edit}
+          />
+        ))}
+      </AccordionContent>
+    </AccordionItem>
+  );
+};
+export default SingleRoadMap;
