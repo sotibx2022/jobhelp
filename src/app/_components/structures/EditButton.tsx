@@ -3,22 +3,24 @@ import { Edit } from 'lucide-react'
 import React from 'react'
 interface EditButtonProps {
   onClick?: () => void
-  size?:"small"
+  size?: 'small'
+  variant?: 'default' | 'outline' | 'secondary' | 'ghost'
+  text?: string // 👈 optional text prop
 }
-const EditButton: React.FC<EditButtonProps> = ({ onClick,size }) => {
+const EditButton: React.FC<EditButtonProps> = ({
+  onClick,
+  size,
+  variant = 'outline',
+  text = 'Edit', // 👈 default to "Edit"
+}) => {
   return (
     <Button
-      variant="outline"
+      variant={variant}
       onClick={onClick}
-      className="relative group flex items-center justify-center text-foreground hover:opacity-90 transition-opacity"
+      className="flex items-center gap-2 text-foreground hover:opacity-90 transition-opacity"
     >
-      <Edit className={size ==='small'? "w-4 h-4" : "w-5 h-5"}  />
-      {/* Tooltip-style label */}
-      <span
-        className="absolute top-full text-xs text-foreground opacity-0 group-hover:opacity-100"
-      >
-        Edit
-      </span>
+      <Edit className={size === 'small' ? 'w-4 h-4' : 'w-5 h-5'} />
+      <span className="text-sm">{text}</span>
     </Button>
   )
 }

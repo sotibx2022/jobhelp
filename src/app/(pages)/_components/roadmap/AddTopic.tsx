@@ -6,44 +6,45 @@ import { useDispatch } from 'react-redux';
 interface AddTopicProps {
   defaultValue: string,
   cancelTopicChange: (value: boolean) => void;
-  titleIndex: number;
+  titleIndex?: number;
   subTitleIndex?: number,
-  action?:string
+  action?: string
 }
-const AddTopic: React.FC<AddTopicProps> = ({ defaultValue, cancelTopicChange, titleIndex, subTitleIndex,action }) => {
-  console.log(subTitleIndex);
+const AddTopic: React.FC<AddTopicProps> = ({ defaultValue, cancelTopicChange, titleIndex, subTitleIndex, action }) => {
   const dispatch = useDispatch()
   const [topic, setTopic] = useState(defaultValue);
   const cancleHandler = () => {
     cancelTopicChange(true);
   }
   const saveHandler = () => {
-     if(action ==='add'){
-     if(titleIndex !==undefined && titleIndex !==null){
-      dispatch(addRoadMapSubTitle({titleIndex,actionTitle:topic}))
-     }else{
-      dispatch(addRoadMapTitle({actionTitle:topic}))
-     }
-     }else{
- if (subTitleIndex !== undefined && subTitleIndex !== null) {
-      dispatch(
-        editRoadMapSubTitle({
-          titleIndex: titleIndex,
-          subTitleIndex: subTitleIndex,
-          actionTitle: topic,
-        })
-      );
-      cancelTopicChange(true);
+    const definedTitle = titleIndex !== undefined && titleIndex !== null
+    const definedSubTitle = subTitleIndex !== undefined && subTitleIndex !== null
+    if (action === 'add') {
+      if (definedTitle) {
+        dispatch(addRoadMapSubTitle({ titleIndex, actionTitle: topic }))
+      } else {
+        dispatch(addRoadMapTitle({ actionTitle: topic }))
+      }
     } else {
-      dispatch(
-        editRoadMapTitle({
-          index: titleIndex,
-          actionTitle: topic,
-        })
-      );
-      cancelTopicChange(true);
+      if (definedSubTitle && definedTitle) {
+        dispatch(
+          editRoadMapSubTitle({
+            titleIndex: titleIndex,
+            subTitleIndex: subTitleIndex,
+            actionTitle: topic,
+          })
+        );
+        cancelTopicChange(true);
+      } else if (definedTitle) {
+        dispatch(
+          editRoadMapTitle({
+            index: titleIndex,
+            actionTitle: topic,
+          })
+        );
+        cancelTopicChange(true);
+      }
     }
-     }
   };
   return (
     <div className='flex gap-2'>

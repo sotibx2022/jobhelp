@@ -13,6 +13,7 @@ import { AccordionHeader } from "@radix-ui/react-accordion";
 import { useDispatch } from "react-redux";
 import { deleteRoadmapTitle } from "@/app/redux/roadmapSlice";
 import AddTopic from "./AddTopic";
+import AddButton from "@/app/_components/structures/AddButton";
 interface SingleRoadMapProps {
   index: number;
   content: ContentType;
@@ -25,7 +26,7 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
   unitScore,
   edit,
 }) => {
-  const[addTopic,setAddTopic] = useState(false);
+  const [addTopic, setAddTopic] = useState(false);
   const dispatch = useDispatch();
   const [score, setScore] = useState(0);
   const handleCheckedValue = (checked: boolean) => {
@@ -40,15 +41,15 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
   function handleEdit() {
     setAddTopic(true)
   }
-  const cancleTopicChange =(value:boolean)=>{
+  const cancleTopicChange = (value: boolean) => {
     setAddTopic(false)
   }
   return (
     <AccordionItem value={`item-${index}`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <AccordionTrigger className="flex items-center">
-          {addTopic?<AddTopic defaultValue={content.actionTitle} cancelTopicChange={cancleTopicChange}
-          titleIndex={index}/>:<span className="secondaryHeading">{content.actionTitle}</span>}
+          {addTopic ? <AddTopic defaultValue={content.actionTitle} cancelTopicChange={cancleTopicChange}
+            titleIndex={index} /> : <span className="secondaryHeading">{content.actionTitle}</span>}
           <Badge variant="outline" className="ml-2">
             Score: {score}/{content.subContents.length}
           </Badge>
@@ -81,7 +82,7 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
             subTitleIndex={idx}
           />
         ))}
-        <AddTopic defaultValue={"Add New Sub Topic"} cancelTopicChange={cancleTopicChange}/>
+        {addTopic ? <AddTopic defaultValue={"Add New Sub Topic"} cancelTopicChange={cancleTopicChange} titleIndex={index} action="add" /> : <AddButton size="small" onClick={() => setAddTopic(!addTopic)} text="Add Sub Title" />}
       </AccordionContent>
     </AccordionItem>
   );

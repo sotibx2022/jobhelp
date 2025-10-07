@@ -9,11 +9,15 @@ import SingleRoadMap from './SingleRoadMap'
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Edit } from "lucide-react";
+import { Edit, Eye } from "lucide-react";
 import { Badge } from '@/components/ui/badge'
 import { useDispatch, useSelector } from 'react-redux'
 import { setRoadMapItems } from '@/app/redux/roadmapSlice'
 import { RootState } from '@/app/redux/store'
+import AddTopic from './AddTopic'
+import AddButton from '@/app/_components/structures/AddButton'
+import ViewButton from '@/app/_components/structures/ViewButton'
+import { EditButton } from '@/app/_components'
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const contents = useSelector((state: RootState) => state.roadmapDetails)
   const dispatch = useDispatch()
@@ -28,6 +32,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const jobContents = data?.data
   const [overallScore, setOverallScore] = useState(0)
   const [overallLength, setOverallLength] = useState(0)
+  const [addTopic, setAddTopic] = useState(false)
   const handleUnitScore = ({ value }: { value: number }) => {
     setOverallScore(prev => prev + value)
   }
@@ -41,8 +46,8 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     }
   }, [jobContents])
   const score = Math.floor((overallScore / overallLength) * 100)
-  const onEdit = () => {
-    setEdit(true)
+  const cancleTopicChange = (value: boolean) => {
+    setAddTopic(false)
   }
   return (
     <div className="w-full">
@@ -52,10 +57,11 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
             <h2 className="secondaryHeading capitalize">Progress</h2>
             <Badge variant="destructive">{score}%</Badge>
           </div>
-          <Button onClick={onEdit} variant="default" className="gap-2">
-            <Edit size={18} />
-            Edit
-          </Button>
+          {edit ? (
+            <EditButton variant='secondary' text='Edit' onClick={() => setEdit(true)}/>
+          ) : (
+            <ViewButton variant='secondary' text='View' onClick={() => setEdit(false)} />
+          )}
         </CardHeader>
         <CardContent>
           <Progress value={score} className="h-2 mt-2" />
@@ -76,6 +82,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
               edit={edit}
             />
           ))}
+          {addTopic ? <AddTopic defaultValue={'Add New Topic'} cancelTopicChange={cancleTopicChange} action='add' /> : <AddButton text='Add Topic' onClick={() => setAddTopic(!addTopic)} />}
         </Accordion>
       )}
     </div>
