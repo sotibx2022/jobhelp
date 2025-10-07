@@ -18,6 +18,7 @@ import AddTopic from './AddTopic'
 import AddButton from '@/app/_components/structures/AddButton'
 import ViewButton from '@/app/_components/structures/ViewButton'
 import { EditButton } from '@/app/_components'
+import { setScoreValue } from '@/app/redux/profileScoreSlice'
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const contents = useSelector((state: RootState) => state.roadmapDetails)
   const dispatch = useDispatch()
@@ -46,6 +47,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     }
   }, [jobContents])
   const score = Math.floor((overallScore / overallLength) * 100)
+  useEffect(()=>{dispatch(setScoreValue(score))},[score])
   const cancleTopicChange = (value: boolean) => {
     setAddTopic(false)
   }

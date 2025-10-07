@@ -1,5 +1,6 @@
-import { UserCircle } from 'lucide-react'
-import React from 'react'
+"use client";
+import { UserCircle } from "lucide-react";
+import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,41 +8,42 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Badge } from '@/components/ui/badge'
+} from "@/components/ui/dropdown-menu";
+import { useSelector } from 'react-redux'
+import { RootState } from '@/app/redux/store'
+import ScoreDisplay from "./ScoreDisplay";
 const GuestUser = () => {
-    let score;
+  const score = useSelector((state: RootState) => state.profileScore.scoreValue)
+  const borderStyle = {
+    background: `conic-gradient(
+      #3b82f6 ${score * 3.6}deg,
+      #e5e7eb ${score * 3.6}deg
+    )`,
+  };
   return (
     <div className="flex justify-center">
       <DropdownMenu>
         <DropdownMenuTrigger className="flex flex-col items-center gap-2 focus:outline-none">
-          {/* User icon */}
-          <div className="flex items-center justify-center w-10 h-10 rounded-full border border-muted-foreground/20">
-            <UserCircle className="w-6 h-6 text-foreground" />
-          </div>
-          {/* Score + progress */}
-          {score && <div className="w-24 text-center">
-            <p className="text-sm font-medium flex justify-center items-center gap-1">
-              Score <Badge variant="outline">{score}%</Badge>
-            </p>
-            <div className="relative w-full h-1 bg-muted-foreground/30 rounded-full mt-1">
-              <div
-                className="absolute top-0 left-0 h-full bg-foreground rounded-full transition-all duration-300"
-                style={{ width: `${score}%` }}
-              ></div>
+          <div
+            className="relative w-12 h-12 rounded-full p-[2px]"
+            style={borderStyle}
+          >
+            <div className="flex items-center justify-center w-full h-full rounded-full bg-background">
+              <UserCircle className="w-7 h-7 text-foreground" />
             </div>
-          </div>}
+          </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="center" className="min-w-[8rem] text-sm">
           <DropdownMenuLabel className="text-center font-medium">
             Guest User
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          {score && score>0 && <ScoreDisplay/>}
           <DropdownMenuItem className="justify-center">Register</DropdownMenuItem>
           <DropdownMenuItem className="justify-center">Login</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  )
-}
-export default GuestUser
+  );
+};
+export default GuestUser;
