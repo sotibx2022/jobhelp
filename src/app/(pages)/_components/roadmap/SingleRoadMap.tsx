@@ -47,7 +47,8 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
     <AccordionItem value={`item-${index}`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <AccordionTrigger className="flex items-center">
-          {addTopic?<AddTopic defaultValue={content.actionTitle} cancelTopicChange={cancleTopicChange}/>:<span className="secondaryHeading">{content.actionTitle}</span>}
+          {addTopic?<AddTopic defaultValue={content.actionTitle} cancelTopicChange={cancleTopicChange}
+          titleIndex={index}/>:<span className="secondaryHeading">{content.actionTitle}</span>}
           <Badge variant="outline" className="ml-2">
             Score: {score}/{content.subContents.length}
           </Badge>
@@ -76,6 +77,8 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
             string={item}
             checkedValue={handleCheckedValue}
             edit={edit}
+            titleIndex={index}
+            subTitleIndex={idx}
           />
         ))}
       </AccordionContent>
