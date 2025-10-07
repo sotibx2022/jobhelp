@@ -8,13 +8,13 @@ const roadmapSlice = createSlice({
     setRoadMapItems: (state, action: PayloadAction<ContentsType>) => {
       return action.payload;
     },
-   deleteRoadmapTitle: (state, action: PayloadAction<{ index: number }>) => {
-  console.log('Current state:', JSON.parse(JSON.stringify(state)));
-  console.log('Deleting index:', action.payload.index);
-  const newState = state.filter((_, i) => i !== action.payload.index);
-  console.log('New state after deletion:',JSON.parse(JSON.stringify(newState)) );
-  return newState;
-},
+    deleteRoadmapTitle: (state, action: PayloadAction<{ index: number }>) => {
+      console.log('Current state:', JSON.parse(JSON.stringify(state)));
+      console.log('Deleting index:', action.payload.index);
+      const newState = state.filter((_, i) => i !== action.payload.index);
+      console.log('New state after deletion:', JSON.parse(JSON.stringify(newState)));
+      return newState;
+    },
     editRoadMapTitle: (
       state,
       action: PayloadAction<{ index: number; actionTitle: string }>

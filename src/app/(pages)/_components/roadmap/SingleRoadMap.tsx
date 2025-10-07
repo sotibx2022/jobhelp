@@ -12,6 +12,7 @@ import { DeleteButton, EditButton } from "@/app/_components";
 import { AccordionHeader } from "@radix-ui/react-accordion";
 import { useDispatch } from "react-redux";
 import { deleteRoadmapTitle } from "@/app/redux/roadmapSlice";
+import AddTopic from "./AddTopic";
 interface SingleRoadMapProps {
   index: number;
   content: ContentType;
@@ -24,6 +25,7 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
   unitScore,
   edit,
 }) => {
+  const[addTopic,setAddTopic] = useState(false);
   const dispatch = useDispatch();
   const [score, setScore] = useState(0);
   const handleCheckedValue = (checked: boolean) => {
@@ -36,13 +38,16 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
     dispatch(deleteRoadmapTitle({ index }))
   }
   function handleEdit() {
-    throw new Error("Function not implemented.");
+    setAddTopic(true)
+  }
+  const cancleTopicChange =(value:boolean)=>{
+    setAddTopic(false)
   }
   return (
     <AccordionItem value={`item-${index}`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <AccordionTrigger className="flex items-center">
-          <span className="secondaryHeading">{content.actionTitle}</span>
+          {addTopic?<AddTopic defaultValue={content.actionTitle} cancelTopicChange={cancleTopicChange}/>:<span className="secondaryHeading">{content.actionTitle}</span>}
           <Badge variant="outline" className="ml-2">
             Score: {score}/{content.subContents.length}
           </Badge>
