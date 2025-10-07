@@ -47,7 +47,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     }
   }, [jobContents])
   const score = Math.floor((overallScore / overallLength) * 100)
-  useEffect(()=>{dispatch(setScoreValue(score))},[score])
+  useEffect(() => { dispatch(setScoreValue(score)) }, [score])
   const cancleTopicChange = (value: boolean) => {
     setAddTopic(false)
   }
@@ -60,7 +60,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
             <Badge variant="destructive">{score}%</Badge>
           </div>
           {!edit ? (
-            <EditButton variant='secondary' text='Edit' onClick={() => setEdit(!edit)}/>
+            <EditButton variant='secondary' text='Edit' onClick={() => setEdit(!edit)} />
           ) : (
             <ViewButton variant='secondary' text='View' onClick={() => setEdit(!edit)} />
           )}
