@@ -57,10 +57,10 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
             <h2 className="secondaryHeading capitalize">Progress</h2>
             <Badge variant="destructive">{score}%</Badge>
           </div>
-          {edit ? (
-            <EditButton variant='secondary' text='Edit' onClick={() => setEdit(true)}/>
+          {!edit ? (
+            <EditButton variant='secondary' text='Edit' onClick={() => setEdit(!edit)}/>
           ) : (
-            <ViewButton variant='secondary' text='View' onClick={() => setEdit(false)} />
+            <ViewButton variant='secondary' text='View' onClick={() => setEdit(!edit)} />
           )}
         </CardHeader>
         <CardContent>
@@ -82,7 +82,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
               edit={edit}
             />
           ))}
-          {addTopic ? <AddTopic defaultValue={'Add New Topic'} cancelTopicChange={cancleTopicChange} action='add' /> : <AddButton text='Add Topic' onClick={() => setAddTopic(!addTopic)} />}
+          {edit && (addTopic ? <AddTopic defaultValue={'Add New Topic'} cancelTopicChange={cancleTopicChange} action='add' /> : <AddButton text='Add Topic' onClick={() => setAddTopic(!addTopic)} />)}
         </Accordion>
       )}
     </div>

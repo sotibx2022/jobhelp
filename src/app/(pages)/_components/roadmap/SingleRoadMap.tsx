@@ -9,7 +9,6 @@ import StringCheckList from "./StringCheckList";
 import { ContentType } from "@/app/types/roadmapTypes";
 import { Badge } from "@/components/ui/badge";
 import { DeleteButton, EditButton } from "@/app/_components";
-import { AccordionHeader } from "@radix-ui/react-accordion";
 import { useDispatch } from "react-redux";
 import { deleteRoadmapTitle } from "@/app/redux/roadmapSlice";
 import AddTopic from "./AddTopic";
@@ -34,55 +33,75 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
     setScore((prev) => prev + delta);
     unitScore({ value: delta });
   };
-  function handleDelete(index: number) {
-    alert('delete request');
-    dispatch(deleteRoadmapTitle({ index }))
-  }
-  function handleEdit() {
-    setAddTopic(true)
-  }
+  const handleDelete = (index: number) => {
+    alert("delete request");
+    dispatch(deleteRoadmapTitle({ index }));
+  };
+  const handleEdit = () => {
+    setAddTopic(true);
+  };
   const cancleTopicChange = (value: boolean) => {
-    setAddTopic(false)
-  }
+    setAddTopic(false);
+  };
   return (
-    <AccordionItem value={`item-${index}`}>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <AccordionTrigger className="flex items-center">
-          {addTopic ? <AddTopic defaultValue={content.actionTitle} cancelTopicChange={cancleTopicChange}
-            titleIndex={index} /> : <span className="secondaryHeading">{content.actionTitle}</span>}
-          <Badge variant="outline" className="ml-2">
-            Score: {score}/{content.subContents.length}
-          </Badge>
-        </AccordionTrigger>
-        <div>
-          {/* Left section: title + buttons */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-            {edit && (
-              <div className="flex gap-2"><DeleteButton onClick={() => {
-                handleDelete(index);
-              }} />
-                <EditButton onClick={() => {
-                  handleEdit();
-                }} />
-              </div>
+    <AccordionItem value={`item-${index}`} className="border rounded-lg mb-4">
+      <AccordionTrigger className="px-4 py-3 hover:no-underline">
+        <div className="flex justify-between items-center w-full pr-4">
+          {/* Left side: Title and Badge */}
+          <div className="flex items-center gap-3">
+            {edit && addTopic ? (
+              <AddTopic
+                defaultValue={content.actionTitle}
+                cancelTopicChange={cancleTopicChange}
+                titleIndex={index}
+              />
+            ) : (
+              <span className="secondaryHeading">{content.actionTitle}</span>
+            )}
+            <Badge variant="secondary" className="ml-2">
+              Score: {score}/{content.subContents.length}
+            </Badge>
+          </div>
+          {/* Right side: Edit/Delete buttons */}
+          {edit && !addTopic && (
+            <div className="flex items-center gap-2">
+              <EditButton onClick={handleEdit} />
+              <DeleteButton size="small" onClick={() => handleDelete(index)} />
+            </div>
+          )}
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="px-4 pb-3">
+        <div className="space-y-2 mb-3">
+          {content.subContents.map((item: string, idx: number) => (
+            <StringCheckList
+              key={idx}
+              stringValue={item}
+              checkedValue={handleCheckedValue}
+              edit={edit}
+              titleIndex={index}
+              subTitleIndex={idx}
+            />
+          ))}
+        </div>
+        {edit && (
+          <div className="mt-3">
+            {addTopic ? (
+              <AddTopic
+                defaultValue="Add New Sub Topic"
+                cancelTopicChange={cancleTopicChange}
+                titleIndex={index}
+                action="add"
+              />
+            ) : (
+              <AddButton 
+                size="small" 
+                onClick={() => setAddTopic(!addTopic)} 
+                text="Add Sub Title" 
+              />
             )}
           </div>
-          {/* Right section: badge */}
-        </div>
-      </div>
-      {/* Accordion Body */}
-      <AccordionContent className="px-4 pb-4">
-        {content.subContents.map((item: string, idx: number) => (
-          <StringCheckList
-            key={idx}
-            stringValue={item}
-            checkedValue={handleCheckedValue}
-            edit={edit}
-            titleIndex={index}
-            subTitleIndex={idx}
-          />
-        ))}
-        {addTopic ? <AddTopic defaultValue={"Add New Sub Topic"} cancelTopicChange={cancleTopicChange} titleIndex={index} action="add" /> : <AddButton size="small" onClick={() => setAddTopic(!addTopic)} text="Add Sub Title" />}
+        )}
       </AccordionContent>
     </AccordionItem>
   );

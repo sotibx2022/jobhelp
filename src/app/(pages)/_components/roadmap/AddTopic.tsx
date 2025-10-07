@@ -1,4 +1,5 @@
 import { DeleteButton, SaveButton } from '@/app/_components';
+import ResetButton from '@/app/_components/structures/ResetButton';
 import { addRoadMapSubTitle, addRoadMapTitle, editRoadMapSubTitle, editRoadMapTitle } from '@/app/redux/roadmapSlice';
 import { Input } from '@/components/ui/input'
 import React, { useState } from 'react'
@@ -48,10 +49,10 @@ const AddTopic: React.FC<AddTopicProps> = ({ defaultValue, cancelTopicChange, ti
   };
   return (
     <div className='flex gap-2'>
-      <Input type='text' placeholder='Add New Topic' className='max-w-[500px]' value={topic} onChange={(e) => setTopic(e.target.value)} />
+      <Input type='text' placeholder='Add New Topic' className='min-w-[300px]' value={topic} onChange={(e) => setTopic(e.target.value)} />
       {topic && <div className='flexCenter gap-2'>
         <SaveButton onClick={saveHandler} />
-        <DeleteButton onClick={cancleHandler} />
+        <ResetButton onClick={cancleHandler} />
       </div>}
     </div>
   )
