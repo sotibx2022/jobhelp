@@ -6,17 +6,17 @@ import { useDispatch } from "react-redux"
 import { deleteRoadMapSubTitle } from "@/app/redux/roadmapSlice"
 import AddTopic from "./AddTopic"
 interface StringCheckListProps {
-  string: string
+  stringValue: string
   checkedValue: (value: boolean) => void,
   edit: boolean,
   titleIndex: number,
   subTitleIndex: number
 }
-const StringCheckList: React.FC<StringCheckListProps> = ({ string, checkedValue, edit, titleIndex, subTitleIndex }) => {
+const StringCheckList: React.FC<StringCheckListProps> = ({ stringValue, checkedValue, edit, titleIndex, subTitleIndex }) => {
   const dispatch = useDispatch()
   const [isChecked, setIsChecked] = useState(false)
   const [addTopic, setAddTopic] = useState(false);
-  const [topic, setTopic] = useState("")
+  const [topic, setTopic] = useState(stringValue)
   const toggleItem = () => {
     const newValue = !isChecked
     setIsChecked(newValue)
@@ -38,7 +38,7 @@ const StringCheckList: React.FC<StringCheckListProps> = ({ string, checkedValue,
           }`}
       >
         <Checkbox checked={isChecked} onCheckedChange={toggleItem} />
-        <span>{string}</span>
+        <span>{stringValue}</span>
         {edit && <>
           <DeleteButton size="small" onClick={deleteHandler} />
           <EditButton size="small" onClick={editHandler} />

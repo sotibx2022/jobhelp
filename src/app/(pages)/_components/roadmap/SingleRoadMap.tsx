@@ -74,13 +74,14 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
         {content.subContents.map((item: string, idx: number) => (
           <StringCheckList
             key={idx}
-            string={item}
+            stringValue={item}
             checkedValue={handleCheckedValue}
             edit={edit}
             titleIndex={index}
             subTitleIndex={idx}
           />
         ))}
+        <AddTopic defaultValue={"Add New Sub Topic"} cancelTopicChange={cancleTopicChange}/>
       </AccordionContent>
     </AccordionItem>
   );
