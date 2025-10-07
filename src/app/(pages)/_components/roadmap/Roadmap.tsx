@@ -6,7 +6,6 @@ import { useQuery } from '@tanstack/react-query'
 import { Accordion } from "@/components/ui/accordion"
 import React, { useEffect, useState } from 'react'
 import SingleRoadMap from './SingleRoadMap'
-import AddTopic from './AddTopic'
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -79,7 +78,6 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
           ))}
         </Accordion>
       )}
-      <AddTopic />
     </div>
   )
 }
