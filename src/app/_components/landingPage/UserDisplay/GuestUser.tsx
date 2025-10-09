@@ -12,6 +12,7 @@ import {
 import { useSelector } from 'react-redux'
 import { RootState } from '@/app/redux/store'
 import ScoreDisplay from "./ScoreDisplay";
+import ProfileIcon from "./ProfileIcon";
 const GuestUser = () => {
   const score = useSelector((state: RootState) => state.profileScore.scoreValue)
   const borderStyle = {
@@ -29,7 +30,7 @@ const GuestUser = () => {
             style={borderStyle}
           >
             <div className="flex items-center justify-center w-full h-full rounded-full bg-background">
-              <UserCircle className="w-7 h-7 text-foreground" />
+              <ProfileIcon />
             </div>
           </div>
         </DropdownMenuTrigger>
@@ -38,7 +39,7 @@ const GuestUser = () => {
             Guest User
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {score && score>0 && <ScoreDisplay/>}
+          {score && score > 0 && <ScoreDisplay />}
           <DropdownMenuItem className="justify-center">Register</DropdownMenuItem>
           <DropdownMenuItem className="justify-center">Login</DropdownMenuItem>
         </DropdownMenuContent>

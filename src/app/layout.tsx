@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ProviderWrapper from "./ProviderWrapper";
+import AbsoluteComponent from "./_components/absoluteComponents/AbsoluteComponent";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <ProviderWrapper>
         <body className={`${inter.variable} antialiased`}>
+          <AbsoluteComponent/>
           {children}
         </body>
       </ProviderWrapper>

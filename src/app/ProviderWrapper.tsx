@@ -2,6 +2,7 @@
 import { Provider } from "react-redux";
 import QueryProvider from "./provider/QueryProvider";
 import { store } from "./redux/store";
+import DisplayProvider from "./context/DisplayComponent";
 interface RootLayoutProps {
     children: React.ReactNode;
 }
@@ -9,7 +10,9 @@ const ProviderWrapper = ({ children }: RootLayoutProps) => {
     return (
         <Provider store={store}>
             <QueryProvider>
+                <DisplayProvider>
                 {children}
+                </DisplayProvider>
             </QueryProvider>
         </Provider>
     );
