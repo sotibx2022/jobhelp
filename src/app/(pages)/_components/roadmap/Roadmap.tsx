@@ -19,11 +19,12 @@ import AddButton from '@/app/_components/structures/AddButton'
 import ViewButton from '@/app/_components/structures/ViewButton'
 import { EditButton } from '@/app/_components'
 import { setScoreValue } from '@/app/redux/profileScoreSlice'
+import SkletonRoadmapPage from '@/app/_components/structures/skleton/SkletonRoadmapPage'
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const contents = useSelector((state: RootState) => state.roadmapDetails)
   const dispatch = useDispatch()
   const [edit, setEdit] = useState(false);
-  const { data } = useQuery<APIResponse<ContentsType>>(
+  const { data, isPending } = useQuery<APIResponse<ContentsType>>(
     {
       queryKey: ['jobContent', jobTitle],
       queryFn: () => getJobDetails<ContentsType>(`/api/contents?jobtitle=${jobTitle}`),
@@ -51,9 +52,12 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const cancleTopicChange = (value: boolean) => {
     setAddTopic(false)
   }
+  if (isNaN(score)) {
+    return <SkletonRoadmapPage />;
+  }
   return (
     <div className="w-full">
-      <Card >
+      <Card className='mb-4' >
         <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className='flex gap-2'>
             <h2 className="secondaryHeading capitalize">Progress</h2>

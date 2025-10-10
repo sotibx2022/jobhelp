@@ -8,10 +8,12 @@ import { Navigation } from '@/app/_components'
 import Link from 'next/link'
 import SingleJob from './SingleJob'
 import JobsFilter from './JobsFilter'
+import SkletonJobsPage from '@/app/_components/structures/skleton/SkletonJobsPage'
 const Page = () => {
   const searchParams = useSearchParams();
   const jobTitle = searchParams.get('jobtitle');
-  const [country, setCountry] = useState<string>('')
+  const countryValue = searchParams.get('country')
+  const [country,setCountry] = useState(countryValue||"")
   const [pageNumber, setPageNumber] = useState(1);
   const selectedCountry = (countryName: string) => {
     setCountry(countryName)
@@ -32,6 +34,9 @@ const Page = () => {
   const totalResults = parseInt(allJobs?.queries?.request[0]?.totalResults);
   const returnedPageNumber = (value: number) => {
     setPageNumber(value)
+  }
+  if(isNaN(totalResults)){
+    return <SkletonJobsPage/>
   }
   return (
     <div className="p-4">

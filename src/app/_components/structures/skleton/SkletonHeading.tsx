@@ -5,6 +5,6 @@ interface SkeletonHeadingProps {
   className?: string
 }
 const SkeletonHeading: React.FC<SkeletonHeadingProps> = ({ className }) => {
-  return <Skeleton className={cn("", className)} />
+  return <Skeleton className={cn("bg-muted/60", className)} />
 }
 export default SkeletonHeading
