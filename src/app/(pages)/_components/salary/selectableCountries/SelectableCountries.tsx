@@ -43,8 +43,8 @@ const SelectableCountries: React.FC<ISelectableCountriesProps> = ({ selectedCoun
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.set("country", newCountry);
     router.push(`${pathname}?${currentParams.toString()}`, { scroll: false });
-        if(selectedCountry){
-        }
+    if (selectedCountry) {
+    }
   };
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -64,7 +64,7 @@ const SelectableCountries: React.FC<ISelectableCountriesProps> = ({ selectedCoun
   useEffect(() => {
     handleCountryChange(value);
   }, [value, isPending]);
-  if (isLoading) return <SkletonCountryLoading/>;
+  if (isLoading) return <SkletonCountryLoading />;
   return (
     <Card className="w-full">
       <CardHeader>
