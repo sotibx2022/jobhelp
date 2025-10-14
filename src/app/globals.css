@@ -169,12 +169,12 @@
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-input:-webkit-autofill:active,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-textarea:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0px 1000px oklch(0.93 0.02 256.04) inset !important;
-  -webkit-text-fill-color: inherit;
-  /* input text color */
+input:-webkit-autofill:active {
+    /* Reset browser autofill styles */
+    box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: inherit !important; /* keep text color same */
+    color: inherit !important;
+    background-color: transparent !important;
+    transition: color 0.3s, background-color 0.3s; /* match your normal transition */
 }
