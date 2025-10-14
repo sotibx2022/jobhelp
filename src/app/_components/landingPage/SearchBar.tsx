@@ -23,7 +23,7 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
     const doSubmit = () => {
         if (!searchValue.trim()) return;
         dispatch(addJobDetails({ jobTitle: searchValue }));
-        if (pathName === '/') {
+        if (pathName === '/' || pathName.includes('register') || pathName.includes('login') || pathName.includes('reset')) {
             router.push(`/overview?jobtitle=${encodeURIComponent(searchValue)}`);
         } else {
             const currentParams = new URLSearchParams(searchParams.toString());
