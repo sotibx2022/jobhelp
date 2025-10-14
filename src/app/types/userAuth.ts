@@ -43,3 +43,13 @@ export const registerFormSchema = z
     path: ["confirmPassword"],
     message: "Passwords do not match",
   });
+  export const resetFormSchema = z.object({
+    email:z.string().min(1,"Email is Required").email("Please Enter Valid Email"),
+    newPassword:z.string().
+    min(8,"Minimum 8 Characters are Required").
+    regex(passwordRegex,"Password must include upper & lower case letters, a number, and a special character"),
+    confirmNewPassword:z.string().min(8,"Please Confirm Password")
+  }).refine((data)=>data.newPassword === data.confirmNewPassword,{
+    path:['confirmNewPassword'],
+    message:"Password do not Match"
+  })

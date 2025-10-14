@@ -6,10 +6,10 @@ const RootLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
     return (
         <>
             <main className="container">
-                        <PagesHeader />
-                        <div className="childrenPages">{children}</div>
-                        <CommonFooter />
-                    </main>
+                <PagesHeader />
+                <div className="childrenPages">{children}</div>
+                <CommonFooter />
+            </main>
         </>
     );
 };

@@ -63,8 +63,8 @@ const FormInput = forwardRef<HTMLInputElement, IFormInputProps>(
             return null
         }
         return (
-            <div >
-                <Label htmlFor={label}>{label}</Label>
+            <div className="my-2" >
+                <Label htmlFor={label} className="my-2">{label}</Label>
                 <InputGroup className={`${generateBorderColor(status)}`}>
                     <InputGroupInput
                         id={label}
