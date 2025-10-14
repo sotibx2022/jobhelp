@@ -109,8 +109,7 @@
   textarea,
   select,
   optgroup,
-  option {
-  }
+  option {}
 }
 @layer components {
   .selectItem {
@@ -146,18 +145,18 @@
   .fullScreen {
     @apply h-screen w-screen;
   }
-  .childrenPages{
+  .childrenPages {
     @apply min-h-[80vh]
   }
-  .pagesContent{
+  .pagesContent {
     @apply w-full
   }
   .logoContainer {
     @apply relative w-[200px] h-[50px]
-}
-.twoColumnSection{
-  @apply flex flex-col gap-4 md:flex-row justify-between
-}
+  }
+  .twoColumnSection {
+    @apply flex flex-col gap-4 md:flex-row justify-between
+  }
 }
 @layer base {
   * {
@@ -166,4 +165,16 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px oklch(0.93 0.02 256.04) inset !important;
+  -webkit-text-fill-color: inherit;
+  /* input text color */
 }
