@@ -127,6 +127,9 @@
   .flexCenter {
     @apply flex items-center justify-center;
   }
+  .pageCenter{
+    @apply min-h-[80vh] flex items-center justify-center w-full
+  }
   .flexBetween {
     @apply flex items-center justify-between;
   }
