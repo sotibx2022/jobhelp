@@ -23,6 +23,21 @@ const FormInput = forwardRef<HTMLInputElement, IFormInputProps>(
         const [inputType, setInputType] = useState(type)
         const [status, setStatus] = useState<"idle" | "validating" | "error" | "success">("idle")
         const [inputValue, setInputValue] = useState("")
+        const generateBorderColor = (status: string): string => {
+            switch (status) {
+                case 'validating':
+                    return "border border-yellow-500"
+                    break;
+                case 'success':
+                    return "border border-green-500"
+                    break;
+                case 'error':
+                    return "border border-red-500"
+                    break;
+                default:
+                    return ""
+            }
+        }
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             setInputValue(event.target.value)
             setStatus("validating")
@@ -32,8 +47,10 @@ const FormInput = forwardRef<HTMLInputElement, IFormInputProps>(
             callback: () => {
                 if (error) {
                     setStatus("error")
+                    generateBorderColor('error')
                 } else if (inputValue.trim() !== "") {
                     setStatus("success")
+                    generateBorderColor('success')
                 } else {
                     setStatus("idle")
                 }
@@ -46,9 +63,9 @@ const FormInput = forwardRef<HTMLInputElement, IFormInputProps>(
             return null
         }
         return (
-            <div>
+            <div >
                 <Label htmlFor={label}>{label}</Label>
-                <InputGroup>
+                <InputGroup className={`${generateBorderColor(status)}`}>
                     <InputGroupInput
                         id={label}
                         ref={ref}
@@ -56,7 +73,7 @@ const FormInput = forwardRef<HTMLInputElement, IFormInputProps>(
                         placeholder={placeholder}
                         {...rest}
                         onChange={handleChange}
-                        autoComplete={type ==='password'?"off":"on"}
+                        autoComplete={type === 'password' ? "off" : "on"}
                     />
                     <InputGroupAddon align={'inline-end'}>
                         {status === "error" && (
@@ -67,9 +84,6 @@ const FormInput = forwardRef<HTMLInputElement, IFormInputProps>(
                         )}
                         {status === "validating" && (
                             <Loader2 className="text-yellow-500 w-4 h-4 animate-spin" />
-                        )}
-                        {status === "idle" && (
-                            <Circle className="text-gray-400 w-4 h-4" />
                         )}
                     </InputGroupAddon>
                     <InputGroupAddon>
