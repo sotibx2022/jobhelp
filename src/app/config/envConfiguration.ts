@@ -5,6 +5,7 @@ const _config = {
         apiKey: process.env.GOOGLE_API_KEY!,
         cxid: process.env.GOOGLE_CX,
         apiurl: process.env.GOOGLE_API_URL,
-    }
+    },
+    dbConnection: process.env.MONGODB_CONNECTION_URL
 }
 export const config = Object.freeze(_config)
