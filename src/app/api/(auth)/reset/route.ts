@@ -1,8 +1,10 @@
 import { UserModel } from '@/app/model/user.model';
 import { NextResponse, type NextRequest } from 'next/server';
 import bcrypt from 'bcrypt';
+import { connectToDb } from '@/app/config/connectToDb';
 export async function POST(req: NextRequest) {
     try {
+        connectToDb()
         const { email, newPassword, confirmNewPassword } = await req.json();
         // Check if passwords match
         if (newPassword !== confirmNewPassword) {

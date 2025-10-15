@@ -10,6 +10,7 @@ import { loginFormSchema } from "@/app/types/userAuth"
 import GoogleLogin from "../components/GoogleLogin"
 import AuthLinks from "../components/AuthLinks"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { authMutation } from "../authMutation/authMutation"
 type LoginFormData = z.infer<typeof loginFormSchema>
 const LoginPage = () => {
   const {
@@ -20,8 +21,12 @@ const LoginPage = () => {
     resolver: zodResolver(loginFormSchema),
     mode: 'onChange'
   })
+  const loginMutation = authMutation('login')
   const onSubmit = (data: LoginFormData) => {
-    console.log("Login data:", data)
+    loginMutation.mutate(data)
+  }
+  if(loginMutation.isPending){
+    return <h1>is Pending</h1>
   }
   return (
     <section className="pageCenter">

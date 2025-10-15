@@ -4,8 +4,10 @@ import bcrypt from 'bcrypt';
 import { APIResponseError, APIResponseSuccess } from '@/app/types/APIResponse';
 import jwt from 'jsonwebtoken';
 import { config } from '@/app/config/envConfiguration';
+import { connectToDb } from '@/app/config/connectToDb';
 export async function POST(req: NextRequest) {
     try {
+        connectToDb()
         const { email, password } = await req.json();
         // Check if user exists
         const existingUser = await UserModel.findOne({ email });

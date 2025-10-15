@@ -4,8 +4,10 @@ import jwt from 'jsonwebtoken';
 import { config } from '@/app/config/envConfiguration';
 import { UserModel } from '@/app/model/user.model';
 import { APIResponseError, APIResponseSuccess } from '@/app/types/APIResponse';
+import { connectToDb } from '@/app/config/connectToDb';
 export async function POST(req: NextRequest) {
     try {
+        connectToDb();
         const { email, fullName, password, confirmPassword } = await req.json();
         // Check if passwords match
         if (password !== confirmPassword) {
@@ -30,10 +32,10 @@ export async function POST(req: NextRequest) {
         });
         // Generate JWT token
         const userToken = jwt.sign(
-  { userId: newUser._id },
-  config.passwordSecret!,
-  { expiresIn: '1h' }
-);
+            { userId: newUser._id },
+            config.passwordSecret!,
+            { expiresIn: '1h' }
+        );
         // Prepare response
         const response = NextResponse.json<APIResponseSuccess<undefined>>({
             message: "User created successfully",

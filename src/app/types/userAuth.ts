@@ -53,3 +53,6 @@ export const registerFormSchema = z
     path:['confirmNewPassword'],
     message:"Password do not Match"
   })
+export type UserRegisterData = z.infer<typeof registerFormSchema>
+export type UserLoginData = z.infer<typeof loginFormSchema>
+export type UserResetData = z.infer<typeof resetFormSchema>

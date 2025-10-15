@@ -9,11 +9,17 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import z from 'zod'
 import GoogleLogin from '../components/GoogleLogin'
 import AuthLinks from '../components/AuthLinks'
+import { authMutation } from '../authMutation/authMutation'
+import { Button } from '@/components/ui/button'
 const page = () => {
     type resetFormData = z.infer<typeof resetFormSchema>
     const { register, handleSubmit, formState: { errors } } = useForm<resetFormData>({ mode: 'onChange', resolver: zodResolver(resetFormSchema) })
+    const resetMutation = authMutation('reset')
     const onSubmit = (data: resetFormData) => {
-        console.log(data);
+        resetMutation.mutate(data);
+    }
+    if (resetMutation.isPending) {
+        return <h1>THis is the pending state</h1>
     }
     return (
         <section className="pageCenter">
@@ -30,6 +36,7 @@ const page = () => {
                         <FormInput label={'Confirm New Password'} type='password' placeholder={'eg. MyP@ssw0rd!23'} Icon={Lock}
                             {...register('confirmNewPassword')}
                             error={errors.confirmNewPassword?.message} />
+                        <Button variant='secondary'>Reset</Button>
                     </form>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-4">

@@ -9,12 +9,18 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import z from 'zod'
 import GoogleLogin from '../components/GoogleLogin'
 import AuthLinks from '../components/AuthLinks'
+import { authMutation } from '../authMutation/authMutation'
+import { Button } from '@/components/ui/button'
 const page = () => {
     type registerFormData = z.infer<typeof registerFormSchema>
     const { register, handleSubmit, formState: { errors } } = useForm<registerFormData>({ mode: 'onChange', resolver: zodResolver(registerFormSchema) })
+    const registerMutation = authMutation('register')
     const onSubmit = (data: registerFormData) => {
-        console.log(data);
+       registerMutation.mutate(data)
     }
+    // if(registerMutation.isPending){
+    //     return <h1>is Pending</h1>
+    // }
     return (
         <section className="pageCenter">
             <Card>
@@ -32,6 +38,7 @@ const page = () => {
                         <FormInput label={'Confirm Password'} type='password' placeholder={'eg. MyP@ssw0rd!23'} Icon={Lock}
                             {...register('confirmPassword')}
                             error={errors.confirmPassword?.message} />
+                            <Button variant='secondary'>Register</Button>
                     </form>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-4">
