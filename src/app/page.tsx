@@ -2,6 +2,7 @@ import React, { Suspense } from 'react'
 import { SearchBar, LandingPageHeader, CommonFooter, Loading } from './_components'
 import SearchBarSkeleton from './_components/structures/skleton/SkletonSearchBar'
 import DisplayProvider from './context/DisplayComponent'
+import ErrorToast from './_components/absoluteComponents/toastComponents/ErrorToast'
 const Page = () => {
   return (
     <DisplayProvider>

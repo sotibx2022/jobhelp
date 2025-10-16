@@ -2,10 +2,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import jobDetailsReducer from "./jobdetailsSlice";
 import roadMapReducer from "./roadmapSlice";
 import profileScoreReducer from "./profileScoreSlice";
+import toastReducer from './toastSlice'
 const combinedReducers = {
   jobDetails: jobDetailsReducer,
   roadmapDetails: roadMapReducer,
-  profileScore:profileScoreReducer
+  profileScore:profileScoreReducer,
+  toast:toastReducer
 };
 export const store = configureStore({
   reducer: combinedReducers,
