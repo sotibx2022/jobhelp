@@ -6,7 +6,7 @@ import Loading from '../_components/structures/loading/Loading'
 const page = () => {
   return (
     <div>
-        <Loading/>
+      <Loading />
     </div>
   )
 }

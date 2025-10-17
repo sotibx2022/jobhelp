@@ -1,30 +1,31 @@
 "use client";
-import { UserCircle } from "lucide-react";
-import React from "react";
+import { ChevronsDown } from "lucide-react";
+import React, { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSelector } from 'react-redux'
-import { RootState } from '@/app/redux/store'
+import { motion, AnimatePresence } from "framer-motion";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 import ScoreDisplay from "./ScoreDisplay";
 import ProfileIcon from "./ProfileIcon";
 const GuestUser = () => {
-  const score = useSelector((state: RootState) => state.profileScore.scoreValue)
-  const borderStyle = {
+  const [open, setOpen] = useState(false);
+  const score = useSelector((state: RootState) => state.profileScore.scoreValue);
+ const borderStyle = {
     background: `conic-gradient(
       #3b82f6 ${score * 3.6}deg,
       #e5e7eb ${score * 3.6}deg
-    )`,
-  };
+    )`
+  }
   return (
-    <div className="flex justify-center">
-      <DropdownMenu>
-        <DropdownMenuTrigger className="flex flex-col items-center gap-2 focus:outline-none">
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
+      {/* Trigger */}
+      <DropdownMenuTrigger asChild>
+        <button className="flex items-center  focus:outline-none">
           <div
             className="relative w-12 h-12 rounded-full p-[2px]"
             style={borderStyle}
@@ -33,18 +34,42 @@ const GuestUser = () => {
               <ProfileIcon />
             </div>
           </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="center" className="min-w-[8rem] text-sm">
-          <DropdownMenuLabel className="text-center font-medium">
-            Guest User
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {score && score > 0 && <ScoreDisplay />}
-          <DropdownMenuItem className="justify-center">Register</DropdownMenuItem>
-          <DropdownMenuItem className="justify-center">Login</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+          <p className="primaryParagraph flexCenter gap-1">
+            Guest
+            <motion.span
+              animate={{ rotate: open ? 180 : 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+            >
+              <ChevronsDown className="w-4 h-4" />
+            </motion.span>
+          </p>
+        </button>
+      </DropdownMenuTrigger>
+      <AnimatePresence>
+        {open && (
+          <DropdownMenuContent
+            asChild
+            align="center"
+            className="min-w-[8rem] text-sm bg-background border rounded-lg shadow-md overflow-hidden z-50"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: -6, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -6, scale: 0.98 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+            >
+              {(score ?? 0) > 0 && (
+                <div className="p-2">
+                  <ScoreDisplay />
+                </div>
+              )}
+              <DropdownMenuItem className="justify-center">Register</DropdownMenuItem>
+              <DropdownMenuItem className="justify-center">Login</DropdownMenuItem>
+            </motion.div>
+          </DropdownMenuContent>
+        )}
+      </AnimatePresence>
+    </DropdownMenu>
   );
 };
 export default GuestUser;

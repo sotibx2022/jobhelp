@@ -19,16 +19,12 @@ const CommonFooter = () => {
       title: "Salary",
       icon: TrendingUp,
     },
-    {
-      title: "Skills",
-      icon: Settings,
-    }
   ]
   return (
     <footer className="w-full border-t mt-4">
       <div className="container mx-auto p-4">
         {/* Features Section */}
-        <div className="flexBetween flex-wrap mb-4">
+        <div className="flexBetween mb-4">
           {features.map((feature, index) => (
             <div
               key={index}

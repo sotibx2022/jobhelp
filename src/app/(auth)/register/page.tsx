@@ -18,11 +18,11 @@ const page = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<registerFormData>({ mode: 'onChange', resolver: zodResolver(registerFormSchema) })
     const registerMutation = authMutation('register')
     const onSubmit = (data: registerFormData) => {
-       registerMutation.mutate(data)
+        registerMutation.mutate(data)
     }
     return (
         <section className="pageCenter">
-            {registerMutation.isPending && <Loading/>}
+            {registerMutation.isPending && <Loading />}
             <Card>
                 <CardHeader>
                     <CardTitle>Register</CardTitle>
@@ -38,7 +38,7 @@ const page = () => {
                         <FormInput label={'Confirm Password'} type='password' placeholder={'eg. MyP@ssw0rd!23'} Icon={Lock}
                             {...register('confirmPassword')}
                             error={errors.confirmPassword?.message} />
-                            <Button variant='secondary'>Register</Button>
+                        <Button variant='secondary'>Register</Button>
                     </form>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-4">

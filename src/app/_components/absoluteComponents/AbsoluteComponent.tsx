@@ -8,7 +8,6 @@ import SuccessToast from './toastComponents/SuccessToast'
 import ToastComponent from './toastComponents/ToastComponent'
 const AbsoluteComponent = () => {
   const { visibleComponent, setVisibleComponent } = useContext(DisplayContext)
-  console.log(visibleComponent);
   return (
     <div>
       {visibleComponent === 'chatBox' && <ChatBox />}

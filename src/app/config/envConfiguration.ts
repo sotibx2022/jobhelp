@@ -7,6 +7,6 @@ const _config = {
         apiurl: process.env.GOOGLE_API_URL,
     },
     dbConnection: process.env.MONGODB_CONNECTION_URL,
-    passwordSecret:process.env.JWT_SECRET
+    passwordSecret:process.env.JWT_SECRET,
 }
 export const config = Object.freeze(_config)
