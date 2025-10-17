@@ -12,6 +12,7 @@ import AuthLinks from '../components/AuthLinks'
 import { authMutation } from '../authMutation/authMutation'
 import { Button } from '@/components/ui/button'
 import ErrorToast from '@/app/_components/absoluteComponents/toastComponents/ErrorToast'
+import { Loading } from '@/app/_components'
 const page = () => {
     type registerFormData = z.infer<typeof registerFormSchema>
     const { register, handleSubmit, formState: { errors } } = useForm<registerFormData>({ mode: 'onChange', resolver: zodResolver(registerFormSchema) })
@@ -19,11 +20,9 @@ const page = () => {
     const onSubmit = (data: registerFormData) => {
        registerMutation.mutate(data)
     }
-    if(registerMutation.isPending){
-        return <h1>is Pending</h1>
-    }
     return (
         <section className="pageCenter">
+            {registerMutation.isPending && <Loading/>}
             <Card>
                 <CardHeader>
                     <CardTitle>Register</CardTitle>

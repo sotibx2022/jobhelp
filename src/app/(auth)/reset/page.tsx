@@ -11,6 +11,7 @@ import GoogleLogin from '../components/GoogleLogin'
 import AuthLinks from '../components/AuthLinks'
 import { authMutation } from '../authMutation/authMutation'
 import { Button } from '@/components/ui/button'
+import { Loading } from '@/app/_components'
 const page = () => {
     type resetFormData = z.infer<typeof resetFormSchema>
     const { register, handleSubmit, formState: { errors } } = useForm<resetFormData>({ mode: 'onChange', resolver: zodResolver(resetFormSchema) })
@@ -18,11 +19,9 @@ const page = () => {
     const onSubmit = (data: resetFormData) => {
         resetMutation.mutate(data);
     }
-    if (resetMutation.isPending) {
-        return <h1>THis is the pending state</h1>
-    }
     return (
         <section className="pageCenter">
+            {resetMutation.isPending && <Loading/>}
             <Card>
                 <CardHeader>
                     <CardTitle>Reset</CardTitle>

@@ -11,6 +11,7 @@ import GoogleLogin from "../components/GoogleLogin"
 import AuthLinks from "../components/AuthLinks"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { authMutation } from "../authMutation/authMutation"
+import { Loading } from "@/app/_components"
 type LoginFormData = z.infer<typeof loginFormSchema>
 const LoginPage = () => {
   const {
@@ -25,11 +26,9 @@ const LoginPage = () => {
   const onSubmit = (data: LoginFormData) => {
     loginMutation.mutate(data)
   }
-  if(loginMutation.isPending){
-    return <h1>is Pending</h1>
-  }
   return (
     <section className="pageCenter">
+      {loginMutation.isPending && <Loading/>}
       <Card>
         <CardHeader>
           <CardTitle>Login</CardTitle>
