@@ -68,7 +68,7 @@ const GuestUser = () => {
                 <Link href='/register'>Register</Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="justify-center">
-                <Link href='/login'>Login</Link>
+                <Link href='login'>Login</Link>
               </DropdownMenuItem>
             </motion.div>
           </DropdownMenuContent>

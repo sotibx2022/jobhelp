@@ -1,7 +1,22 @@
-import React from 'react'
+"use client"
+import React, { useEffect } from 'react'
 import { FileText, Search, Map, TrendingUp, Settings } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { useQuery } from '@tanstack/react-query'
+import { getUserDetails } from '@/app/functions/queryFunctions/getUserDetails'
+import { useDispatch } from 'react-redux'
+import { setUserDetails } from '@/app/redux/userDetailsSlice'
 const CommonFooter = () => {
+  const dispatch = useDispatch()
+  const {data:userData,isPending} = useQuery({
+    queryKey:['userDetails'],
+    queryFn:getUserDetails
+  })
+  useEffect(()=>{
+    if(userData?.success){
+      dispatch(setUserDetails(userData.data))
+    }
+  },[userData])
   const features = [
     {
       title: "Resume",
