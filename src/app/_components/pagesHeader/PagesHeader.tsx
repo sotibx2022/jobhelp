@@ -1,13 +1,14 @@
 import React, { Suspense } from 'react'
-import { Loading, SearchBar,Logo, GuestUser } from '../index'
-const PagesHeader= () => {
+import { Loading, SearchBar, Logo } from '../index'
+import UserDisplay from '../landingPage/UserDisplay/UserDisplay'
+const PagesHeader = () => {
   return (
     <div className='flexBetween w-full'>
       <Logo />
-      <Suspense fallback={<Loading/>}>
-      <SearchBar  />
+      <Suspense fallback={<Loading />}>
+        <SearchBar />
       </Suspense>
-      <GuestUser/>
+      <UserDisplay />
     </div>
   )
 }

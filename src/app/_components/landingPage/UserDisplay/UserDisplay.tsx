@@ -13,9 +13,13 @@ import { RootState } from "@/app/redux/store";
 import ScoreDisplay from "./ScoreDisplay";
 import ProfileIcon from "./ProfileIcon";
 import Link from "next/link";
-const GuestUser = () => {
+import { useLogout } from "@/hooks/useLogout";
+import { Button } from "@/components/ui/button";
+const UserDisplay = () => {
   const [open, setOpen] = useState(false);
+  const userDetails = useSelector((state: RootState) => state.user.user)
   const score = useSelector((state: RootState) => state.profileScore.scoreValue);
+  const logout = useLogout()
   const borderStyle = {
     background: `conic-gradient(
       #3b82f6 ${score * 3.6}deg,
@@ -36,7 +40,7 @@ const GuestUser = () => {
             </div>
           </div>
           <p className="primaryParagraph flexCenter gap-1">
-            Guest
+            {userDetails ? userDetails.fullName : "Guest"}
             <motion.span
               animate={{ rotate: open ? 180 : 0 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
@@ -65,10 +69,15 @@ const GuestUser = () => {
                 </div>
               )}
               <DropdownMenuItem className="justify-center">
-                <Link href='/register'>Register</Link>
+                {userDetails ? <Link href='/profile'>Profile</Link> : <Link href='/register'>Register</Link>}
               </DropdownMenuItem>
               <DropdownMenuItem className="justify-center">
-                <Link href='/login'>Login</Link>
+                {userDetails ?  <Button
+                variant={'destructive'}
+    onClick={() => logout.mutate()}
+  >
+    Logout
+  </Button> : <Link href='/login'>Login</Link>}
               </DropdownMenuItem>
             </motion.div>
           </DropdownMenuContent>
@@ -77,4 +86,4 @@ const GuestUser = () => {
     </DropdownMenu>
   );
 };
-export default GuestUser;
+export default UserDisplay;

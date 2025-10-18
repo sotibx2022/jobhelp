@@ -7,9 +7,9 @@ import UserDetailsReducer from './userDetailsSlice'
 const combinedReducers = {
   jobDetails: jobDetailsReducer,
   roadmapDetails: roadMapReducer,
-  profileScore:profileScoreReducer,
-  toast:toastReducer,
-  user:UserDetailsReducer
+  profileScore: profileScoreReducer,
+  toast: toastReducer,
+  user: UserDetailsReducer
 };
 export const store = configureStore({
   reducer: combinedReducers,

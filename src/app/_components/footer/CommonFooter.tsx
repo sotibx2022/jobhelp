@@ -8,15 +8,15 @@ import { useDispatch } from 'react-redux'
 import { setUserDetails } from '@/app/redux/userDetailsSlice'
 const CommonFooter = () => {
   const dispatch = useDispatch()
-  const {data:userData,isPending} = useQuery({
-    queryKey:['userDetails'],
-    queryFn:getUserDetails
+  const { data: userData, isPending } = useQuery({
+    queryKey: ['userDetails'],
+    queryFn: getUserDetails
   })
-  useEffect(()=>{
-    if(userData?.success){
+  useEffect(() => {
+    if (userData?.success) {
       dispatch(setUserDetails(userData.data))
     }
-  },[userData])
+  }, [userData])
   const features = [
     {
       title: "Resume",

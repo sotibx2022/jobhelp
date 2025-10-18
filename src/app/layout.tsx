@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ProviderWrapper from "./ProviderWrapper";
 import AbsoluteComponent from "./_components/absoluteComponents/AbsoluteComponent";
+import AuthWrapper from "./_components/wrappers/AuthWrapper";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -19,12 +20,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ProviderWrapper>
-        <body className={`${inter.variable} antialiased`}>
-          <AbsoluteComponent/>
-          {children}
-        </body>
-      </ProviderWrapper>
+      <AuthWrapper>
+        <ProviderWrapper>
+          <body className={`${inter.variable} antialiased`}>
+            <AbsoluteComponent />
+            {children}
+          </body>
+        </ProviderWrapper>
+      </AuthWrapper>
     </html>
   );
 }

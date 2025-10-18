@@ -8,8 +8,8 @@ import { getUserDetails } from './functions/queryFunctions/getUserDetails'
 const Page = async () => {
   const queryClient = getQueryClient();
   queryClient.prefetchQuery({
-    queryKey:['userDetails'],
-    queryFn:getUserDetails
+    queryKey: ['userDetails'],
+    queryFn: getUserDetails
   })
   const dehydratedState = dehydrate(queryClient)
   return (
@@ -24,7 +24,7 @@ const Page = async () => {
           </Suspense>
         </div>
         <HydrationBoundary state={dehydratedState}>
-        <CommonFooter />
+          <CommonFooter />
         </HydrationBoundary>
       </section>
     </DisplayProvider>
