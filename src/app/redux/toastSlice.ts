@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface IToastState {
-    toastType: 'success' | 'error' | 'blank'
+    toastType: 'success' | 'error' | 'blank' | 'info'
     message: string
 }
 const initialToast: IToastState = {

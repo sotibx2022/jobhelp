@@ -26,19 +26,21 @@ export const authMutation = (action: string) => {
         }
     };
     return useMutation({
-        mutationFn: async (postData:authPostData) => {
+        mutationFn: async (postData: authPostData) => {
             const response = await axios.post(`${returnAuthPostURL()}`, { ...postData });
             return response.data;
         }, onSuccess: (response: APIResponseSuccess<undefined> | APIResponseError) => {
-            if(response.success){
-                dispatch(setToast({toastType:'success',message:response.message}))
-                if(action==='reset'){
+            if (response.success) {
+                dispatch(setToast({ toastType: 'success', message: response.message }))
+                if (action === 'reset') {
                     router.push('/login')
-                }else{
-                    login.mutate()
+                } else {
+                    setTimeout(() => {
+                        login.mutate({skipBroadcast:false})
+                    }, 100)
                 }
-            }else{
-                dispatch(setToast({toastType:'error',message:response.message}))
+            } else {
+                dispatch(setToast({ toastType: 'error', message: response.message }))
             }
         }, onError: (error) => {
             returnErrorObject(error)

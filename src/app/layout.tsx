@@ -20,14 +20,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthWrapper>
         <ProviderWrapper>
           <body className={`${inter.variable} antialiased`}>
+            <AuthWrapper>
             <AbsoluteComponent />
             {children}
+            </AuthWrapper>
           </body>
         </ProviderWrapper>
-      </AuthWrapper>
     </html>
   );
 }
