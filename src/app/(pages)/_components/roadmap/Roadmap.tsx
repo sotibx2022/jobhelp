@@ -59,10 +59,7 @@ const { data: datafromDb, isPending: pendingfromDB } = useQuery<APIResponse<Cont
   if (!actualData || !Array.isArray(actualData) || actualData.length === 0) {
     return;
   }
-  // Only dispatch if Redux state is empty or differs
-  const reduxContents = contents ?? [];
-  const isDifferent = JSON.stringify(reduxContents) !== JSON.stringify(actualData);
-  if (isDifferent) {
+  if (!contents || contents.length ===0) {
     dispatch(setRoadMapItems(actualData));
     setOriginalContents(actualData);
     setOverallLength(useOverallLength(actualData));
