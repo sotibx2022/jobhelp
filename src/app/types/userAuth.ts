@@ -38,6 +38,8 @@ export const registerFormSchema = z
       .min(3, "Full name must be at least 3 characters")
       .regex(/^[a-zA-Z\s]+$/, "Full name can only contain letters and spaces"),
     confirmPassword: z.string().min(8, "Please confirm your password"),
+    score:z.number().min(0).max(100).optional(),
+    jobTitles: z.array(z.string()).optional()
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],

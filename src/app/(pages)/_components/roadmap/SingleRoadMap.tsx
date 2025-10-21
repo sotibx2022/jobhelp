@@ -6,7 +6,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import StringCheckList from "./StringCheckList";
-import { ContentType } from "@/app/types/roadmapTypes";
+import { ContentType, ContentUIType } from "@/app/types/roadmapTypes";
 import { Badge } from "@/components/ui/badge";
 import { DeleteButton, EditButton } from "@/app/_components";
 import { useDispatch } from "react-redux";
@@ -15,7 +15,7 @@ import AddTopic from "./AddTopic";
 import AddButton from "@/app/_components/structures/AddButton";
 interface SingleRoadMapProps {
   index: number;
-  content: ContentType;
+  content: ContentUIType;
   unitScore: (args: { value: number }) => void;
   edit: boolean;
 }
@@ -29,7 +29,7 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
   const dispatch = useDispatch();
   const [score, setScore] = useState(0);
   const handleCheckedValue = (checked: boolean) => {
-    const delta = checked ? 1 : -1;
+    const delta = checked ? 1 : 0;
     setScore((prev) => prev + delta);
     unitScore({ value: delta });
   };
@@ -73,10 +73,10 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
       </AccordionTrigger>
       <AccordionContent className="px-4 pb-3">
         <div className="space-y-2 mb-3">
-          {content.subContents.map((item: string, idx: number) => (
+          {content.subContents.map((item, idx: number) => (
             <StringCheckList
               key={idx}
-              stringValue={item}
+            subContent={item}
               checkedValue={handleCheckedValue}
               edit={edit}
               titleIndex={index}

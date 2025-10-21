@@ -1,5 +1,7 @@
 import { UserRegisterData } from "./userAuth";
-export interface UserState extends UserRegisterData {
+type UserWithoutSensitive = Omit<UserRegisterData,'password'|'confirmPassword'>
+export interface UserState extends UserWithoutSensitive {
     _id: string;
-    score: string;
+    score: number;
+    jobTitles?:string[]
 }

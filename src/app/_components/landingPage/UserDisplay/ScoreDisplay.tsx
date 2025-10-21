@@ -4,7 +4,7 @@ import { RootState } from '@/app/redux/store'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 const ScoreDisplay = () => {
-    const score = useSelector((state: RootState) => state.profileScore.scoreValue)
+    const score = useSelector((state: RootState) => state.user.user?.score)
     return (
         <div className='my-2'>
             {score && (

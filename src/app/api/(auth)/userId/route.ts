@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     await connectToDb();
     try {
         // Find user by ID
-        const existingUser = await UserModel.findById(userId);
+        const existingUser = await UserModel.findById(userId).select("-password -__v");
         if (!existingUser) {
             return NextResponse.json(
                 { message: "User not found", status: "error", success: false, data: null },

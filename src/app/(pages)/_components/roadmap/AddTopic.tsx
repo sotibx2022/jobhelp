@@ -33,6 +33,7 @@ const AddTopic: React.FC<AddTopicProps> = ({ defaultValue, cancelTopicChange, ti
             titleIndex: titleIndex,
             subTitleIndex: subTitleIndex,
             actionTitle: topic,
+            checked:false
           })
         );
         cancelTopicChange(true);

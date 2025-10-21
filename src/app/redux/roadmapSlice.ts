@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ContentsType, ContentType } from "../types/roadmapTypes";
-const roadmapInitialState: ContentsType = [];
+import { ContentsUIType, ContentUIType } from "../types/roadmapTypes";
+const roadmapInitialState: ContentUIType[] = [];
 const roadmapSlice = createSlice({
   name: "roadmap",
   initialState: roadmapInitialState,
   reducers: {
-    setRoadMapItems: (state, action: PayloadAction<ContentsType>) => {
+    setRoadMapItems: (state, action: PayloadAction<ContentUIType[]>) => {
       return action.payload;
     },
     deleteRoadmapTitle: (state, action: PayloadAction<{ index: number }>) => {
@@ -38,18 +38,19 @@ const roadmapSlice = createSlice({
     },
     editRoadMapSubTitle: (
       state,
-      action: PayloadAction<{ titleIndex: number; subTitleIndex: number; actionTitle: string }>
+      action: PayloadAction<{ titleIndex: number; subTitleIndex: number; actionTitle: string, checked: boolean }>
     ) => {
-      const { titleIndex, subTitleIndex, actionTitle } = action.payload;
+      const { titleIndex, subTitleIndex, actionTitle, checked } = action.payload;
       if (state[titleIndex]?.subContents[subTitleIndex] !== undefined) {
-        state[titleIndex].subContents[subTitleIndex] = actionTitle;
+        state[titleIndex].subContents[subTitleIndex].actionSubTitle = actionTitle;
+        state[titleIndex].subContents[subTitleIndex].checked = checked
       }
     },
     addRoadMapSubTitle: (
       state,
       action: PayloadAction<{ titleIndex: number; actionTitle: string }>
     ) => {
-      state[action.payload.titleIndex]?.subContents.push(action.payload.actionTitle);
+      state[action.payload.titleIndex]?.subContents.push({ actionSubTitle: action.payload.actionTitle, checked: false });
     },
   },
 });

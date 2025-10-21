@@ -18,12 +18,12 @@ import { Button } from "@/components/ui/button";
 const UserDisplay = () => {
   const [open, setOpen] = useState(false);
   const userDetails = useSelector((state: RootState) => state.user.user)
-  const score = useSelector((state: RootState) => state.profileScore.scoreValue);
+  const score = useSelector((state: RootState) => state.user.user?.score);
   const logout = useLogout()
   const borderStyle = {
     background: `conic-gradient(
-      #3b82f6 ${score * 3.6}deg,
-      #e5e7eb ${score * 3.6}deg
+      #3b82f6 ${(score??0) * 3.6}deg,
+      #e5e7eb ${(score??0) * 3.6}deg
     )`
   }
   return (
@@ -74,7 +74,7 @@ const UserDisplay = () => {
               <DropdownMenuItem className="justify-center">
                 {userDetails ? <Button
                   variant={'destructive'}
-                  onClick={() => logout.mutate({skipBroadcast:false})}
+                  onClick={() => logout.mutate({ skipBroadcast: false })}
                 >
                   Logout
                 </Button> : <Link href='/login'>Login</Link>}

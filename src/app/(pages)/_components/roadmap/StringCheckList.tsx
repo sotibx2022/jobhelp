@@ -3,24 +3,26 @@ import React, { useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DeleteButton, EditButton } from "@/app/_components"
 import { useDispatch } from "react-redux"
-import { deleteRoadMapSubTitle } from "@/app/redux/roadmapSlice"
+import { deleteRoadMapSubTitle, editRoadMapSubTitle } from "@/app/redux/roadmapSlice"
 import AddTopic from "./AddTopic"
 interface StringCheckListProps {
-  stringValue: string
+  subContent: { actionSubTitle: string, checked: boolean }
   checkedValue: (value: boolean) => void,
   edit: boolean,
   titleIndex: number,
   subTitleIndex: number
 }
-const StringCheckList: React.FC<StringCheckListProps> = ({ stringValue, checkedValue, edit, titleIndex, subTitleIndex }) => {
+const StringCheckList: React.FC<StringCheckListProps> = ({ subContent, checkedValue, edit, titleIndex, subTitleIndex }) => {
+  console.log(subContent);
   const dispatch = useDispatch()
-  const [isChecked, setIsChecked] = useState(false)
+  const [isChecked, setIsChecked] = useState(subContent.checked)
   const [addTopic, setAddTopic] = useState(false);
-  const [topic, setTopic] = useState(stringValue)
+  const [topic, setTopic] = useState(subContent.actionSubTitle)
   const toggleItem = () => {
     const newValue = !isChecked
     setIsChecked(newValue)
-    checkedValue(newValue) // callback to parent
+    checkedValue(newValue)
+    dispatch(editRoadMapSubTitle({ titleIndex, subTitleIndex, actionTitle: topic, checked: newValue }))
   }
   function deleteHandler(): void {
     dispatch(deleteRoadMapSubTitle({ titleIndex, subTitleIndex }))
@@ -38,7 +40,7 @@ const StringCheckList: React.FC<StringCheckListProps> = ({ stringValue, checkedV
           }`}
       >
         <Checkbox checked={isChecked} onCheckedChange={toggleItem} />
-        <span>{stringValue}</span>
+        <span>{subContent.actionSubTitle}</span>
         {edit && <>
           <DeleteButton size="small" onClick={deleteHandler} />
           <EditButton size="small" onClick={editHandler} />

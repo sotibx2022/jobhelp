@@ -17,7 +17,15 @@ const userDetailsSlice = createSlice({
         clearUserDetails: (state) => {
             state.user = null;
         },
+        addJobTitle: (state: UserSliceState, action: PayloadAction<{ jobTitle: string }>) => {
+            state.user?.jobTitles?.push(action.payload.jobTitle)
+        },
+        updateUserScore: (state: UserSliceState, action: PayloadAction<{ score: number }>) => {
+            if (state.user) {
+                state.user.score = action.payload.score
+            }
+        }
     },
 });
-export const { setUserDetails, clearUserDetails } = userDetailsSlice.actions;
+export const { setUserDetails, clearUserDetails,addJobTitle,updateUserScore } = userDetailsSlice.actions;
 export default userDetailsSlice.reducer;

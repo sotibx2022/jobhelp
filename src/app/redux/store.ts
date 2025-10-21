@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import jobDetailsReducer from "./jobdetailsSlice";
 import roadMapReducer from "./roadmapSlice";
-import profileScoreReducer from "./profileScoreSlice";
 import toastReducer from './toastSlice'
 import UserDetailsReducer from './userDetailsSlice'
 const combinedReducers = {
   jobDetails: jobDetailsReducer,
   roadmapDetails: roadMapReducer,
-  profileScore: profileScoreReducer,
   toast: toastReducer,
   user: UserDetailsReducer
 };
