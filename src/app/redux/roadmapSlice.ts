@@ -6,7 +6,7 @@ const roadmapSlice = createSlice({
   initialState: roadmapInitialState,
   reducers: {
     setRoadMapItems: (state, action: PayloadAction<ContentUIType[]>) => {
-      return action.payload;
+      return action.payload
     },
     deleteRoadmapTitle: (state, action: PayloadAction<{ index: number }>) => {
       const newState = state.filter((_, i) => i !== action.payload.index);
@@ -38,13 +38,21 @@ const roadmapSlice = createSlice({
     },
     editRoadMapSubTitle: (
       state,
-      action: PayloadAction<{ titleIndex: number; subTitleIndex: number; actionTitle: string, checked: boolean }>
+      action: PayloadAction<{ titleIndex: number; subTitleIndex: number; actionTitle: string; checked: boolean }>
     ) => {
       const { titleIndex, subTitleIndex, actionTitle, checked } = action.payload;
+      console.log("📝 editRoadMapSubTitle called");
+      console.log("Payload:", action.payload);
+      console.log("Current state at titleIndex:", state[titleIndex]);
+      console.log("Current subContents at subTitleIndex:", state[titleIndex]?.subContents[subTitleIndex]);
       if (state[titleIndex]?.subContents[subTitleIndex] !== undefined) {
         state[titleIndex].subContents[subTitleIndex].actionSubTitle = actionTitle;
-        state[titleIndex].subContents[subTitleIndex].checked = checked
+        state[titleIndex].subContents[subTitleIndex].checked = checked;
+        console.log("Updated subContents:", state[titleIndex].subContents[subTitleIndex]);
+      } else {
+        console.log("⚠️ SubContent at provided indexes does not exist");
       }
+      console.log("State after editRoadMapSubTitle execution:", state);
     },
     addRoadMapSubTitle: (
       state,

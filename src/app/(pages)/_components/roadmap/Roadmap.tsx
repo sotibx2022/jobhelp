@@ -18,47 +18,85 @@ import SkletonRoadmapPage from "@/app/_components/structures/skleton/SkletonRoad
 import SingleRoadMap from "./SingleRoadMap";
 import AddTopic from "./AddTopic";
 import SaveAction from "./SaveAction";
-import { updateUserScore } from "@/app/redux/userDetailsSlice";
+import { SingleJobTitle } from "@/app/types/userAuth";
+import { modifyAIDataforRoadMap } from "./modifyAIDataforRoadmap";
+import { setJobTitles } from "@/app/redux/userDetailsSlice";
+import { useOverallLength } from "./useOverallLength";
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const dispatch = useDispatch();
   const contents = useSelector((state: RootState) => state.roadmapDetails);
   const [edit, setEdit] = useState(false);
   const [overallScore, setOverallScore] = useState(0);
   const [overallLength, setOverallLength] = useState(0);
-  const [showRoadMapAction, setShowRoadMapAction] = useState(false);
   const [addTopic, setAddTopic] = useState(false);
   const [originalContents, setOriginalContents] = useState<ContentUIType[] | null>(null);
-  // ✅ Fetch data only if Redux store is empty
-  const shouldFetch = !contents || contents.length === 0;
-  const { data, isPending } = useQuery<APIResponse<ContentsType>>({
-    queryKey: ["jobContent", jobTitle],
-    queryFn: () => getJobDetails<ContentsType>(`/api/contents?jobtitle=${jobTitle}`),
-    enabled: shouldFetch, // only fetch when Redux has no data
-  });
-  // ✅ Handle score updates from child components
+  const hasChanged = JSON.stringify(contents) !== JSON.stringify(originalContents);
+  const [showRoadMapAction, setShowRoadMapAction] = useState<boolean>(hasChanged);
+  const user = useSelector((state: RootState) => state.user);
+  const isThereSavedJobTitleinDB = user.user?.jobTitles?.some(
+    (item: SingleJobTitle) => item.title === jobTitle
+  );
+  const hasNoContents = !contents || contents.length === 0;
+const shouldFetchfromDB = hasNoContents && isThereSavedJobTitleinDB;
+const shouldFetchfromAI = hasNoContents && !isThereSavedJobTitleinDB;
+console.log("🧩 Debug JobContent Fetch Conditions");
+console.log("contents:", contents);
+console.log("contents length:", contents?.length);
+console.log("isThereSavedJobTitleinDB:", isThereSavedJobTitleinDB);
+console.log("hasNoContents:", hasNoContents);
+console.log("shouldFetchfromDB:", shouldFetchfromDB);
+console.log("shouldFetchfromAI:", shouldFetchfromAI);
+const { data: datafromAI, isPending: pendingfromAI } = useQuery<APIResponse<ContentsType>>({
+  queryKey: ["jobContentfromAI", jobTitle],
+  queryFn: () => getJobDetails<ContentsType>(`/api/contents?jobtitle=${jobTitle}`),
+  enabled: Boolean(shouldFetchfromAI),
+});
+console.log("AI Query initialized");
+console.log("datafromAI:", datafromAI);
+console.log("pendingfromAI:", pendingfromAI);
+const { data: datafromDb, isPending: pendingfromDB } = useQuery<APIResponse<ContentUIType[]>>({
+  queryKey: ['jobContentfromDB', jobTitle],
+  queryFn: () => getJobDetails<ContentUIType[]>(`/api/dbcontents?jobtitle=${jobTitle}`),
+  enabled: Boolean(shouldFetchfromDB),
+});
+console.log("DB Query initialized");
+console.log("datafromDb:", datafromDb);
+console.log("pendingfromDB:", pendingfromDB);
   const handleUnitScore = ({ value }: { value: number }) => {
     setOverallScore((prev) => prev + value);
   };
-  // ✅ Detect changes to show Save button
+  useEffect(() => {
+    // Get data from AI or DB
+    const actualData = datafromAI?.data
+      ? modifyAIDataforRoadMap(datafromAI.data)
+      : datafromDb?.data;
+    // Only proceed if actualData exists and is an array
+    if (!actualData || !Array.isArray(actualData) || actualData.length === 0) {
+      setOriginalContents([]);
+      setOverallLength(0);
+      dispatch(setRoadMapItems([]));
+      return;
+    }
+    setOriginalContents(actualData);
+    const tempTotalLength = useOverallLength(actualData);
+    setOverallLength(tempTotalLength);
+    dispatch(setRoadMapItems(actualData));
+  }, [datafromAI, datafromDb, dispatch]);
   useEffect(() => {
     if (!originalContents) return;
-    const hasChanged = JSON.stringify(contents) !== JSON.stringify(originalContents);
     setShowRoadMapAction(hasChanged);
-  }, [contents, originalContents, overallScore]);
+  }, [contents, originalContents]);
   const contentsToRender = contents ?? originalContents;
-  // ✅ Calculate and sync profile score
   const score = Math.floor((overallScore / overallLength) * 100);
-  useEffect(() => {
-    if (!isNaN(score)) {
-      dispatch(updateUserScore({score}));
-    }
-  }, [score, dispatch]);
-  // ✅ Handle topic cancel
   const cancelTopicChange = () => {
     setAddTopic(false);
   };
-  // ✅ Show skeleton during initial load
-  if (isPending && shouldFetch) {
+  const SaveRoadMapItems = () => {
+    dispatch(setJobTitles({ title: jobTitle, score: overallScore }));
+  };
+  const isLoadingAI = pendingfromAI && shouldFetchfromAI;
+  const isLoadingDb = pendingfromDB && shouldFetchfromDB;
+  if (isLoadingAI || isLoadingDb) {
     return <SkletonRoadmapPage />;
   }
   return (
@@ -106,7 +144,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
             ))}
         </Accordion>
       )}
-      {showRoadMapAction && <SaveAction />}
+      {showRoadMapAction && <SaveAction onClick={SaveRoadMapItems} />}
     </div>
   );
 };

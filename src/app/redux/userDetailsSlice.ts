@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserRegisterData } from "../types/userAuth";
+import { SingleJobTitle, UserRegisterData } from "../types/userAuth";
 import { UserState } from "../types/userState";
 interface UserSliceState {
     user: UserState | null;
@@ -17,15 +17,16 @@ const userDetailsSlice = createSlice({
         clearUserDetails: (state) => {
             state.user = null;
         },
-        addJobTitle: (state: UserSliceState, action: PayloadAction<{ jobTitle: string }>) => {
-            state.user?.jobTitles?.push(action.payload.jobTitle)
-        },
-        updateUserScore: (state: UserSliceState, action: PayloadAction<{ score: number }>) => {
-            if (state.user) {
-                state.user.score = action.payload.score
-            }
+        setJobTitles: (state: UserSliceState, action: PayloadAction<SingleJobTitle>) => {
+            state.user?.jobTitles?.map((item: SingleJobTitle, index) => {
+                if (item.title === action.payload.title) {
+                    return item.score = action.payload.score
+                } else {
+                    state.user?.jobTitles?.push({ title: action.payload.title, score: action.payload.score })
+                }
+            })
         }
     },
 });
-export const { setUserDetails, clearUserDetails,addJobTitle,updateUserScore } = userDetailsSlice.actions;
+export const { setUserDetails, clearUserDetails, setJobTitles } = userDetailsSlice.actions;
 export default userDetailsSlice.reducer;

@@ -38,8 +38,10 @@ export const registerFormSchema = z
       .min(3, "Full name must be at least 3 characters")
       .regex(/^[a-zA-Z\s]+$/, "Full name can only contain letters and spaces"),
     confirmPassword: z.string().min(8, "Please confirm your password"),
-    score:z.number().min(0).max(100).optional(),
-    jobTitles: z.array(z.string()).optional()
+    jobTitles: z.array(z.object({
+    title:z.string(),
+    score:z.number(),
+    })).optional()
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
@@ -58,3 +60,7 @@ export const registerFormSchema = z
 export type UserRegisterData = z.infer<typeof registerFormSchema>
 export type UserLoginData = z.infer<typeof loginFormSchema>
 export type UserResetData = z.infer<typeof resetFormSchema>
+export interface SingleJobTitle {
+  title: string;
+  score: number;
+}

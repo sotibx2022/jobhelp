@@ -10,7 +10,6 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
-import ScoreDisplay from "./ScoreDisplay";
 import ProfileIcon from "./ProfileIcon";
 import Link from "next/link";
 import { useLogout } from "@/hooks/useLogout";
@@ -18,14 +17,7 @@ import { Button } from "@/components/ui/button";
 const UserDisplay = () => {
   const [open, setOpen] = useState(false);
   const userDetails = useSelector((state: RootState) => state.user.user)
-  const score = useSelector((state: RootState) => state.user.user?.score);
   const logout = useLogout()
-  const borderStyle = {
-    background: `conic-gradient(
-      #3b82f6 ${(score??0) * 3.6}deg,
-      #e5e7eb ${(score??0) * 3.6}deg
-    )`
-  }
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
       {/* Trigger */}
@@ -33,7 +25,6 @@ const UserDisplay = () => {
         <button className="flex items-center  focus:outline-none">
           <div
             className="relative w-12 h-12 rounded-full p-[2px]"
-            style={borderStyle}
           >
             <div className="flex items-center justify-center w-full h-full rounded-full bg-background">
               <ProfileIcon />
@@ -63,11 +54,6 @@ const UserDisplay = () => {
               exit={{ opacity: 0, y: -6, scale: 0.98 }}
               transition={{ duration: 0.18, ease: "easeOut" }}
             >
-              {(score ?? 0) > 0 && (
-                <div className="p-2">
-                  <ScoreDisplay />
-                </div>
-              )}
               <DropdownMenuItem className="justify-center">
                 {userDetails ? <Link href='/profile'>Profile</Link> : <Link href='/register'>Register</Link>}
               </DropdownMenuItem>

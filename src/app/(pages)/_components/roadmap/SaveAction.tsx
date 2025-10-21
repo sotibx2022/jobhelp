@@ -5,12 +5,10 @@ import Link from 'next/link'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Save, LogIn, X } from 'lucide-react'
-const SaveAction = () => {
+import { SaveButton } from '@/app/_components'
+const SaveAction: React.FC<{ onClick: () => void }> = ({ onClick }) => {
     const user = useSelector((state: RootState) => state.user)
     const [isVisible, setIsVisible] = React.useState(true)
-    const handleRoadmapChange = () => {
-        // Add your save logic here
-    }
     const handleClose = () => {
         setIsVisible(false)
     }
@@ -28,42 +26,10 @@ const SaveAction = () => {
                     <X className="h-3 w-3" />
                 </Button>
                 <div className="flex items-center gap-4 justify-between py-4">
-                    <div className="flex items-center gap-3">
-                        <div className="hidden sm:flex w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                        <p className="text-sm font-medium text-foreground">
+                        <p className="primaryParagraph">
                             You have unsaved changes
                         </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        {!user && (
-                            <Link href="/login">
-                                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                                    Login
-                                </Button>
-                            </Link>
-                        )}
-                        <Button 
-                            onClick={handleRoadmapChange}
-                            size="sm"
-                            className={`min-w-[100px] transition-all duration-200 ${
-                                user 
-                                    ? "bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-md" 
-                                    : "bg-gray-600 hover:bg-gray-700 text-white"
-                            }`}
-                        >
-                            {user ? (
-                                <>
-                                    <Save className="w-4 h-4 mr-2" />
-                                    Save
-                                </>
-                            ) : (
-                                <>
-                                    <LogIn className="w-4 h-4 mr-2" />
-                                    Login
-                                </>
-                            )}
-                        </Button>
-                    </div>
+                    <SaveButton onClick={onClick}/>
                 </div>
             </div>
         </div>

@@ -13,7 +13,6 @@ interface StringCheckListProps {
   subTitleIndex: number
 }
 const StringCheckList: React.FC<StringCheckListProps> = ({ subContent, checkedValue, edit, titleIndex, subTitleIndex }) => {
-  console.log(subContent);
   const dispatch = useDispatch()
   const [isChecked, setIsChecked] = useState(subContent.checked)
   const [addTopic, setAddTopic] = useState(false);

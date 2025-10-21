@@ -29,7 +29,7 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
   const dispatch = useDispatch();
   const [score, setScore] = useState(0);
   const handleCheckedValue = (checked: boolean) => {
-    const delta = checked ? 1 : 0;
+    const delta = checked ? 1 : -1;
     setScore((prev) => prev + delta);
     unitScore({ value: delta });
   };
