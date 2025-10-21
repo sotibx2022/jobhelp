@@ -6,8 +6,13 @@ const roadmapSlice = createSlice({
   initialState: roadmapInitialState,
   reducers: {
     setRoadMapItems: (state, action: PayloadAction<ContentUIType[]>) => {
-      return action.payload
-    },
+  console.log("📝 setRoadMapItems called");
+  console.log("Action payload:", action.payload);
+  console.log("State before update:", state);
+  const newState = action.payload;
+  console.log("State after update:", newState);
+  return newState;
+},
     deleteRoadmapTitle: (state, action: PayloadAction<{ index: number }>) => {
       const newState = state.filter((_, i) => i !== action.payload.index);
       return newState;
