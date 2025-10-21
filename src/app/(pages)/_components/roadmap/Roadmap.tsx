@@ -39,51 +39,35 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const hasNoContents = !contents || contents.length === 0;
   const shouldFetchfromDB = hasNoContents && isThereSavedJobTitleinDB;
   const shouldFetchfromAI = hasNoContents && !isThereSavedJobTitleinDB;
-  console.log("🧩 Debug JobContent Fetch Conditions");
-  console.log("contents:", contents);
-  console.log("contents length:", contents?.length);
-  console.log("isThereSavedJobTitleinDB:", isThereSavedJobTitleinDB);
-  console.log("hasNoContents:", hasNoContents);
-  console.log("shouldFetchfromDB:", shouldFetchfromDB);
-  console.log("shouldFetchfromAI:", shouldFetchfromAI);
   const { data: datafromAI, isPending: pendingfromAI } = useQuery<APIResponse<ContentsType>>({
-    queryKey: ["jobContentfromAI", jobTitle],
-    queryFn: () => getJobDetails<ContentsType>(`/api/contents?jobtitle=${jobTitle}`),
-    enabled: Boolean(shouldFetchfromAI),
-    staleTime: 0,
-    gcTime: 0,
-  });
-  console.log("AI Query initialized");
-  console.log("datafromAI:", datafromAI);
-  console.log("pendingfromAI:", pendingfromAI);
-  const { data: datafromDb, isPending: pendingfromDB } = useQuery<APIResponse<ContentUIType[]>>({
-    queryKey: ['jobContentfromDB', jobTitle],
-    queryFn: () => getJobDetails<ContentUIType[]>(`/api/dbcontents?jobtitle=${jobTitle}`),
-    enabled: Boolean(shouldFetchfromDB),
-  });
-  console.log("DB Query initialized");
-  console.log("datafromDb:", datafromDb);
-  console.log("pendingfromDB:", pendingfromDB);
+  queryKey: ["jobContentfromAI", jobTitle],
+  queryFn: () => getJobDetails<ContentsType>(`/api/contents?jobtitle=${jobTitle}`),
+  enabled: Boolean(shouldFetchfromAI),
+});
+const { data: datafromDb, isPending: pendingfromDB } = useQuery<APIResponse<ContentUIType[]>>({
+  queryKey: ['jobContentfromDB', jobTitle],
+  queryFn: () => getJobDetails<ContentUIType[]>(`/api/dbcontents?jobtitle=${jobTitle}`),
+  enabled: Boolean(shouldFetchfromDB),
+});
   const handleUnitScore = ({ value }: { value: number }) => {
     setOverallScore((prev) => prev + value);
   };
   useEffect(() => {
-    // Get data from AI or DB
-    const actualData = datafromAI?.data
-      ? modifyAIDataforRoadMap(datafromAI.data)
-      : datafromDb?.data;
-    // Only proceed if actualData exists and is an array
-    if (!actualData || !Array.isArray(actualData) || actualData.length === 0) {
-      setOriginalContents([]);
-      setOverallLength(0);
-      dispatch(setRoadMapItems([]));
-      return;
-    }
-    setOriginalContents(actualData);
-    const tempTotalLength = useOverallLength(actualData);
-    setOverallLength(tempTotalLength);
+  const actualData = datafromAI?.data
+    ? modifyAIDataforRoadMap(datafromAI.data)
+    : datafromDb?.data;
+  if (!actualData || !Array.isArray(actualData) || actualData.length === 0) {
+    return;
+  }
+  // Only dispatch if Redux state is empty or differs
+  const reduxContents = contents ?? [];
+  const isDifferent = JSON.stringify(reduxContents) !== JSON.stringify(actualData);
+  if (isDifferent) {
     dispatch(setRoadMapItems(actualData));
-  }, [datafromAI, datafromDb, dispatch]);
+    setOriginalContents(actualData);
+    setOverallLength(useOverallLength(actualData));
+  }
+}, [datafromAI, datafromDb, dispatch]);
   useEffect(() => {
     if (!originalContents) return;
     setShowRoadMapAction(hasChanged);
