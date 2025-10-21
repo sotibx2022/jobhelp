@@ -21,13 +21,15 @@ import SaveAction from "./SaveAction";
 import { SingleJobTitle } from "@/app/types/userAuth";
 import { modifyAIDataforRoadMap } from "./modifyAIDataforRoadmap";
 import { setJobTitles } from "@/app/redux/userDetailsSlice";
-import { useOverallLength } from "./useOverallLength";
+import { useOverallScore } from "./useOverallLength";
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const dispatch = useDispatch();
   const contents = useSelector((state: RootState) => state.roadmapDetails);
+  const [score, setScore] = useState(useOverallScore(contents));
+  useEffect(() => {
+    setScore(useOverallScore(contents));
+  }, [contents]);
   const [edit, setEdit] = useState(false);
-  const [overallScore, setOverallScore] = useState(0);
-  const [overallLength, setOverallLength] = useState(0);
   const [addTopic, setAddTopic] = useState(false);
   const [originalContents, setOriginalContents] = useState<ContentUIType[] | null>(null);
   const hasChanged = JSON.stringify(contents) !== JSON.stringify(originalContents);
@@ -40,42 +42,36 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const shouldFetchfromDB = hasNoContents && isThereSavedJobTitleinDB;
   const shouldFetchfromAI = hasNoContents && !isThereSavedJobTitleinDB;
   const { data: datafromAI, isPending: pendingfromAI } = useQuery<APIResponse<ContentsType>>({
-  queryKey: ["jobContentfromAI", jobTitle],
-  queryFn: () => getJobDetails<ContentsType>(`/api/contents?jobtitle=${jobTitle}`),
-  enabled: Boolean(shouldFetchfromAI),
-});
-const { data: datafromDb, isPending: pendingfromDB } = useQuery<APIResponse<ContentUIType[]>>({
-  queryKey: ['jobContentfromDB', jobTitle],
-  queryFn: () => getJobDetails<ContentUIType[]>(`/api/dbcontents?jobtitle=${jobTitle}`),
-  enabled: Boolean(shouldFetchfromDB),
-});
-  const handleUnitScore = ({ value }: { value: number }) => {
-    setOverallScore((prev) => prev + value);
-  };
+    queryKey: ["jobContentfromAI", jobTitle],
+    queryFn: () => getJobDetails<ContentsType>(`/api/contents?jobtitle=${jobTitle}`),
+    enabled: Boolean(shouldFetchfromAI),
+  });
+  const { data: datafromDb, isPending: pendingfromDB } = useQuery<APIResponse<ContentUIType[]>>({
+    queryKey: ['jobContentfromDB', jobTitle],
+    queryFn: () => getJobDetails<ContentUIType[]>(`/api/dbcontents?jobtitle=${jobTitle}`),
+    enabled: Boolean(shouldFetchfromDB),
+  });
   useEffect(() => {
-  const actualData = datafromAI?.data
-    ? modifyAIDataforRoadMap(datafromAI.data)
-    : datafromDb?.data;
-  if (!actualData || !Array.isArray(actualData) || actualData.length === 0) {
-    return;
-  }
-  if (!contents || contents.length ===0) {
-    dispatch(setRoadMapItems(actualData));
-    setOriginalContents(actualData);
-    setOverallLength(useOverallLength(actualData));
-  }
-}, [datafromAI, datafromDb, dispatch]);
+    const actualData = datafromAI?.data
+      ? modifyAIDataforRoadMap(datafromAI.data)
+      : datafromDb?.data;
+    if (!actualData || !Array.isArray(actualData) || actualData.length === 0) {
+      return;
+    }
+    if (!contents || contents.length === 0) {
+      dispatch(setRoadMapItems(actualData));
+      setOriginalContents(actualData);
+    }
+  }, [datafromAI, datafromDb, dispatch]);
   useEffect(() => {
     if (!originalContents) return;
     setShowRoadMapAction(hasChanged);
   }, [contents, originalContents]);
-  const contentsToRender = contents ?? originalContents;
-  const score = Math.floor((overallScore / overallLength) * 100);
   const cancelTopicChange = () => {
     setAddTopic(false);
   };
   const SaveRoadMapItems = () => {
-    dispatch(setJobTitles({ title: jobTitle, score: overallScore }));
+    dispatch(setJobTitles({ title: jobTitle, score: score }));
   };
   const isLoadingAI = pendingfromAI && shouldFetchfromAI;
   const isLoadingDb = pendingfromDB && shouldFetchfromDB;
@@ -106,12 +102,11 @@ const { data: datafromDb, isPending: pendingfromDB } = useQuery<APIResponse<Cont
           defaultValue={contents.map((_, index) => `item-${index}`)}
           className="w-full"
         >
-          {contentsToRender?.map((content: ContentUIType, index: number) => (
+          {contents?.map((content: ContentUIType, index: number) => (
             <SingleRoadMap
               index={index}
               content={content}
               key={index}
-              unitScore={handleUnitScore}
               edit={edit}
             />
           ))}

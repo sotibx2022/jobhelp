@@ -13,25 +13,29 @@ import { useDispatch } from "react-redux";
 import { deleteRoadmapTitle } from "@/app/redux/roadmapSlice";
 import AddTopic from "./AddTopic";
 import AddButton from "@/app/_components/structures/AddButton";
+import { SingleJobTitle } from "@/app/types/userAuth";
 interface SingleRoadMapProps {
   index: number;
   content: ContentUIType;
-  unitScore: (args: { value: number }) => void;
   edit: boolean;
 }
 const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
   index,
   content,
-  unitScore,
   edit,
 }) => {
   const [addTopic, setAddTopic] = useState(false);
   const dispatch = useDispatch();
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(
+  content.subContents.reduce((accumulator, item, index) => {
+    const valueToAdd = item.checked ? 1 : 0;
+    const newAccumulator = accumulator + valueToAdd;
+    return newAccumulator;
+  }, 0)
+);
   const handleCheckedValue = (checked: boolean) => {
     const delta = checked ? 1 : -1;
     setScore((prev) => prev + delta);
-    unitScore({ value: delta });
   };
   const handleDelete = (index: number) => {
     alert("delete request");
@@ -76,7 +80,7 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
           {content.subContents.map((item, idx: number) => (
             <StringCheckList
               key={idx}
-            subContent={item}
+              subContent={item}
               checkedValue={handleCheckedValue}
               edit={edit}
               titleIndex={index}
@@ -94,10 +98,10 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
                 action="add"
               />
             ) : (
-              <AddButton 
-                size="small" 
-                onClick={() => setAddTopic(!addTopic)} 
-                text="Add Sub Title" 
+              <AddButton
+                size="small"
+                onClick={() => setAddTopic(!addTopic)}
+                text="Add Sub Title"
               />
             )}
           </div>
