@@ -33,25 +33,25 @@ export async function POST(req: NextRequest) {
         }
         const data: ContentUIType[] = await req.json();
         const existingRoadMap = await RoadMapModel.findOne({ userId, jobTitle });
-if (!existingRoadMap) {
-  const newRoadMapItem = new RoadMapModel({
-    userId,
-    jobTitle,
-    roadMapContents: data,
-  });
-  await newRoadMapItem.save(); // ✅ make sure to save it
-  return NextResponse.json({
-    message: "New RoadMap item created.",
-    status: 201,
-    success: true,
-    data: newRoadMapItem,
-  } as APIResponse<IRoadMapContentsDBType>);
-}return NextResponse.json({
-  message: "RoadMap updated successfully.",
-  status: 200,
-  success: true,
-  data: existingRoadMap,
-} as APIResponse<IRoadMapContentsDBType>);
+        if (!existingRoadMap) {
+            const newRoadMapItem = new RoadMapModel({
+                userId,
+                jobTitle,
+                roadMapContents: data,
+            });
+            await newRoadMapItem.save(); // ✅ make sure to save it
+            return NextResponse.json({
+                message: "New RoadMap item created.",
+                status: 201,
+                success: true,
+                data: newRoadMapItem,
+            } as APIResponse<IRoadMapContentsDBType>);
+        } return NextResponse.json({
+            message: "RoadMap updated successfully.",
+            status: 200,
+            success: true,
+            data: existingRoadMap,
+        } as APIResponse<IRoadMapContentsDBType>);
     } catch (error) {
         return NextResponse.json(
             {

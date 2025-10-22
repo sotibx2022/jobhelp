@@ -5,16 +5,20 @@ import { ContentUIType, IRoadMapContentsDBType } from "@/app/types/roadmapTypes"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { useDispatch } from "react-redux"
-export const saveRoadMapMutation = (jobTitle:string,score:number) => {
+export const saveRoadMapMutation = (jobTitle: string, score: number) => {
     const dispatch = useDispatch()
     return useMutation<APIResponse<IRoadMapContentsDBType>, Error, ContentUIType[]>({
         mutationFn: async (data: ContentUIType[]) => {
-            const response = await axios.post(`/api/dbcontents?jobtitle=${jobTitle}`);
+            const response = await axios.post(`/api/dbcontents?jobtitle=${jobTitle}`, data,
+                {
+                    validateStatus: (status) => status >= 200 && status < 500,
+                }
+            );
             return response.data;
         },
-        onSuccess: (response:APIResponse<IRoadMapContentsDBType>) => {
+        onSuccess: (response: APIResponse<IRoadMapContentsDBType>) => {
             if (response.success) {
-                dispatch(setJobTitles({ title:jobTitle, score: score }));
+                dispatch(setJobTitles({ title: jobTitle, score: score }));
                 dispatch(setToast({ toastType: 'success', message: response.message }))
             } else {
                 dispatch(setToast({ toastType: 'error', message: response.message }))
