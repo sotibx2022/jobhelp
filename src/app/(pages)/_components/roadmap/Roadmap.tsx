@@ -11,7 +11,7 @@ import { Accordion } from "@/components/ui/accordion";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { EditButton } from "@/app/_components";
+import { EditButton, Loading } from "@/app/_components";
 import AddButton from "@/app/_components/structures/AddButton";
 import ViewButton from "@/app/_components/structures/ViewButton";
 import SkletonRoadmapPage from "@/app/_components/structures/skleton/SkletonRoadmapPage";
@@ -57,20 +57,20 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     enabled: Boolean(shouldFetchfromDB),
   });
   useEffect(() => {
-  if (!jobTitle) {
-    if (contents.jobTitle) {
-      router.replace(`/roadmap/jobtitle=${contents.jobTitle}`);
-    } else {
-      const storedTitle = localStorage.getItem('jobTitle');
-      if (storedTitle) {
-        const title = JSON.parse(storedTitle);
-        router.replace(`/roadmap/jobtitle=${title}`);
+    if (!jobTitle) {
+      if (contents.jobTitle) {
+        router.replace(`/roadmap?jobtitle=${contents.jobTitle}`);
       } else {
-        router.push('/');
+        const storedTitle = localStorage.getItem('jobTitle');
+        if (storedTitle) {
+          const title = JSON.parse(storedTitle);
+          router.replace(`/roadmap?jobtitle=${title}`);
+        } else {
+          router.push('/');
+        }
       }
     }
-  }
-}, [jobTitle, contents.jobTitle, router]);
+  }, [jobTitle, contents.jobTitle, router]);
   useEffect(() => {
     const actualData = datafromAI?.data
       ? modifyAIDataforRoadMap(datafromAI.data)
@@ -79,7 +79,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
       return;
     }
     if (!contents || contents.roadmapContents.length === 0) {
-      dispatch(setRoadMapItems({jobTitle:jobTitle,roadmapContents:actualData}));
+      dispatch(setRoadMapItems({ jobTitle: jobTitle, roadmapContents: actualData }));
       setOriginalContents(actualData);
     }
   }, [datafromAI, datafromDb, dispatch]);
@@ -105,6 +105,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   }
   return (
     <div className="w-full">
+      {saveRoadMapDetails.isPending && <Loading />}
       <Card className="mb-4">
         <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex gap-2">
