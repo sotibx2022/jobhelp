@@ -43,18 +43,15 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const isThereSavedJobTitleinDB = user.user?.jobTitles?.some(
     (item: SingleJobTitle) => item.title === jobTitle
   );
-  const hasNoContents = !contents || contents.roadmapContents.length === 0;
-  const shouldFetchfromDB = hasNoContents && isThereSavedJobTitleinDB;
-  const shouldFetchfromAI = hasNoContents && !isThereSavedJobTitleinDB;
   const { data: datafromAI, isPending: pendingfromAI } = useQuery<APIResponse<ContentsType>>({
     queryKey: ["jobContentfromAI", jobTitle],
     queryFn: () => getJobDetails<ContentsType>(`/api/contents?jobtitle=${jobTitle}`),
-    enabled: Boolean(shouldFetchfromAI),
+    enabled: Boolean(!isThereSavedJobTitleinDB),
   });
   const { data: datafromDb, isPending: pendingfromDB } = useQuery<APIResponse<ContentUIType[]>>({
     queryKey: ['jobContentfromDB', jobTitle],
     queryFn: () => getJobDetails<ContentUIType[]>(`/api/dbcontents?jobtitle=${jobTitle}`),
-    enabled: Boolean(shouldFetchfromDB),
+    enabled: Boolean(isThereSavedJobTitleinDB),
   });
   useEffect(() => {
     if (!jobTitle) {
@@ -98,8 +95,8 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
       router.push('/login')
     }
   };
-  const isLoadingAI = pendingfromAI && shouldFetchfromAI;
-  const isLoadingDb = pendingfromDB && shouldFetchfromDB;
+  const isLoadingAI = pendingfromAI && !isThereSavedJobTitleinDB;
+  const isLoadingDb = pendingfromDB && isThereSavedJobTitleinDB;
   if (isLoadingAI || isLoadingDb) {
     return <SkletonRoadmapPage />;
   }
