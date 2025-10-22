@@ -57,6 +57,21 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     enabled: Boolean(shouldFetchfromDB),
   });
   useEffect(() => {
+  if (!jobTitle) {
+    if (contents.jobTitle) {
+      router.replace(`/roadmap/jobtitle=${contents.jobTitle}`);
+    } else {
+      const storedTitle = localStorage.getItem('jobTitle');
+      if (storedTitle) {
+        const title = JSON.parse(storedTitle);
+        router.replace(`/roadmap/jobtitle=${title}`);
+      } else {
+        router.push('/');
+      }
+    }
+  }
+}, [jobTitle, contents.jobTitle, router]);
+  useEffect(() => {
     const actualData = datafromAI?.data
       ? modifyAIDataforRoadMap(datafromAI.data)
       : datafromDb?.data;

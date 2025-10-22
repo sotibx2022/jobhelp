@@ -22,6 +22,7 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
     }, [searchParams])
     const doSubmit = () => {
         if (!searchValue.trim()) return;
+        localStorage.setItem('jobTitle',searchValue)
         dispatch(addJobDetails({ jobTitle: searchValue }));
         if (pathName === '/' || pathName.includes('register') || pathName.includes('login') || pathName.includes('reset')) {
             router.push(`/overview?jobtitle=${encodeURIComponent(searchValue)}`);
