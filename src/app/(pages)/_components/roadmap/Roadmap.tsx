@@ -29,9 +29,9 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const router = useRouter()
   const dispatch = useDispatch();
   const contents = useSelector((state: RootState) => state.roadmapDetails);
-  const [score, setScore] = useState(useOverallScore(contents));
+  const [score, setScore] = useState(useOverallScore(contents.roadmapContents));
   useEffect(() => {
-    setScore(useOverallScore(contents));
+    setScore(useOverallScore(contents.roadmapContents));
   }, [contents]);
   const [edit, setEdit] = useState(false);
   const saveRoadMapDetails = saveRoadMapMutation(jobTitle, score)
@@ -43,7 +43,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const isThereSavedJobTitleinDB = user.user?.jobTitles?.some(
     (item: SingleJobTitle) => item.title === jobTitle
   );
-  const hasNoContents = !contents || contents.length === 0;
+  const hasNoContents = !contents || contents.roadmapContents.length === 0;
   const shouldFetchfromDB = hasNoContents && isThereSavedJobTitleinDB;
   const shouldFetchfromAI = hasNoContents && !isThereSavedJobTitleinDB;
   const { data: datafromAI, isPending: pendingfromAI } = useQuery<APIResponse<ContentsType>>({
@@ -63,8 +63,8 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     if (!actualData || !Array.isArray(actualData) || actualData.length === 0) {
       return;
     }
-    if (!contents || contents.length === 0) {
-      dispatch(setRoadMapItems(actualData));
+    if (!contents || contents.roadmapContents.length === 0) {
+      dispatch(setRoadMapItems({jobTitle:jobTitle,roadmapContents:actualData}));
       setOriginalContents(actualData);
     }
   }, [datafromAI, datafromDb, dispatch]);
@@ -77,7 +77,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   };
   const SaveRoadMapItems = () => {
     if (user) {
-      saveRoadMapDetails.mutate(contents)
+      saveRoadMapDetails.mutate(contents.roadmapContents)
     } else {
       dispatch(setToast({ toastType: 'info', message: 'Pleaes Login to Save the Progress' }));
       router.push('/login')
@@ -109,10 +109,10 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
       {contents && (
         <Accordion
           type="multiple"
-          defaultValue={contents.map((_, index) => `item-${index}`)}
+          defaultValue={contents.roadmapContents.map((_, index) => `item-${index}`)}
           className="w-full"
         >
-          {contents?.map((content: ContentUIType, index: number) => (
+          {contents?.roadmapContents.map((content: ContentUIType, index: number) => (
             <SingleRoadMap
               index={index}
               content={content}

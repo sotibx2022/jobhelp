@@ -1,36 +1,46 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ContentsUIType, ContentUIType } from "../types/roadmapTypes";
-const roadmapInitialState: ContentUIType[] = [];
+interface RoadMapState {
+  jobTitle: string, roadmapContents: ContentUIType[]
+}
+const roadmapInitialState: RoadMapState = { jobTitle: '', roadmapContents: [] };
 const roadmapSlice = createSlice({
   name: "roadmap",
   initialState: roadmapInitialState,
   reducers: {
-    setRoadMapItems: (state, action: PayloadAction<ContentUIType[]>) => {
+    setRoadMapItems: (state, action: PayloadAction<RoadMapState>) => {
       return action.payload;
     },
     deleteRoadmapTitle: (state, action: PayloadAction<{ index: number }>) => {
-      return state.filter((_, i) => i !== action.payload.index);
+      return {
+        ...state,
+        roadmapContents: state.roadmapContents.filter(
+          (_, i) => i !== action.payload.index
+        ),
+      };
     },
     editRoadMapTitle: (
       state,
       action: PayloadAction<{ index: number; actionTitle: string }>
     ) => {
-      state[action.payload.index].actionTitle = action.payload.actionTitle;
+      state.roadmapContents[action.payload.index].actionTitle = action.payload.actionTitle;
     },
     addRoadMapTitle: (state, action: PayloadAction<{ actionTitle: string }>) => {
-      state.push({ actionTitle: action.payload.actionTitle, subContents: [] });
+      state.roadmapContents.push({ actionTitle: action.payload.actionTitle, subContents: [] });
     },
     deleteRoadMapSubTitle: (
       state,
       action: PayloadAction<{ titleIndex: number; subTitleIndex: number }>
     ) => {
       const { titleIndex, subTitleIndex } = action.payload;
-      return state.map((content, i) => {
+      state.roadmapContents = state.roadmapContents.map((content, i) => {
         if (i !== titleIndex) return content;
-        const updatedSubContents = content.subContents.filter(
-          (_, j) => j !== subTitleIndex
-        );
-        return { ...content, subContents: updatedSubContents };
+        return {
+          ...content,
+          subContents: content.subContents.filter(
+            (_, j) => j !== subTitleIndex
+          ),
+        };
       });
     },
     editRoadMapSubTitle: (
@@ -43,16 +53,16 @@ const roadmapSlice = createSlice({
       }>
     ) => {
       const { titleIndex, subTitleIndex, actionTitle, checked } = action.payload;
-      if (state[titleIndex]?.subContents[subTitleIndex] !== undefined) {
-        state[titleIndex].subContents[subTitleIndex].actionSubTitle = actionTitle;
-        state[titleIndex].subContents[subTitleIndex].checked = checked;
+      if (state.roadmapContents[titleIndex]?.subContents[subTitleIndex] !== undefined) {
+        state.roadmapContents[titleIndex].subContents[subTitleIndex].actionSubTitle = actionTitle;
+        state.roadmapContents[titleIndex].subContents[subTitleIndex].checked = checked;
       }
     },
     addRoadMapSubTitle: (
       state,
       action: PayloadAction<{ titleIndex: number; actionTitle: string }>
     ) => {
-      state[action.payload.titleIndex]?.subContents.push({
+      state.roadmapContents[action.payload.titleIndex]?.subContents.push({
         actionSubTitle: action.payload.actionTitle,
         checked: false,
       });
