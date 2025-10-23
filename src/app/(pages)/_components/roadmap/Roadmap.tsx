@@ -24,7 +24,7 @@ import { setJobTitles } from "@/app/redux/userDetailsSlice";
 import { useOverallScore } from "./useOverallLength";
 import { setToast } from "@/app/redux/toastSlice";
 import { useRouter } from "next/navigation";
-import { saveRoadMapMutation } from "./saveRoadMapMutation";
+import { useSaveRoadMapMutation } from "./saveRoadMapMutation";
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const router = useRouter()
   const dispatch = useDispatch();
@@ -34,7 +34,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     setScore(useOverallScore(contents.roadmapContents));
   }, [contents]);
   const [edit, setEdit] = useState(false);
-  const saveRoadMapDetails = saveRoadMapMutation(jobTitle, score)
+  const saveRoadMapDetails = useSaveRoadMapMutation()
   const [addTopic, setAddTopic] = useState(false);
   const [originalContents, setOriginalContents] = useState<ContentUIType[] | null>(null);
   const hasChanged = JSON.stringify(contents) !== JSON.stringify(originalContents);
@@ -89,7 +89,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   };
   const SaveRoadMapItems = () => {
     if (user) {
-      saveRoadMapDetails.mutate(contents.roadmapContents)
+      saveRoadMapDetails.mutate({data:contents.roadmapContents,jobTitle,score})
     } else {
       dispatch(setToast({ toastType: 'info', message: 'Pleaes Login to Save the Progress' }));
       router.push('/login')

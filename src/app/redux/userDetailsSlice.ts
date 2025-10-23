@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SingleJobTitle, UserRegisterData } from "../types/userAuth";
 import { UserState } from "../types/userState";
-interface UserSliceState {
+export interface UserSliceState {
     user: UserState | null;
 }
 const initialState: UserSliceState = {
