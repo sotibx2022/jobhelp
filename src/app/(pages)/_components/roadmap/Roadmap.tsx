@@ -25,6 +25,7 @@ import { useOverallScore } from "./useOverallLength";
 import { setToast } from "@/app/redux/toastSlice";
 import { useRouter } from "next/navigation";
 import { useSaveRoadMapMutation } from "./saveRoadMapMutation";
+import { useFetchRoadMapItems } from "./useFetchRoadMapItems";
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const router = useRouter()
   const dispatch = useDispatch();
@@ -40,19 +41,10 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const hasChanged = JSON.stringify(contents) !== JSON.stringify(originalContents);
   const [showRoadMapAction, setShowRoadMapAction] = useState<boolean>(hasChanged);
   const user = useSelector((state: RootState) => state.user);
-  const isThereSavedJobTitleinDB = user.user?.jobTitles?.some(
-    (item: SingleJobTitle) => item.title === jobTitle
+  const { data, isPending } = useFetchRoadMapItems(
+    user,
+    jobTitle
   );
-  const { data: datafromAI, isPending: pendingfromAI } = useQuery<APIResponse<ContentsType>>({
-    queryKey: ["jobContentfromAI", jobTitle],
-    queryFn: () => getJobDetails<ContentsType>(`/api/contents?jobtitle=${jobTitle}`),
-    enabled: Boolean(!isThereSavedJobTitleinDB),
-  });
-  const { data: datafromDb, isPending: pendingfromDB } = useQuery<APIResponse<ContentUIType[]>>({
-    queryKey: ['jobContentfromDB', jobTitle],
-    queryFn: () => getJobDetails<ContentUIType[]>(`/api/dbcontents?jobtitle=${jobTitle}`),
-    enabled: Boolean(isThereSavedJobTitleinDB),
-  });
   useEffect(() => {
     if (!jobTitle) {
       if (contents.jobTitle) {
@@ -69,17 +61,11 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     }
   }, [jobTitle, contents.jobTitle, router]);
   useEffect(() => {
-    const actualData = datafromAI?.data
-      ? modifyAIDataforRoadMap(datafromAI.data)
-      : datafromDb?.data;
-    if (!actualData || !Array.isArray(actualData) || actualData.length === 0) {
-      return;
+    if (data && (!contents || contents.roadmapContents.length === 0)) {
+      dispatch(setRoadMapItems({ jobTitle: jobTitle, roadmapContents: data }));
+      setOriginalContents(data);
     }
-    if (!contents || contents.roadmapContents.length === 0) {
-      dispatch(setRoadMapItems({ jobTitle: jobTitle, roadmapContents: actualData }));
-      setOriginalContents(actualData);
-    }
-  }, [datafromAI, datafromDb, dispatch]);
+  }, [data, dispatch, contents, jobTitle]);
   useEffect(() => {
     if (!originalContents) return;
     setShowRoadMapAction(hasChanged);
@@ -89,15 +75,13 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   };
   const SaveRoadMapItems = () => {
     if (user) {
-      saveRoadMapDetails.mutate({data:contents.roadmapContents,jobTitle,score})
+      saveRoadMapDetails.mutate({ data: contents.roadmapContents, jobTitle, score })
     } else {
       dispatch(setToast({ toastType: 'info', message: 'Pleaes Login to Save the Progress' }));
       router.push('/login')
     }
   };
-  const isLoadingAI = pendingfromAI && !isThereSavedJobTitleinDB;
-  const isLoadingDb = pendingfromDB && isThereSavedJobTitleinDB;
-  if (isLoadingAI || isLoadingDb) {
+  if (isPending) {
     return <SkletonRoadmapPage />;
   }
   return (

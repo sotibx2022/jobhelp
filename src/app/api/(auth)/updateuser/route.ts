@@ -1,3 +1,4 @@
+import { connectToDb } from '@/app/config/connectToDb';
 import { validateUserToken } from '@/app/functions/middlewareFunctions/validateUserToken';
 import { UserModel } from '@/app/model/user.model';
 import { UserSliceState } from '@/app/redux/userDetailsSlice';
@@ -5,6 +6,7 @@ import { APIResponseError, APIResponseSuccess } from '@/app/types/APIResponse';
 import { NextResponse, type NextRequest } from 'next/server';
 export async function POST(req: NextRequest) {
     try {
+        await connectToDb();
         const { jobTitle, score } = await req.json();
         if (!jobTitle || score === undefined) {
             return NextResponse.json({
@@ -13,7 +15,7 @@ export async function POST(req: NextRequest) {
                 success: false,
             } as APIResponseError);
         }
-        const userId = validateUserToken(req); 
+        const userId = await validateUserToken(req);
         if (!userId) {
             return NextResponse.json({
                 message: "Unauthorized to update user",
@@ -29,11 +31,10 @@ export async function POST(req: NextRequest) {
                 status: 404,
             } as APIResponseError);
         }
-        // ✅ Ensure jobtitles is initialized
         if (!Array.isArray(user.jobtitles)) {
             user.jobtitles = [];
         }
-        user.jobtitles.push({ title: jobTitle, score });
+        user.jobTitles.push({ title: jobTitle, score });
         await user.save();
         return NextResponse.json({
             message: "User updated successfully",
@@ -42,7 +43,6 @@ export async function POST(req: NextRequest) {
             data: user,
         } as APIResponseSuccess<UserSliceState>);
     } catch (error: any) {
-        console.error("Error updating user:", error);
         return NextResponse.json({
             message: "Internal server error",
             success: false,
