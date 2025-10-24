@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { useQuery } from '@tanstack/react-query'
 import { getUserDetails } from '@/app/functions/queryFunctions/getUserDetails'
 import { useDispatch } from 'react-redux'
-import { setUserDetails } from '@/app/redux/userDetailsSlice'
+import { setUserDetails, userInitialized } from '@/app/redux/userDetailsSlice'
 const CommonFooter = () => {
   const dispatch = useDispatch()
   const { data: userData, isPending } = useQuery({
@@ -13,10 +13,13 @@ const CommonFooter = () => {
     queryFn: getUserDetails
   })
   useEffect(() => {
+    if(isPending) return
     if (userData?.success) {
       dispatch(setUserDetails(userData.data))
+    } else {
+      dispatch(userInitialized())
     }
-  }, [userData])
+  }, [userData,isPending])
   const features = [
     {
       title: "Resume",

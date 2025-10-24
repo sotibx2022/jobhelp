@@ -1,87 +1,97 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
-import { getJobDetails } from "@/app/functions/queryFunctions/getJobDetails";
-import { APIResponse } from "@/app/types/APIResponse";
-import { ContentsType, ContentType, ContentUIType } from "@/app/types/roadmapTypes";
 import { RootState } from "@/app/redux/store";
-import { setRoadMapItems } from "@/app/redux/roadmapSlice";
-import { Accordion } from "@/components/ui/accordion";
-import { Progress } from "@/components/ui/progress";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { EditButton, Loading } from "@/app/_components";
-import AddButton from "@/app/_components/structures/AddButton";
-import ViewButton from "@/app/_components/structures/ViewButton";
-import SkletonRoadmapPage from "@/app/_components/structures/skleton/SkletonRoadmapPage";
-import SingleRoadMap from "./SingleRoadMap";
-import AddTopic from "./AddTopic";
-import SaveAction from "./SaveAction";
-import { SingleJobTitle } from "@/app/types/userAuth";
-import { modifyAIDataforRoadMap } from "./modifyAIDataforRoadmap";
-import { setJobTitles } from "@/app/redux/userDetailsSlice";
-import { useOverallScore } from "./useOverallLength";
+import { RoadMapState, setRoadMapItems } from "@/app/redux/roadmapSlice";
 import { setToast } from "@/app/redux/toastSlice";
 import { useRouter } from "next/navigation";
+import { ContentUIType } from "@/app/types/roadmapTypes";
+import { useOverallScore } from "./useOverallLength";
 import { useSaveRoadMapMutation } from "./saveRoadMapMutation";
 import { useFetchRoadMapItems } from "./useFetchRoadMapItems";
+import SkletonRoadmapPage from "@/app/_components/structures/skleton/SkletonRoadmapPage";
+import { EditButton, Loading } from "@/app/_components";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import ViewButton from "@/app/_components/structures/ViewButton";
+import { Progress } from "@/components/ui/progress";
+import { Accordion } from "@/components/ui/accordion";
+import SingleRoadMap from "./SingleRoadMap";
+import AddTopic from "./AddTopic";
+import AddButton from "@/app/_components/structures/AddButton";
+import SaveAction from "./SaveAction";
+import { dataTagErrorSymbol } from "@tanstack/react-query";
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
-  const router = useRouter()
+  const router = useRouter();
   const dispatch = useDispatch();
-  const contents = useSelector((state: RootState) => state.roadmapDetails);
-  const [score, setScore] = useState(useOverallScore(contents.roadmapContents));
+  const contents: RoadMapState = useSelector((state: RootState) => state.roadmapDetails);
+  const user = useSelector((state: RootState) => state.user);
+  // React Query + fetch only after user is initialized
+  const { data, isPending } = useFetchRoadMapItems(user, jobTitle);
+  // State for progress score
+  const [score, setScore] = useState(0);
   useEffect(() => {
-    setScore(useOverallScore(contents.roadmapContents));
+    setScore(useOverallScore(contents.roadMapContents));
   }, [contents]);
   const [edit, setEdit] = useState(false);
-  const saveRoadMapDetails = useSaveRoadMapMutation()
+  const saveRoadMapDetails = useSaveRoadMapMutation();
   const [addTopic, setAddTopic] = useState(false);
-  const [originalContents, setOriginalContents] = useState<ContentUIType[] | null>(null);
+  const [originalContents, setOriginalContents] = useState<RoadMapState | null>(null);
   const hasChanged = JSON.stringify(contents) !== JSON.stringify(originalContents);
   const [showRoadMapAction, setShowRoadMapAction] = useState<boolean>(hasChanged);
-  const user = useSelector((state: RootState) => state.user);
-  const { data, isPending } = useFetchRoadMapItems(
-    user,
-    jobTitle
-  );
+  console.log(contents.roadMapContents);
+  // Redirect logic if jobTitle is missing
   useEffect(() => {
     if (!jobTitle) {
-      if (contents.jobTitle) {
-        router.replace(`/roadmap?jobtitle=${contents.jobTitle}`);
+      const fallbackTitle = contents.jobTitle || JSON.parse(localStorage.getItem('jobTitle') || 'null');
+      if (fallbackTitle) {
+        router.replace(`/roadmap?jobtitle=${fallbackTitle}`);
       } else {
-        const storedTitle = localStorage.getItem('jobTitle');
-        if (storedTitle) {
-          const title = JSON.parse(storedTitle);
-          router.replace(`/roadmap?jobtitle=${title}`);
-        } else {
-          router.push('/');
-        }
+        router.push('/');
       }
     }
   }, [jobTitle, contents.jobTitle, router]);
+  // Populate Redux store with fetched roadmap data once ready
+  console.log(data)
+  console.log(contents)
   useEffect(() => {
-    if (data && (!contents || contents.roadmapContents.length === 0)) {
-      dispatch(setRoadMapItems({ jobTitle: jobTitle, roadmapContents: data }));
+    if (data && contents?.roadMapContents?.length === 0) {
+      console.log(contents)
+      console.log("i am inside to set redux")
+      console.log("data to set in redux is", data);
+      dispatch(setRoadMapItems(data));
       setOriginalContents(data);
     }
   }, [data, dispatch, contents, jobTitle]);
+  // Detect changes for showing SaveAction
   useEffect(() => {
     if (!originalContents) return;
     setShowRoadMapAction(hasChanged);
-  }, [contents, originalContents]);
-  const cancelTopicChange = () => {
-    setAddTopic(false);
-  };
+  }, [contents, originalContents, hasChanged]);
+  const cancelTopicChange = () => setAddTopic(false);
   const SaveRoadMapItems = () => {
-    if (user) {
-      saveRoadMapDetails.mutate({ data: contents.roadmapContents, jobTitle, score })
+    if (user.initialized && user.user) {
+      saveRoadMapDetails.mutate({ data: contents.roadMapContents, jobTitle, score });
     } else {
-      dispatch(setToast({ toastType: 'info', message: 'Pleaes Login to Save the Progress' }));
-      router.push('/login')
+      dispatch(setToast({ toastType: 'info', message: 'Please login to save your progress' }));
+      router.push('/login');
     }
   };
-  if (isPending) {
+  useEffect(() => {
+    console.log("===== Roadmap Debug =====");
+    console.log("user:", user);
+    console.log("user.initialized:", user?.initialized);
+    console.log("isPending:", isPending);
+    console.log("contents:", contents);
+    console.log("contents?.roadMapContents?.length:", contents?.roadMapContents?.length);
+    if (user?.initialized || isPending || contents?.roadMapContents?.length === 0) {
+      console.log("pending state");
+    } else {
+      console.log("active state");
+    }
+  }, [contents, isPending, user]);
+  // Render skeleton until data + user are ready
+  if (!user.initialized || isPending || contents?.roadMapContents?.length === 0) {
     return <SkletonRoadmapPage />;
   }
   return (
@@ -106,27 +116,17 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
       {contents && (
         <Accordion
           type="multiple"
-          defaultValue={contents.roadmapContents.map((_, index) => `item-${index}`)}
+          defaultValue={contents?.roadMapContents?.map((_, index) => `item-${index}`)}
           className="w-full"
         >
-          {contents?.roadmapContents.map((content: ContentUIType, index: number) => (
-            <SingleRoadMap
-              index={index}
-              content={content}
-              key={index}
-              edit={edit}
-            />
+          {contents?.roadMapContents?.map((content: ContentUIType, index: number) => (
+            <SingleRoadMap key={index} index={index} content={content} edit={edit} />
           ))}
-          {edit &&
-            (addTopic ? (
-              <AddTopic
-                defaultValue="Add New Topic"
-                cancelTopicChange={cancelTopicChange}
-                action="add"
-              />
-            ) : (
-              <AddButton text="Add Topic" onClick={() => setAddTopic(true)} />
-            ))}
+          {edit && (addTopic ? (
+            <AddTopic defaultValue="Add New Topic" cancelTopicChange={cancelTopicChange} action="add" />
+          ) : (
+            <AddButton text="Add Topic" onClick={() => setAddTopic(true)} />
+          ))}
         </Accordion>
       )}
       {showRoadMapAction && <SaveAction onClick={SaveRoadMapItems} />}
