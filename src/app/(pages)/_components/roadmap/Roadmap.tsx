@@ -21,6 +21,7 @@ import AddTopic from "./AddTopic";
 import AddButton from "@/app/_components/structures/AddButton";
 import SaveAction from "./SaveAction";
 import { dataTagErrorSymbol } from "@tanstack/react-query";
+import ProgressCard from "@/app/(dashboard)/profile/Progress";
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -39,7 +40,6 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const [originalContents, setOriginalContents] = useState<RoadMapState | null>(null);
   const hasChanged = JSON.stringify(contents) !== JSON.stringify(originalContents);
   const [showRoadMapAction, setShowRoadMapAction] = useState<boolean>(hasChanged);
-  console.log(contents.roadMapContents);
   // Redirect logic if jobTitle is missing
   useEffect(() => {
     if (!jobTitle) {
@@ -52,13 +52,8 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     }
   }, [jobTitle, contents.jobTitle, router]);
   // Populate Redux store with fetched roadmap data once ready
-  console.log(data)
-  console.log(contents)
   useEffect(() => {
     if (data && contents?.roadMapContents?.length === 0) {
-      console.log(contents)
-      console.log("i am inside to set redux")
-      console.log("data to set in redux is", data);
       dispatch(setRoadMapItems(data));
       setOriginalContents(data);
     }
@@ -78,16 +73,8 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     }
   };
   useEffect(() => {
-    console.log("===== Roadmap Debug =====");
-    console.log("user:", user);
-    console.log("user.initialized:", user?.initialized);
-    console.log("isPending:", isPending);
-    console.log("contents:", contents);
-    console.log("contents?.roadMapContents?.length:", contents?.roadMapContents?.length);
     if (user?.initialized || isPending || contents?.roadMapContents?.length === 0) {
-      console.log("pending state");
     } else {
-      console.log("active state");
     }
   }, [contents, isPending, user]);
   // Render skeleton until data + user are ready
@@ -97,22 +84,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   return (
     <div className="w-full">
       {saveRoadMapDetails.isPending && <Loading />}
-      <Card className="mb-4">
-        <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="flex gap-2">
-            <h2 className="secondaryHeading capitalize">Progress</h2>
-            <Badge variant="destructive">{score}%</Badge>
-          </div>
-          {!edit ? (
-            <EditButton variant="secondary" text="Edit" onClick={() => setEdit(true)} />
-          ) : (
-            <ViewButton variant="secondary" text="View" onClick={() => setEdit(false)} />
-          )}
-        </CardHeader>
-        <CardContent>
-          <Progress value={score} className="h-2 mt-2" />
-        </CardContent>
-      </Card>
+      <ProgressCard jobTitle={jobTitle} score={score} editValue={true} editable={true} />
       {contents && (
         <Accordion
           type="multiple"

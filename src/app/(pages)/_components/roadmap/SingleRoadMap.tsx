@@ -24,7 +24,6 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
   content,
   edit,
 }) => {
-  console.log(content)
   const [addTopic, setAddTopic] = useState(false);
   const dispatch = useDispatch();
   const [score, setScore] = useState(

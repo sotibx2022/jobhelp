@@ -23,10 +23,10 @@ export const useLogout = () => {
                 message: response.message
             }))
             if (response.success) {
+                dispatch(clearUserDetails())
                 if (!variables.skipBroadcast) {
                     authChannel?.postMessage("logout");
                 }
-                dispatch(clearUserDetails())
             }
         },
         onError: (error) => {

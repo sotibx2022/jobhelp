@@ -5,11 +5,13 @@ import { APIResponse, returnErrorObject } from "@/app/types/APIResponse";
 import { UserState } from "@/app/types/userState";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 interface LoginVariables {
   skipBroadcast?: boolean;
 }
 export const useLogin = () => {
+  const router = useRouter()
   const authChannel = getAuthChannel();
   const dispatch = useDispatch();
   return useMutation<APIResponse<UserState>, unknown, LoginVariables>({
@@ -20,6 +22,7 @@ export const useLogin = () => {
     onSuccess: (response: APIResponse<UserState>, variables?: LoginVariables) => {
       if (response.success) {
         dispatch(setUserDetails(response.data));
+        router.push('/profile')
         // Only broadcast login if skipBroadcast is NOT true
         if (!variables?.skipBroadcast) {
           authChannel?.postMessage("login");
