@@ -21,11 +21,8 @@ import {
 } from "lucide-react"
 import { SidebarItem } from "./SidebarItem";
 const sidebarItems = [
-  { label: "Overview", icon: LayoutDashboard, href: "/overview" },
   { label: "Salary", icon: Wallet, href: "/salary" },
-  { label: "Skills", icon: BadgeCheck, href: "/skills" },
   { label: "Roadmap", icon: Route, href: "/roadmap" },
-  { label: "Jobs", icon: Briefcase, href: "/jobs" },
   { label: "Resume", icon: FileText, href: "/resume" },
 ];
 const AppSidebar = () => {

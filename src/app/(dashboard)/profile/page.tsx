@@ -48,7 +48,7 @@ const Page = () => {
                             </EmptyMedia>
                             <EmptyTitle>No Job Saved</EmptyTitle>
                             <EmptyDescription className="primaryParagraph">
-                                Hi, <span className="font-bold">{user.user?.fullName}</span>,
+                                Hi, <span className="font-bold">{user.user?.fullName}</span>
                                 <br />
                                 There are no jobs saved in the database for this user.
                             </EmptyDescription>

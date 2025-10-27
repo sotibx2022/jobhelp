@@ -31,10 +31,17 @@ const userDetailsSlice = createSlice({
             })
             state.initialized = true
         },
+        deleteJobTitle: (state: UserSliceState, action: PayloadAction<string>) => {
+            if (state.user?.jobTitles) {
+                state.user.jobTitles = state.user.jobTitles.filter(
+                    (item) => item.title !== action.payload
+                );
+            }
+        },
         userInitialized: (state) => {
             state.initialized = true
         }
     },
 });
-export const { setUserDetails, clearUserDetails, setJobTitles, userInitialized } = userDetailsSlice.actions;
+export const { setUserDetails, clearUserDetails, setJobTitles, userInitialized, deleteJobTitle } = userDetailsSlice.actions;
 export default userDetailsSlice.reducer;

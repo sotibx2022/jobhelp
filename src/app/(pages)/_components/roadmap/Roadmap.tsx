@@ -22,6 +22,7 @@ import AddButton from "@/app/_components/structures/AddButton";
 import SaveAction from "./SaveAction";
 import { dataTagErrorSymbol } from "@tanstack/react-query";
 import ProgressCard from "@/app/(dashboard)/profile/Progress";
+import { useFallBackJobTitle } from "@/hooks/useFallBackJobTitle";
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -41,16 +42,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const hasChanged = JSON.stringify(contents) !== JSON.stringify(originalContents);
   const [showRoadMapAction, setShowRoadMapAction] = useState<boolean>(hasChanged);
   // Redirect logic if jobTitle is missing
-  useEffect(() => {
-    if (!jobTitle) {
-      const fallbackTitle = contents.jobTitle || JSON.parse(localStorage.getItem('jobTitle') || 'null');
-      if (fallbackTitle) {
-        router.replace(`/roadmap?jobtitle=${fallbackTitle}`);
-      } else {
-        router.push('/');
-      }
-    }
-  }, [jobTitle, contents.jobTitle, router]);
+  useFallBackJobTitle(jobTitle)
   // Populate Redux store with fetched roadmap data once ready
   useEffect(() => {
     if (data && contents?.roadMapContents?.length === 0) {

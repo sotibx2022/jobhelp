@@ -7,6 +7,7 @@ import { config } from "@/app/config/envConfiguration";
 import { jobSalaryType } from "@/app/types/jobSalary";
 import { APIResponse } from "@/app/types/APIResponse";
 import SkeletonCard from "@/app/_components/structures/skleton/SkletonCard";
+import { useFallBackJobTitle } from "@/hooks/useFallBackJobTitle";
 type SalaryProps = {
   jobTitle: string;
   country: string;
@@ -19,6 +20,7 @@ const Salary: React.FC<SalaryProps> = ({ jobTitle, country }) => {
         `/api/salary?jobtitle=${jobTitle}&country=${country}`
       ),
   });
+  useFallBackJobTitle(jobTitle)
   return (
     <div className="flex flex-col gap-4">
       <section className="twoColumnSection">

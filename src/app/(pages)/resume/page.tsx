@@ -1,7 +1,8 @@
 import React from 'react'
+import { Resume } from '../_components'
 const page = () => {
   return (
-    <div>page</div>
+    <Resume/>
   )
 }
 export default page

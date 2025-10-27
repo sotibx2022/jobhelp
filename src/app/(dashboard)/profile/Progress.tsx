@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "@/app/redux/toastSlice";
 import { User } from "lucide-react";
 import { RootState } from "@/app/redux/store";
+import { deleteJobTitle } from "@/app/redux/userDetailsSlice";
 interface ProgressCardProps {
   jobTitle: string;
   score: number;
@@ -48,6 +49,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
     }, onSuccess: (response: APIResponse<undefined>) => {
       if (response.success) {
         dispatch(setToast({ toastType: 'success', message: response.message }))
+        dispatch(deleteJobTitle(jobTitle))
         queryClient.invalidateQueries({ queryKey: ['userDetails'] })
       } else {
         dispatch(setToast({ toastType: 'error', message: response.message }))
