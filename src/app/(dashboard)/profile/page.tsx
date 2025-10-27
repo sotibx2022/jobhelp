@@ -10,23 +10,53 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ProgressCard from "./Progress";
+import ProfileSkleton from "./ProfileSkleton";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty"
+import { BriefcaseBusiness, Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
 const Page = () => {
-    const user = useSelector((state: RootState) => state.user?.user);
+    const router = useRouter()
+    const user = useSelector((state: RootState) => state.user);
     const content = useSelector((state: RootState) => state.roadmapDetails);
     const reduxJobTitle = content.jobTitle;
     const reduxScore = useOverallScore(content.roadMapContents);
+    if (!user.initialized) {
+        return <ProfileSkleton />
+    }
     return (
         <div>
             <div className="dbItems">
-                {user?.jobTitles && user.jobTitles.length > 0 ? (
+                {user?.user?.jobTitles && user?.user.jobTitles.length > 0 ? (
                     <>
                         <h2 className="secondaryHeading">Saved Job Titles</h2>
-                        {user.jobTitles.map((singleJobTitle: SingleJobTitle, index: number) => (
-                            <ProgressCard jobTitle={singleJobTitle.title} score={singleJobTitle.score} editValue={false} key={index} editable={false}/>
+                        {user?.user.jobTitles.map((singleJobTitle: SingleJobTitle, index: number) => (
+                            <ProgressCard jobTitle={singleJobTitle.title} score={singleJobTitle.score} editValue={false} key={index} editable={false} />
                         ))}
                     </>
                 ) : (
-                    <h2>There are no Saved Job Titles</h2>
+                    <Empty>
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <BriefcaseBusiness />
+                            </EmptyMedia>
+                            <EmptyTitle>No Job Saved</EmptyTitle>
+                            <EmptyDescription className="primaryParagraph">
+                                Hi, <span className="font-bold">{user.user?.fullName}</span>,
+                                <br />
+                                There are no jobs saved in the database for this user.
+                            </EmptyDescription>
+                        </EmptyHeader>
+                        <EmptyContent>
+                            <Button onClick={() => router.push('/')}>Add Profile</Button>
+                        </EmptyContent>
+                    </Empty>
                 )}
             </div>
             {reduxJobTitle && <div className="reduxItem">

@@ -12,9 +12,9 @@ const ViewButton: React.FC<ViewButtonProps> = ({ onClick, size, text, variant = 
     <Button
       variant={variant}
       onClick={onClick}
+      className="relative group" 
     >
       <Eye className={size === 'small' ? 'w-4 h-4' : 'w-5 h-5'} />
-      {/* If text is provided, display it next to the icon */}
       {text ? (
         <span className="text-sm">{text}</span>
       ) : (
