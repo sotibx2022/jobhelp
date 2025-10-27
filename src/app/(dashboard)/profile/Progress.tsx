@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress as ProgressBar } from "@/components/ui/progress";
-import { DeleteButton, EditButton } from "@/app/_components";
+import { DeleteButton, EditButton, Loading } from "@/app/_components";
 import ViewButton from "@/app/_components/structures/ViewButton";
 import { useRouter } from "next/navigation";
 import { ButtonGroup, } from "@/components/ui/button-group"
@@ -59,6 +59,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
   }
   return (
     <Card className="mb-4 shadow-sm hover:shadow-md transition-shadow">
+      {deleteRoadMapMutation.isPending && <Loading />}
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <h2 className="secondaryHeading capitalize">{jobTitle}</h2>
         <div className="flex items-center gap-2">
