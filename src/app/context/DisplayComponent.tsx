@@ -1,6 +1,6 @@
 "use client"
 import React, { createContext, useState, ReactNode, Dispatch, SetStateAction } from "react"
-type VisibleComponent = "chatButton" | "chatBox"
+type VisibleComponent = "chatButton" | "chatBox" | 'shareButton' |'shareBox'
 interface DisplayContextType {
   visibleComponent: VisibleComponent
   setVisibleComponent: Dispatch<SetStateAction<VisibleComponent>>

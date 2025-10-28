@@ -1,13 +1,14 @@
 "use client"
 import React from 'react'
-import SuccessToast from '../_components/absoluteComponents/toastComponents/SuccessToast'
-import ErrorToast from '../_components/absoluteComponents/toastComponents/ErrorToast'
-import Loading from '../_components/structures/loading/Loading'
-import ProfileSkleton from '../(dashboard)/profile/ProfileSkleton'
+import ShareProfileInfo from '../(dashboard)/profile/ShareProfileInfo'
+import ShareButton from '../_components/structures/ShareButton'
 const page = () => {
+  const handleClick=()=>{
+  }
   return (
     <div>
-      <ProfileSkleton/>
+      <ShareProfileInfo/>
+      <ShareButton onClick={handleClick}/>
     </div>
   )
 }
