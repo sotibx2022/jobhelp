@@ -19,15 +19,19 @@ interface ProgressCardProps {
   jobTitle: string;
   score: number;
   editValue?: boolean;
-  setEdit?: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditChild?: (value: boolean) => void;
   editable: boolean;
+  userToken?: string;
+  readOnly?: boolean;
 }
 const ProgressCard: React.FC<ProgressCardProps> = ({
   jobTitle,
   score,
   editValue,
-  setEdit,
+  setEditChild,
   editable,
+  userToken,
+  readOnly
 }) => {
   const dispatch = useDispatch()
   const queryClient = useQueryClient()
@@ -35,12 +39,16 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user.user)
   useEffect(() => {
-    if (setEdit) {
-      setEdit(editRoadMap)
+    if (setEditChild) {
+      setEditChild(editRoadMap)
     }
   }, [editRoadMap])
   function redirectToRoadMap(): void {
-    router.push(`/roadmap?jobtitle=${jobTitle}`)
+    if (userToken) {
+      router.push(`/shared/roadmap?usertoken=${userToken}&jobtitle=${jobTitle}`)
+    } else {
+      router.push(`/roadmap?jobtitle=${jobTitle}`)
+    }
   }
   const deleteRoadMapMutation = useMutation({
     mutationFn: async ({ jobTitle, userId }: { jobTitle: string; userId: string }) => {
@@ -68,30 +76,17 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
           <h2 className="secondaryHeading capitalize">Progress</h2>
           <Badge variant="destructive">{score}%</Badge>
         </div>
-        {!editable && <div className="progressActions">
-          <ButtonGroup>
-            <ViewButton
-              onClick={redirectToRoadMap}
-            />
-            <DeleteButton
-              onClick={deleteRoadMapItem}
-            />
-          </ButtonGroup>
-        </div>
-        }
-        {editable && (
-          <ButtonGroup>
-            {editRoadMap ? (
-              <EditButton
-                variant="secondary"
-                onClick={() => setEditRoadmap(true)}
-              />
-            ) : (
-              <ViewButton
-                onClick={() => setEditRoadmap(false)}
-              />
-            )}
-          </ButtonGroup>
+        {!readOnly && (
+          <div className="flex items-center gap-2">
+            {!editable ? (
+              <div className="progressActions">
+                <ButtonGroup>
+                  <ViewButton onClick={redirectToRoadMap} />
+                  <DeleteButton onClick={deleteRoadMapItem} />
+                </ButtonGroup>
+              </div>
+            ):null}
+          </div>
         )}
       </CardHeader>
       <CardContent>

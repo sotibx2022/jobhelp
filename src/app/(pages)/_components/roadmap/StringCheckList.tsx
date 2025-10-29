@@ -38,7 +38,11 @@ const StringCheckList: React.FC<StringCheckListProps> = ({ subContent, checkedVa
         className={`flex items-center gap-2 p-2 rounded ${isChecked ? "bg-green-100 line-through text-gray-500" : ""
           }`}
       >
-        <Checkbox checked={isChecked} onCheckedChange={toggleItem} />
+        <Checkbox
+  checked={isChecked}
+  onCheckedChange={toggleItem}
+  disabled={!edit}
+/>
         <span>{subContent.actionSubTitle}</span>
         {edit && <>
           <DeleteButton size="small" onClick={deleteHandler} />

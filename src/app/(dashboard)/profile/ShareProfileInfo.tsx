@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Copy, CheckCheckIcon, X } from 'lucide-react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useDebounce } from '@/app/functions/helperFunctions/debounce'
 import Divider from '@/app/_components/common/Divider'
 import Image from 'next/image'
@@ -11,14 +11,33 @@ import linkedin from './../../../../public/socialicons/linkedin.png'
 import twitter from './../../../../public/socialicons/twitter.png'
 import whatsapp from './../../../../public/socialicons/whatsapp.png'
 import { DisplayContext } from '@/app/context/DisplayComponent'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
+import { config } from '@/app/config/envConfiguration'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
+import { Spinner } from "@/components/ui/spinner"
 const ShareProfileInfo = () => {
     const { visibleComponent, setVisibleComponent } = useContext(DisplayContext)
-    const [shareableUrl, setShareableUrl] = useState("https://yourdomain.com/username")
+    const [shareableUrl, setShareableUrl] = useState("Your Shareable Link here.")
     const [copied, setCopied] = useState(false)
     const handleCopy = () => {
         navigator.clipboard.writeText(shareableUrl)
         setCopied(true)
     }
+    const { data: userToken, isPending } = useQuery({
+        queryKey: ['shareableUserToken'],
+        queryFn: async () => {
+            const response = await axios.get('/api/usertoken');
+            return response.data.data
+        }
+    })
+    useEffect(() => {
+        if (isPending) {
+            setShareableUrl("Generating Shareable URL.")
+        } else {
+            setShareableUrl(`${config.websiteUrl}/shared/profile?usertoken=${userToken}`)
+        }
+    }, [isPending])
     useDebounce({
         callback: () => {
             if (copied) {
@@ -43,8 +62,13 @@ const ShareProfileInfo = () => {
                         <div className="flex flex-col gap-2">
                             <label className="primaryParagraph">Shareable Link</label>
                             <div className="flex items-center gap-2">
-                                <Input type="text" readOnly value={shareableUrl} className={`flex-1 ${copied ? "border-green-500" : ""}`} />
-                                <Button variant="outline" size="icon" onClick={handleCopy} title="Copy link" disabled={copied}>
+                                <InputGroup>
+                                    <InputGroupInput type="text" readOnly value={shareableUrl} className={`flex-1 ${copied ? "border-green-500" : ""}`} />
+                                    <InputGroupAddon align="inline-end">
+                                        {isPending && <Spinner />}
+                                    </InputGroupAddon>
+                                </InputGroup>
+                                <Button variant="outline" size="icon" onClick={handleCopy} title="Copy link" disabled={copied && isPending}>
                                     <Copy className="w-4 h-4" />
                                 </Button>
                             </div>

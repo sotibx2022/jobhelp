@@ -11,16 +11,11 @@ import { useSaveRoadMapMutation } from "./saveRoadMapMutation";
 import { useFetchRoadMapItems } from "./useFetchRoadMapItems";
 import SkletonRoadmapPage from "@/app/_components/structures/skleton/SkletonRoadmapPage";
 import { EditButton, Loading } from "@/app/_components";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import ViewButton from "@/app/_components/structures/ViewButton";
-import { Progress } from "@/components/ui/progress";
 import { Accordion } from "@/components/ui/accordion";
 import SingleRoadMap from "./SingleRoadMap";
 import AddTopic from "./AddTopic";
 import AddButton from "@/app/_components/structures/AddButton";
 import SaveAction from "./SaveAction";
-import { dataTagErrorSymbol } from "@tanstack/react-query";
 import ProgressCard from "@/app/(dashboard)/profile/Progress";
 import { useFallBackJobTitle } from "@/hooks/useFallBackJobTitle";
 const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
@@ -28,9 +23,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const dispatch = useDispatch();
   const contents: RoadMapState = useSelector((state: RootState) => state.roadmapDetails);
   const user = useSelector((state: RootState) => state.user);
-  // React Query + fetch only after user is initialized
   const { data, isPending } = useFetchRoadMapItems(user, jobTitle);
-  // State for progress score
   const [score, setScore] = useState(0);
   useEffect(() => {
     setScore(useOverallScore(contents.roadMapContents));
@@ -43,6 +36,10 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const [showRoadMapAction, setShowRoadMapAction] = useState<boolean>(hasChanged);
   // Redirect logic if jobTitle is missing
   useFallBackJobTitle(jobTitle)
+  const handleEditValue =(value:boolean) =>{
+    console.log(value);
+    setEdit(value)
+  }
   // Populate Redux store with fetched roadmap data once ready
   useEffect(() => {
     if (data && contents?.roadMapContents?.length === 0) {
@@ -76,7 +73,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   return (
     <div className="w-full">
       {saveRoadMapDetails.isPending && <Loading />}
-      <ProgressCard jobTitle={jobTitle} score={score} editValue={true} editable={true} />
+      <ProgressCard jobTitle={jobTitle} score={score} setEditChild={handleEditValue} editValue={true} editable={true} />
       {contents && (
         <Accordion
           type="multiple"

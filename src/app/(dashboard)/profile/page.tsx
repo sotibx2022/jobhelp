@@ -20,25 +20,29 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty"
 import { BriefcaseBusiness, Icon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { DisplayContext } from "@/app/context/DisplayComponent";
 import ShareButton from "@/app/_components/structures/ShareButton";
 import ShareProfileInfo from "./ShareProfileInfo";
+import { useFallBackJobTitle } from "@/hooks/useFallBackJobTitle";
 const Page = () => {
-    const {visibleComponent,setVisibleComponent} = useContext(DisplayContext)
+    const searchParams = useSearchParams();
+    const jobTitle = searchParams.get('jobtitle')
+    const { visibleComponent, setVisibleComponent } = useContext(DisplayContext)
     const router = useRouter()
     const user = useSelector((state: RootState) => state.user);
     const content = useSelector((state: RootState) => state.roadmapDetails);
     const reduxJobTitle = content.jobTitle;
     const reduxScore = useOverallScore(content.roadMapContents);
-    useEffect(()=>{setVisibleComponent('shareButton')},[])
+    useFallBackJobTitle(jobTitle??"")
+    useEffect(() => { setVisibleComponent('shareButton') }, [])
     if (!user.initialized) {
         return <ProfileSkleton />
     }
     return (
         <div>
-            <ShareButton onClick={()=>setVisibleComponent('shareBox')}/>
-                {visibleComponent === 'shareBox' && <ShareProfileInfo/>}
+            <ShareButton onClick={() => setVisibleComponent('shareBox')} />
+            {visibleComponent === 'shareBox' && <ShareProfileInfo />}
             <div className="dbItems">
                 {user?.user?.jobTitles && user?.user.jobTitles.length > 0 ? (
                     <>

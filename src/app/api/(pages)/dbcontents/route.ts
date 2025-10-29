@@ -4,6 +4,8 @@ import { validateUserToken } from "@/app/functions/middlewareFunctions/validateU
 import { ContentUIType, IRoadMapContentsDBType } from "@/app/types/roadmapTypes";
 import { APIResponse } from "@/app/types/APIResponse";
 import { RoadMapModel } from '@/app/model/roadmap.model';
+import jwt from 'jsonwebtoken';
+import { config } from "@/app/config/envConfiguration";
 export async function POST(req: NextRequest) {
   try {
     // 1️⃣ Connect to DB
@@ -75,61 +77,72 @@ export async function POST(req: NextRequest) {
   }
 }
 export async function GET(req: NextRequest) {
-    try {
-        await connectToDb();
-        const userId = validateUserToken(req);
-        if (!userId) {
-            return NextResponse.json(
-                {
-                    message: "No user ID found. Unauthorized access.",
-                    status: 401,
-                    success: false,
-                } as APIResponse<null>,
-                { status: 401 }
-            );
-        }
-        const url = new URL(req.url);
-        const searchParams = url.searchParams;
-        const jobTitle = searchParams.get("jobtitle");
-        if (!jobTitle) {
-            return NextResponse.json(
-                {
-                    message: "No job title provided.",
-                    status: 400,
-                    success: false,
-                } as APIResponse<null>,
-                { status: 400 }
-            );
-        }
-        const roadMapContents = await RoadMapModel.findOne({ userId, jobTitle });
-        if (!roadMapContents) {
-            return NextResponse.json(
-                {
-                    message: "No roadmap contents found for this user and job title.",
-                    status: 404,
-                    success: false,
-                } as APIResponse<null>,
-                { status: 404 }
-            );
-        }
+  try {
+    await connectToDb();
+    const url = new URL(req.url);
+    const searchParams = url.searchParams;
+    const jobTitle = searchParams.get("jobtitle");
+    const userToken = searchParams.get('usertoken')
+    let userId
+    if (!userToken) {
+      userId = validateUserToken(req);
+      if (!userId) {
         return NextResponse.json(
-            {
-                message: "Roadmap items fetched from database.",
-                status: 200,
-                success: true,
-                data: roadMapContents as IRoadMapContentsDBType,
-            } as APIResponse<IRoadMapContentsDBType>,
-            { status: 200 }
+          {
+            message: "No user ID found. Unauthorized access.",
+            status: 401,
+            success: false,
+          } as APIResponse<null>,
+          { status: 401 }
         );
-    } catch (error: any) {
-        console.error("Error fetching roadmap items:", error);
-        return NextResponse.json(
-            {
-                message: "Internal server error.",
-                status: 500,
-                success: false,
-            } as APIResponse<null>,
-            { status: 500 }
-        );
+      }
+    } else {
+      console.log("🔹 userToken received:", userToken);
+    const decoded = jwt.verify(userToken, config.passwordSecret!);
+    console.log("✅ JWT decoded successfully:", decoded);
+    // If your token payload has userId
+    userId = (decoded as { userId: string }).userId;
+    console.log("🔹 Extracted userId:", userId);
     }
+    if (!jobTitle) {
+      return NextResponse.json(
+        {
+          message: "No job title provided.",
+          status: 400,
+          success: false,
+        } as APIResponse<null>,
+        { status: 400 }
+      );
+    }
+    const roadMapContents = await RoadMapModel.findOne({ userId, jobTitle });
+    if (!roadMapContents) {
+      return NextResponse.json(
+        {
+          message: "No roadmap contents found for this user and job title.",
+          status: 404,
+          success: false,
+        } as APIResponse<null>,
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(
+      {
+        message: "Roadmap items fetched from database.",
+        status: 200,
+        success: true,
+        data: roadMapContents as IRoadMapContentsDBType,
+      } as APIResponse<IRoadMapContentsDBType>,
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Error fetching roadmap items:", error);
+    return NextResponse.json(
+      {
+        message: "Internal server error.",
+        status: 500,
+        success: false,
+      } as APIResponse<null>,
+      { status: 500 }
+    );
+  }
 }
