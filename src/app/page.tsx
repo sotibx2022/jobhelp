@@ -5,6 +5,7 @@ import DisplayProvider from './context/DisplayComponent'
 import { getQueryClient } from '@/hooks/getQueryClient'
 import { dehydrate, hydrate, HydrationBoundary } from '@tanstack/react-query'
 import { getUserDetails } from './functions/queryFunctions/getUserDetails'
+import { SelectableCountries } from './(pages)/_components'
 const Page = async () => {
   const queryClient = getQueryClient();
   queryClient.prefetchQuery({
@@ -27,6 +28,7 @@ const Page = async () => {
           <CommonFooter />
         </HydrationBoundary>
       </section>
+      <SelectableCountries/>
     </DisplayProvider>
   )
 }
