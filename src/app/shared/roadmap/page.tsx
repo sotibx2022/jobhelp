@@ -13,6 +13,7 @@ import { useUserDetails } from '../userDetails';
 import { RoadMapState } from '@/app/redux/roadmapSlice';
 import { APIResponse } from '@/app/types/APIResponse';
 import { ContentUIType } from '@/app/types/roadmapTypes';
+import Link from 'next/link';
 const Page = () => {
   const searchParams = useSearchParams();
   const jobTitle = searchParams.get('jobtitle') ?? '';
@@ -60,6 +61,7 @@ const Page = () => {
       <div className="container w-full">
         <div className="userProfile py-4 text-xl font-semibold text-center">
           {userDetails?.fullName ?? 'Guest User'}
+          <Link href={`/shared/profile?usertoken=${userToken}`}>GO Back to Profile</Link>
         </div>
         <ProgressCard
           jobTitle={contentsData.jobTitle}
