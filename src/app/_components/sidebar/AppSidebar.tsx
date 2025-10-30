@@ -28,9 +28,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import EditButton from "../structures/EditButton";
 import { Button } from "@/components/ui/button";
 import { useLogout } from "@/hooks/useLogout";
-import ProfileIcon from "../landingPage/UserDisplay/ProfileIcon";
 const sidebarItems = [
-  { label: "Salary", icon: Wallet, href: "/salary" },
   { label: "Roadmap", icon: Route, href: "/roadmap" },
   { label: "Resume", icon: FileText, href: "/resume" },
 ];

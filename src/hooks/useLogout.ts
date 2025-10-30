@@ -1,4 +1,5 @@
 import { getAuthChannel } from "@/app/config/authChannel"
+import { clearRoadMapItems } from "@/app/redux/roadmapSlice"
 import { setToast } from "@/app/redux/toastSlice"
 import { clearUserDetails } from "@/app/redux/userDetailsSlice"
 import { APIResponse, APIResponseSuccess, returnErrorObject } from "@/app/types/APIResponse"
@@ -23,6 +24,7 @@ export const useLogout = () => {
             if (response.success) {
                 dispatch(clearUserDetails())
                 router.refresh()
+                dispatch(clearRoadMapItems())
                 if (!variables.skipBroadcast) {
                     authChannel?.postMessage("logout");
                 }
