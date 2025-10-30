@@ -21,8 +21,8 @@ export const useFallBackJobTitle = () => {
       params.set('jobtitle', fallbackTitle);
       const redirectUrl = `${pathname}?${params.toString()}`;
       window.location.href = redirectUrl;
-    }else{
+    } else {
       return;
     }
-  }, [ ]);
+  }, []);
 };
