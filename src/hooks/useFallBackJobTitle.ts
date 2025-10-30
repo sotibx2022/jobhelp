@@ -3,8 +3,8 @@ import { RootState } from "@/app/redux/store";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-export const useFallBackJobTitle = (jobTitle: string) => {
-  const contents = useSelector((state: RootState) => state.roadmapDetails);
+export const useFallBackJobTitle = () => {
+  const jobTitle = useSelector((state: RootState) => state.jobDetails.jobTitle);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const redirectTriggered = useRef(false);
@@ -18,7 +18,7 @@ export const useFallBackJobTitle = (jobTitle: string) => {
     }
     if (!jobTitle) {
       const storedJobTitle = localStorage.getItem('jobTitle');
-      const fallbackTitle = contents.jobTitle || JSON.parse(storedJobTitle || 'null');
+      const fallbackTitle = jobTitle || JSON.parse(storedJobTitle || 'null');
       if (!fallbackTitle) {
         redirectTriggered.current = true;
         window.location.href = '/';
@@ -30,5 +30,5 @@ export const useFallBackJobTitle = (jobTitle: string) => {
       redirectTriggered.current = true;
       window.location.href = redirectUrl;
     }
-  }, [jobTitle, contents.jobTitle, pathname, searchParams]);
+  }, [ jobTitle, pathname, searchParams]);
 };
