@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
-import { RoadMapState, setRoadMapItems } from "@/app/redux/roadmapSlice";
+import { clearRoadMapItems, RoadMapState, setRoadMapItems } from "@/app/redux/roadmapSlice";
 import { setToast } from "@/app/redux/toastSlice";
 import { useRouter } from "next/navigation";
 import { ContentUIType } from "@/app/types/roadmapTypes";
@@ -36,7 +36,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const [showRoadMapAction, setShowRoadMapAction] = useState<boolean>(hasChanged);
   // Redirect logic if jobTitle is missing
   useFallBackJobTitle()
-  const handleEditValue =(value:boolean) =>{
+  const handleEditValue = (value: boolean) => {
     console.log(value);
     setEdit(value)
   }
@@ -45,6 +45,9 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     if (data && contents?.roadMapContents?.length === 0) {
       dispatch(setRoadMapItems(data));
       setOriginalContents(data);
+    }
+    if (jobTitle !== contents.jobTitle) {
+      dispatch(clearRoadMapItems())
     }
   }, [data, dispatch, contents, jobTitle]);
   // Detect changes for showing SaveAction

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ContentsUIType, ContentUIType } from "../types/roadmapTypes";
+import { createRoadMapState } from "../(pages)/_components/roadmap/useFetchRoadMapItems";
 export interface RoadMapState {
   jobTitle: string, roadMapContents: ContentUIType[]
 }
@@ -10,6 +11,9 @@ const roadmapSlice = createSlice({
   reducers: {
     setRoadMapItems: (state, action: PayloadAction<RoadMapState>) => {
       return action.payload;
+    },
+    clearRoadMapItems: (state) => {
+      return createRoadMapState()
     },
     deleteRoadmapTitle: (state, action: PayloadAction<{ index: number }>) => {
       return {
@@ -77,5 +81,6 @@ export const {
   deleteRoadMapSubTitle,
   editRoadMapSubTitle,
   addRoadMapSubTitle,
+  clearRoadMapItems
 } = roadmapSlice.actions;
 export default roadmapSlice.reducer;
