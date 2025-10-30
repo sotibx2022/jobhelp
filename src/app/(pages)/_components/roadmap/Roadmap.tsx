@@ -35,7 +35,7 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const hasChanged = JSON.stringify(contents) !== JSON.stringify(originalContents);
   const [showRoadMapAction, setShowRoadMapAction] = useState<boolean>(hasChanged);
   // Redirect logic if jobTitle is missing
-  useFallBackJobTitle(jobTitle)
+  useFallBackJobTitle()
   const handleEditValue =(value:boolean) =>{
     console.log(value);
     setEdit(value)

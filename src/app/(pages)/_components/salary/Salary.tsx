@@ -20,7 +20,7 @@ const Salary: React.FC<SalaryProps> = ({ jobTitle, country }) => {
         `/api/salary?jobtitle=${jobTitle}&country=${country}`
       ),
   });
-  useFallBackJobTitle(jobTitle)
+  useFallBackJobTitle()
   return (
     <div className="flex flex-col gap-4">
       <section className="twoColumnSection">

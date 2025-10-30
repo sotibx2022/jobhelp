@@ -34,7 +34,7 @@ const Page = () => {
     const content = useSelector((state: RootState) => state.roadmapDetails);
     const reduxJobTitle = content.jobTitle;
     const reduxScore = useOverallScore(content.roadMapContents);
-    useFallBackJobTitle(jobTitle??"")
+    useFallBackJobTitle()
     useEffect(() => { setVisibleComponent('shareButton') }, [])
     if (!user.initialized) {
         return <ProfileSkleton />
