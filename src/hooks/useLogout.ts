@@ -30,11 +30,11 @@ export const useLogout = () => {
                     toastType: "success",
                     message: response.message
                 }))
-            }else{
+            } else {
                 dispatch(setToast({
-                toastType:"error",
-                message: response.message
-            }))
+                    toastType: "error",
+                    message: response.message
+                }))
             }
         },
         onError: (error) => {
