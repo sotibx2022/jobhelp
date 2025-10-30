@@ -20,16 +20,21 @@ export const useLogout = () => {
             return response.data;
         },
         onSuccess: (response: APIResponse<undefined>, variables: LogoutVariables) => {
-            dispatch(setToast({
-                toastType: `${response.success ? 'success' : 'error'}`,
-                message: response.message
-            }))
             if (response.success) {
                 dispatch(clearUserDetails())
                 router.refresh()
                 if (!variables.skipBroadcast) {
                     authChannel?.postMessage("logout");
                 }
+                dispatch(setToast({
+                    toastType: "success",
+                    message: response.message
+                }))
+            }else{
+                dispatch(setToast({
+                toastType:"error",
+                message: response.message
+            }))
             }
         },
         onError: (error) => {
