@@ -5,11 +5,13 @@ import { APIResponse, APIResponseSuccess, returnErrorObject } from "@/app/types/
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { Variable } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useDispatch } from "react-redux"
 interface LogoutVariables {
     skipBroadcast?: boolean;
 }
 export const useLogout = () => {
+    const router = useRouter()
     const authChannel = getAuthChannel();
     const dispatch = useDispatch()
     return useMutation<APIResponse<undefined>, unknown, LogoutVariables>({
@@ -24,6 +26,7 @@ export const useLogout = () => {
             }))
             if (response.success) {
                 dispatch(clearUserDetails())
+                router.refresh()
                 if (!variables.skipBroadcast) {
                     authChannel?.postMessage("logout");
                 }

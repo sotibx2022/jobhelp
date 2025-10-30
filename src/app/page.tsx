@@ -28,7 +28,6 @@ const Page = async () => {
           <CommonFooter />
         </HydrationBoundary>
       </section>
-      <SelectableCountries/>
     </DisplayProvider>
   )
 }
