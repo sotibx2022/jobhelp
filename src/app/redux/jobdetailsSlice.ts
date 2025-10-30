@@ -16,7 +16,9 @@ const jobdetailsSlice = createSlice({
             state.jobTitle = action.payload.jobTitle
         },
         setJobDetails:(state:IState,action:PayloadAction<IjobActionPayload>)=>{
-        state.jobTitle=action.payload.jobTitle
+            if(state.jobTitle !== action.payload.jobTitle){
+state.jobTitle=action.payload.jobTitle
+            }
     },
         removeJobDetails: (state: IState, action) => {
             state.jobTitle === ''

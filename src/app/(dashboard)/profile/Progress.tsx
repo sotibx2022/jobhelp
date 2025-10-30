@@ -15,6 +15,7 @@ import { setToast } from "@/app/redux/toastSlice";
 import { User } from "lucide-react";
 import { RootState } from "@/app/redux/store";
 import { deleteJobTitle } from "@/app/redux/userDetailsSlice";
+import { removeJobDetails, setJobDetails } from "@/app/redux/jobdetailsSlice";
 interface ProgressCardProps {
   jobTitle: string;
   score: number;
@@ -48,6 +49,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
       router.push(`/shared/roadmap?usertoken=${userToken}&jobtitle=${jobTitle}`)
     } else {
       router.push(`/roadmap?jobtitle=${jobTitle}`)
+      dispatch(setJobDetails({jobTitle}))
     }
   }
   const deleteRoadMapMutation = useMutation({
@@ -66,6 +68,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
   })
   function deleteRoadMapItem(): void {
     deleteRoadMapMutation.mutate({ jobTitle, userId: user!._id });
+    dispatch(removeJobDetails(""))
   }
   return (
     <Card className="mb-4 shadow-sm hover:shadow-md transition-shadow">
