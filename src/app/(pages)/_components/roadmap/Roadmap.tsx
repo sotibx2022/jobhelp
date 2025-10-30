@@ -26,7 +26,9 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
   const { data, isPending } = useFetchRoadMapItems(user, jobTitle);
   const [score, setScore] = useState(0);
   useEffect(() => {
-    setScore(useOverallScore(contents.roadMapContents));
+    if (contents.roadMapContents.length > 0) {
+      setScore(useOverallScore(contents.roadMapContents));
+    }
   }, [contents]);
   const [edit, setEdit] = useState(false);
   const saveRoadMapDetails = useSaveRoadMapMutation();
@@ -40,16 +42,19 @@ const Roadmap: React.FC<{ jobTitle: string }> = ({ jobTitle }) => {
     console.log(value);
     setEdit(value)
   }
-  // Populate Redux store with fetched roadmap data once ready
+  // 1️⃣ Initialize roadmap data
   useEffect(() => {
     if (data && contents?.roadMapContents?.length === 0) {
       dispatch(setRoadMapItems(data));
       setOriginalContents(data);
     }
-    if (jobTitle !== contents.jobTitle) {
-      dispatch(clearRoadMapItems())
+  }, [data, dispatch, contents?.roadMapContents?.length]);
+  // 2️⃣ Reset when job title changes
+  useEffect(() => {
+    if (jobTitle !== contents?.jobTitle) {
+      dispatch(clearRoadMapItems());
     }
-  }, [data, dispatch, contents, jobTitle]);
+  }, [jobTitle, contents?.jobTitle, dispatch]);
   // Detect changes for showing SaveAction
   useEffect(() => {
     if (!originalContents) return;
