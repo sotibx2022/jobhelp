@@ -24,5 +24,5 @@ export const useFallBackJobTitle = () => {
     }else{
       return;
     }
-  }, [ jobTitle, pathname, searchParams]);
+  }, [ ]);
 };
