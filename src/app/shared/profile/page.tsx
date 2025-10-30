@@ -23,7 +23,7 @@ const page = () => {
   const searchParams = useSearchParams();
   const router = useRouter()
   const userToken = searchParams.get('usertoken');
-  const {userDetails,isPending} = useUserDetails(userToken??"")
+  const { userDetails, isPending } = useUserDetails(userToken ?? "")
   return (
     <div>
       <PagesHeader />

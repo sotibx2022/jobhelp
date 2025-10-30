@@ -7,7 +7,7 @@ export const useUserDetails = (userToken: string) => {
     const userDetailsMutation = useMutation({
         mutationFn: async (token: string) => {
             const response = await axios.post('/api/usertoken', { userToken: token });
-            return response.data;
+            return response.data.data;
         },
         onSuccess: (data) => {
             setUserDetails(data);

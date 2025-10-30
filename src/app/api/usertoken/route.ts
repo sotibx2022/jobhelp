@@ -53,7 +53,15 @@ export async function POST(req: NextRequest) {
       );
     }
     // Verify JWT token
-    const decoded = jwt.verify(userToken, config.passwordSecret!) as { userId: string };
+    let decoded;
+    try {
+      decoded = jwt.verify(userToken, config.passwordSecret!) as { userId: string };
+    } catch (jwtError: any) {
+      return NextResponse.json(
+        { message: "Invalid or expired token", success: false, status: 401, error: jwtError.message },
+        { status: 401 }
+      );
+    }
     const userId = decoded.userId;
     if (!userId) {
       return NextResponse.json(
@@ -62,7 +70,7 @@ export async function POST(req: NextRequest) {
       );
     }
     // Find user in DB
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(userId).select("-email -password");
     if (!user) {
       return NextResponse.json(
         { message: "User not found", success: false, status: 404 },
@@ -77,7 +85,6 @@ export async function POST(req: NextRequest) {
       data: user,
     } as APIResponseSuccess<UserState>);
   } catch (error: any) {
-    console.error("Error in POST /user:", error);
     return NextResponse.json(
       { message: "Failed to fetch user", success: false, status: 500, error: error.message },
       { status: 500 }
