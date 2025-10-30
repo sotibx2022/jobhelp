@@ -33,7 +33,7 @@ const Page = () => {
     enabled: !!jobTitle && !!userToken, // avoids fetching when params are missing
   });
   // ✅ Fetch user details with your custom hook
-  const { isLoading: userDetailsPending, userDetails } = useUserDetails(userToken);
+  const { isPending: userDetailsPending, userDetails } = useUserDetails(userToken);
   // ✅ Compute overall score safely
   const score = useMemo(() => {
     if (contentsPending || !contents?.data?.roadMapContents) return 0;
