@@ -1,5 +1,5 @@
 "use client";
-import { ChevronsDown } from "lucide-react";
+import { ChevronsDown, User, LogOut, LogIn, UserPlus } from "lucide-react";
 import React, { useState } from "react";
 import {
   DropdownMenu,
@@ -13,19 +13,16 @@ import { RootState } from "@/app/redux/store";
 import ProfileIcon from "./ProfileIcon";
 import Link from "next/link";
 import { useLogout } from "@/hooks/useLogout";
-import { Button } from "@/components/ui/button";
 const UserDisplay = () => {
   const [open, setOpen] = useState(false);
-  const userDetails = useSelector((state: RootState) => state.user.user)
-  const logout = useLogout()
+  const userDetails = useSelector((state: RootState) => state.user.user);
+  const logout = useLogout();
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
       {/* Trigger */}
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center  focus:outline-none">
-          <div
-            className="relative w-12 h-12 rounded-full p-[2px]"
-          >
+        <button className="flex items-center focus:outline-none">
+          <div className="relative w-12 h-12 rounded-full p-[2px]">
             <div className="flex items-center justify-center w-full h-full rounded-full bg-background">
               <ProfileIcon />
             </div>
@@ -54,15 +51,36 @@ const UserDisplay = () => {
               exit={{ opacity: 0, y: -6, scale: 0.98 }}
               transition={{ duration: 0.18, ease: "easeOut" }}
             >
-              <DropdownMenuItem className="justify-center">
-                {userDetails ? <Link href='/profile'>Profile</Link> : <Link href='/register'>Register</Link>}
+              {/* Profile / Register */}
+              <DropdownMenuItem className="justify-center gap-2">
+                {userDetails ? (
+                  <Link href="/profile" className="flex items-center gap-2 primaryParagraph">
+                    <User className="w-4 h-4" />
+                    Profile
+                  </Link>
+                ) : (
+                  <Link href="/register" className="flex items-center gap-2 primaryParagraph">
+                    <UserPlus className="w-4 h-4" />
+                    Register
+                  </Link>
+                )}
               </DropdownMenuItem>
-              <DropdownMenuItem className="justify-center">
-                {userDetails ? <span
-                  onClick={() => logout.mutate({ skipBroadcast: false })}
-                >
-                  Logout
-                </span> : <Link href='/login'>Login</Link>}
+              {/* Logout / Login */}
+              <DropdownMenuItem className="justify-center gap-2">
+                {userDetails ? (
+                  <button
+                    onClick={() => logout.mutate({ skipBroadcast: false })}
+                    className="flex items-center gap-2 text-destructive focus:outline-none"
+                  >
+                    <LogOut className="w-4 h-4 text-destructive" />
+                    Logout
+                  </button>
+                ) : (
+                  <Link href="/login" className="flex items-center gap-2 justify-start  primaryParagraph">
+                    <LogIn className="w-4 h-4" />
+                    Login
+                  </Link>
+                )}
               </DropdownMenuItem>
             </motion.div>
           </DropdownMenuContent>

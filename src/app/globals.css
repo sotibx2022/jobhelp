@@ -179,4 +179,7 @@
   .roundedExtra {
     @apply rounded-tr-3xl rounded-bl-3xl;
   }
+  .linkText{
+    @apply text-muted-foreground hover:text-foreground transition-colors;
+  }
 }
