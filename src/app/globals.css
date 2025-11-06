@@ -171,7 +171,7 @@
 }
 @layer utilities {
   .roundedSmall {
-    @apply rounded-tr-xl rounded-bl-xl;
+    @apply rounded-tr-[10px] rounded-bl-[10px];
   }
   .roundedLarge {
     @apply rounded-tr-2xl rounded-bl-2xl;
