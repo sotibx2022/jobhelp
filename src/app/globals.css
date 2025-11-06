@@ -160,6 +160,9 @@
   .twoColumnSection {
     @apply flex flex-col gap-4 md:flex-row justify-between
   }
+  .rounded{
+    @apply rounded-tr-lg rounded-bl-lg rounded-tl-none rounded-br-none;
+  }
 }
 @layer base {
   * {
