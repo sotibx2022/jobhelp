@@ -24,14 +24,8 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
         if (!searchValue.trim()) return;
         localStorage.setItem('jobTitle', JSON.stringify('Maintenance planner'));
         dispatch(addJobDetails({ jobTitle: searchValue }));
-        if (pathName === '/' || pathName.includes('register') || pathName.includes('login') || pathName.includes('reset')) {
-            router.push(`/salary?jobtitle=${encodeURIComponent(searchValue)}`);
-        } else {
-            const currentParams = new URLSearchParams(searchParams.toString());
-            currentParams.set('jobtitle', searchValue)
-            router.push(`${pathName}?${currentParams.toString()}`, { scroll: false });
+            router.push(`/roadmap?jobtitle=${encodeURIComponent(searchValue)}`);
         }
-    };
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
     };
