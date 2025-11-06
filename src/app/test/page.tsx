@@ -1,12 +1,11 @@
 "use client"
 import React from 'react'
-import ShareProfileInfo from '../(dashboard)/profile/ShareProfileInfo'
-import ShareButton from '../_components/structures/ShareButton'
-import SkletonRoadmapPage from '../_components/structures/skleton/SkletonRoadmapPage'
+import { Button } from '@/components/ui/button'
 const page = () => {
   return (
-    <div>
-      <SkletonRoadmapPage />
+    <div className='flexCenter w-full h-[100vh] gap-4'>
+      <Button>shadcn button</Button>
+      <button className='roundedExtra bg-red-500 p-4 text-white'>plain button</button>
     </div>
   )
 }

@@ -127,7 +127,7 @@
   .flexCenter {
     @apply flex items-center justify-center;
   }
-  .pageCenter{
+  .pageCenter {
     @apply min-h-[80vh] flex items-center justify-center w-full
   }
   .flexBetween {
@@ -160,9 +160,6 @@
   .twoColumnSection {
     @apply flex flex-col gap-4 md:flex-row justify-between
   }
-  .roundedExtra{
-    @apply rounded-tr-lg rounded-bl-lg rounded-tl-none rounded-br-none;
-  }
 }
 @layer base {
   * {
@@ -170,5 +167,16 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+@layer utilities {
+  .roundedSmall {
+    @apply rounded-tr-xl rounded-bl-xl;
+  }
+  .roundedLarge {
+    @apply rounded-tr-2xl rounded-bl-2xl;
+  }
+  .roundedExtra {
+    @apply rounded-tr-3xl rounded-bl-3xl;
   }
 }
