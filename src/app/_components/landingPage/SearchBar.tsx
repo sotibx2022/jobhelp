@@ -24,8 +24,8 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
         if (!searchValue.trim()) return;
         localStorage.setItem('jobTitle', JSON.stringify('Maintenance planner'));
         dispatch(addJobDetails({ jobTitle: searchValue }));
-            router.push(`/roadmap?jobtitle=${encodeURIComponent(searchValue)}`);
-        }
+        router.push(`/roadmap?jobtitle=${encodeURIComponent(searchValue)}`);
+    }
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
     };

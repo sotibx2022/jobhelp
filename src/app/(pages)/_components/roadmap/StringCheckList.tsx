@@ -48,21 +48,21 @@ const StringCheckList: React.FC<StringCheckListProps> = ({ subContent, checkedVa
           disabled={!edit}
         />
         <span>{subContent.actionSubTitle}</span>
-       <AnimatePresence>
-  {edit && isHovered && (
-    <motion.div
-      key="hover-buttons"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.2 }}
-      className="flex gap-1"
-    >
-      <DeleteButton size="small" onClick={deleteHandler} />
-      <EditButton size="small" onClick={editHandler} />
-    </motion.div>
-  )}
-</AnimatePresence>
+        <AnimatePresence>
+          {edit && isHovered && (
+            <motion.div
+              key="hover-buttons"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.2 }}
+              className="flex gap-1"
+            >
+              <DeleteButton size="small" onClick={deleteHandler} />
+              <EditButton size="small" onClick={editHandler} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>}
   </>
   )

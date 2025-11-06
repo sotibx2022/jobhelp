@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge'
 import { CheckCheckIcon } from 'lucide-react'
 import React from 'react'
 const StringList: React.FC<{ stringArray?: string[] }> = ({ stringArray }) => {
