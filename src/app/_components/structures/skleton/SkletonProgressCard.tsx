@@ -3,7 +3,7 @@ import SkeletonHeading from './SkletonHeading'
 import SkletonBox from './SkletonBox'
 const SkletonProgressCard = () => {
   return (
-    <div className='h-[100px] bg-card p-4 border-2 flex flex-col justify-between mb-4'>
+    <div className='h-[100px] bg-card p-4 border-2 flex flex-col justify-between mb-4 roundedExtra'>
     <div className="flexBetween">
       <div className="flex items-center gap-4">
         <SkeletonHeading className='h-[25px] w-[200px] '/>

@@ -7,7 +7,7 @@ interface SkeletonCardProps {
 }
 const SkeletonCard: React.FC<SkeletonCardProps> = ({ className }) => {
   return (
-    <Card className={`animate-pulse bg-muted/30 ${className}`}>
+    <Card className={`animate-pulse bg-muted/30 roundedExtra ${className}`}>
       <CardHeader>
         <SkeletonBox className="w-full h-1/4" />
       </CardHeader>

@@ -48,7 +48,7 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
     setAddTopic(false);
   };
   return (
-    <AccordionItem value={`item-${index}`} className="border rounded-lg mb-4">
+    <AccordionItem value={`item-${index}`} className="border roundedExtra mb-4">
       <AccordionTrigger className="px-4 py-3 hover:no-underline">
         <div className="flex justify-between items-center w-full pr-4">
           {/* Left side: Title and Badge */}

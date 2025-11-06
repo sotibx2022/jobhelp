@@ -8,7 +8,7 @@ const SkeletonBox: React.FC<SkeletonBoxProps> = ({ className }) => {
   return (
     <div
       className={cn(
-        "animate-pulse bg-muted/60",
+        "animate-pulse bg-muted/60 roundedLarge",
         className
       )}
     />

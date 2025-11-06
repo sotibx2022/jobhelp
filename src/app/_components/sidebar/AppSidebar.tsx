@@ -64,7 +64,7 @@ const AppSidebar = () => {
         </div>
         <div className="sidebarProfile">
         <p className="primaryParagraph">{user?.fullName || "Guest User"}</p>
-        <p>Visit Profile</p>
+        {user && <p className="primaryParagraph">Visit Profile</p>}
         </div>
         {user? <Button variant={'destructive'} onClick={()=>LogOut.mutate}>Logout</Button>:
         <Button variant={'secondary'} onClick={()=>router.push('/register')}> Register</Button>}

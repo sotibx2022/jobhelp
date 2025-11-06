@@ -11,8 +11,8 @@ const SkeletonLists: React.FC<SkeletonListsProps> = ({ listLength, className }) 
     <>
       {Array.from({ length: listLength }).map((_, index) => (
         <div key={index} className="flex gap-2 items-center mb-2">
-          <SkeletonBox className="w-8 h-8" />
-          <Skeleton className={cn("h-8 bg-muted/60", className)} />
+          <SkeletonBox className="w-8 h-8 roundedSmall" />
+          <Skeleton className={cn("h-8 bg-muted/60 roundedSmall", className)} />
         </div>
       ))}
     </>

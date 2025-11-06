@@ -58,12 +58,11 @@ const UserDisplay = () => {
                 {userDetails ? <Link href='/profile'>Profile</Link> : <Link href='/register'>Register</Link>}
               </DropdownMenuItem>
               <DropdownMenuItem className="justify-center">
-                {userDetails ? <Button
-                  variant={'destructive'}
+                {userDetails ? <span
                   onClick={() => logout.mutate({ skipBroadcast: false })}
                 >
                   Logout
-                </Button> : <Link href='/login'>Login</Link>}
+                </span> : <Link href='/login'>Login</Link>}
               </DropdownMenuItem>
             </motion.div>
           </DropdownMenuContent>
