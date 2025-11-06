@@ -34,11 +34,22 @@ const StringCheckList: React.FC<StringCheckListProps> = ({ subContent, checkedVa
   const cancleTopicChange = (value: boolean) => {
     setAddTopic(false)
   }
-  return (<>
-    {addTopic ? <AddTopic defaultValue={topic} cancelTopicChange={cancleTopicChange} titleIndex={titleIndex} subTitleIndex={subTitleIndex} /> :
+  return (
+  <>
+    {addTopic ? (
+      <AddTopic
+        defaultValue={topic}
+        cancelTopicChange={cancleTopicChange}
+        titleIndex={titleIndex}
+        subTitleIndex={subTitleIndex}
+      />
+    ) : (
       <div
-        className={`flex items-center gap-2 p-2 rounded ${isChecked ? "bg-green-100 line-through text-gray-500" : ""
-          }`}
+        className={`relative flex items-center gap-2 p-2 rounded ${
+          isChecked
+            ? "bg-green-100 line-through text-gray-500"
+            : ""
+        }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -48,23 +59,25 @@ const StringCheckList: React.FC<StringCheckListProps> = ({ subContent, checkedVa
           disabled={!edit}
         />
         <span>{subContent.actionSubTitle}</span>
+        {/* Motion buttons absolutely positioned — no layout shift */}
         <AnimatePresence>
           {edit && isHovered && (
             <motion.div
               key="hover-buttons"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 10, x: 20 }}
+              animate={{ opacity: 1, y: 0, x: 0 }}
+              exit={{ opacity: 0, y: 10, x: 20 }}
               transition={{ duration: 0.2 }}
-              className="flex gap-1"
+              className="absolute right-2 flex gap-1"
             >
               <DeleteButton size="small" onClick={deleteHandler} />
               <EditButton size="small" onClick={editHandler} />
             </motion.div>
           )}
         </AnimatePresence>
-      </div>}
+      </div>
+    )}
   </>
-  )
+);
 }
 export default StringCheckList
