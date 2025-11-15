@@ -5,13 +5,17 @@ import { clearUserDetails } from "@/app/redux/userDetailsSlice";
 import { APIResponse, returnErrorObject } from "@/app/types/APIResponse";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { Router } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 interface LogoutVariables {
     skipBroadcast?: boolean;
 }
 export const useLogout = () => {
+    const path = usePathname()
     const authChannel = getAuthChannel();
     const dispatch = useDispatch();
+    const router = useRouter()
     return useMutation<APIResponse<undefined>, unknown, LogoutVariables>({
         mutationFn: async () => {
             const response = await axios.get("/api/logout");
@@ -33,6 +37,9 @@ export const useLogout = () => {
                         message: response.message || "Logged out successfully",
                     })
                 );
+                if (path.includes("/profile")) {
+                    router.push('/')
+                }
             } else {
                 // Show error toast if logout failed
                 dispatch(
