@@ -3,7 +3,7 @@ import { Loading, SearchBar, Logo } from '../index'
 import UserDisplay from '../landingPage/UserDisplay/UserDisplay'
 const PagesHeader = () => {
   return (
-    <div className='w-full flex-col gap-2 sm:items-center sm:flex-row sm:justify-between my-2'>
+    <div className='w-full flex flex-col  sm:flex sm:flex-row justify-between items-center'>
       <Logo />
       <Suspense fallback={<Loading />}>
         <SearchBar />

@@ -39,7 +39,7 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
         setSearchValue("");
     };
     return (
-        <div className="flexCenter">
+        <div className="flex items-center">
             <div className="relative p-4">
                 <AbsoluteIcon left="20px" icon={<Search />} />
                 <Input
@@ -54,7 +54,7 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
                     <AbsoluteIcon right="20px" icon={<X />} onClick={handleClear} />
                 )}
             </div>
-            <Button onClick={doSubmit}>
+            <Button onClick={doSubmit} className="-ml-2 z-10">
                 <ArrowRight className="w-5 h-5" />
             </Button>
         </div>
