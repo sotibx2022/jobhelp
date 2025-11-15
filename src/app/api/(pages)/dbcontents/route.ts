@@ -82,8 +82,8 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const searchParams = url.searchParams;
     const jobTitle = searchParams.get("jobtitle");
-    const userToken = searchParams.get('usertoken')
-    let userId
+    let userId = searchParams.get('usertoken');
+    const userToken = userId
     if (!userToken) {
       userId = validateUserToken(req);
       if (!userId) {
@@ -97,12 +97,6 @@ export async function GET(req: NextRequest) {
         );
       }
     } else {
-      console.log("🔹 userToken received:", userToken);
-    const decoded = jwt.verify(userToken, config.passwordSecret!);
-    console.log("✅ JWT decoded successfully:", decoded);
-    // If your token payload has userId
-    userId = (decoded as { userId: string }).userId;
-    console.log("🔹 Extracted userId:", userId);
     }
     if (!jobTitle) {
       return NextResponse.json(
