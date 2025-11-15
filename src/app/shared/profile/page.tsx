@@ -19,6 +19,7 @@ import {
 import { BriefcaseBusiness } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useUserDetails } from '../userDetails'
+import SharedUserCard from '../SharedUserCard'
 const page = () => {
   const searchParams = useSearchParams();
   const router = useRouter()
@@ -26,12 +27,11 @@ const page = () => {
   const { userDetails, isPending } = useUserDetails(userToken ?? "")
   return (
     <div>
-      <PagesHeader />
       {isPending && <ProfileSkleton />}
       {!isPending && <div className="dbItems container">
         {userDetails && userDetails.jobTitles && userDetails.jobTitles.length > 0 ? (
           <>
-            <h2 className="secondaryHeading">Skills of {userDetails?.fullName}</h2>
+            <SharedUserCard fullName={userDetails.fullName} userToken={userToken ?? ""} link={false} text='Skills of' />
             {userDetails.jobTitles.map((singleJobTitle: SingleJobTitle, index: number) => (
               <ProgressCard jobTitle={singleJobTitle.title} score={singleJobTitle.score} editValue={false} key={index} editable={false} userToken={userToken!} shared={true} />
             ))}
@@ -53,7 +53,6 @@ const page = () => {
           </Empty>
         )}
       </div>}
-      <CommonFooter />
     </div>
   )
 }

@@ -14,6 +14,9 @@ import { RoadMapState } from '@/app/redux/roadmapSlice';
 import { APIResponse } from '@/app/types/APIResponse';
 import { ContentUIType } from '@/app/types/roadmapTypes';
 import Link from 'next/link';
+import { ArrowLeft, User } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import SharedUserCard from '../SharedUserCard';
 const Page = () => {
   const searchParams = useSearchParams();
   const jobTitle = searchParams.get('jobtitle') ?? '';
@@ -45,7 +48,9 @@ const Page = () => {
   const contentsData = contents?.data ?? { jobTitle: 'N/A', roadMapContents: [] };
   // ✅ Handle loading state cleanly
   if ((contentsPending || userDetailsPending) && contentsData.roadMapContents.length === 0) {
-    return <SkletonRoadmapPage />;
+    return <div className="container">
+      <SkletonRoadmapPage />
+    </div>
   }
   // ✅ Handle API errors gracefully
   if (contentsError) {
@@ -57,12 +62,7 @@ const Page = () => {
   }
   return (
     <>
-      <PagesHeader />
-      <div className="container w-full">
-        <div className="userProfile py-4 text-xl font-semibold text-center">
-          {userDetails?.fullName ?? 'Guest User'}
-          <Link href={`/shared/profile?usertoken=${userToken}`}>GO Back to Profile</Link>
-        </div>
+      <div className="container w-full relative">
         <ProgressCard
           jobTitle={contentsData.jobTitle}
           score={score}
@@ -70,6 +70,7 @@ const Page = () => {
           editable
           readOnly
         />
+        <SharedUserCard fullName={userDetails?.fullName} userToken={userToken} link={true} />
         {contentsData.roadMapContents.length > 0 && (
           <Accordion
             type="multiple"
@@ -82,7 +83,6 @@ const Page = () => {
           </Accordion>
         )}
       </div>
-      <CommonFooter />
     </>
   );
 };
