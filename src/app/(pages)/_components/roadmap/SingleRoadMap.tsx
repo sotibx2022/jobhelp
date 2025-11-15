@@ -50,9 +50,9 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
   return (
     <AccordionItem value={`item-${index}`} className="border roundedExtra mb-4">
       <AccordionTrigger className="px-4 py-3 hover:no-underline">
-        <div className="flex justify-between items-center w-full pr-4">
+        <div className="flex  flex-col gap-2 md:flex-row md:justify-between md:items-center w-full pr-4">
           {/* Left side: Title and Badge */}
-          <div className="flex items-center gap-3 flex-col md:flex-row">
+          <div className="flex  gap-3 flex-col md:flex-row">
             {edit && addTopic ? (
               <AddTopic
                 defaultValue={content.actionTitle}
@@ -68,7 +68,7 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
           </div>
           {/* Right side: Edit/Delete buttons */}
           {edit && !addTopic && (
-            <div className="flex items-center gap-2">
+            <div className="flex gap-2">
               <EditButton onClick={handleEdit} />
               <DeleteButton size="small" onClick={() => handleDelete(index)} />
             </div>
