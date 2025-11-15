@@ -44,6 +44,7 @@ const SelectableCountries: React.FC<ISelectableCountriesProps> = ({ selectedCoun
     currentParams.set("country", newCountry);
     router.push(`${pathname}?${currentParams.toString()}`, { scroll: false });
     if (selectedCountry) {
+      selectedCountry(newCountry)
     }
   };
   const [open, setOpen] = React.useState(false);

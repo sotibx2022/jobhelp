@@ -28,7 +28,6 @@ const sidebarItems = [
   { label: "Roadmap", icon: Route, href: "/roadmap" },
   { label: "Resume", icon: FileText, href: "/resume" },
   { label: "Salary", icon: DollarSign, href: '/salary' },
-  { label: "Jobs", icon: BriefcaseBusiness, href: '/jobs' }
 ];
 const AppSidebar = () => {
   const { state, isMobile } = useSidebar()
