@@ -13,17 +13,7 @@ const Page = async () => {
     queryKey: ['userDetails'],
     queryFn: getUserDetails
   })
-  queryClient.prefetchQuery({
-    queryKey: ['country'],
-    queryFn: async () => {
-      try {
-        const response = await axios.post("https://ipapi.co/json/");
-        return response.data.country_name;
-      } catch (error) {
-        return "United States";
-      }
-    }
-  })
+  
   const dehydratedState = dehydrate(queryClient)
   return (
     <DisplayProvider>

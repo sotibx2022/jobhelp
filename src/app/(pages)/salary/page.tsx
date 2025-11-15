@@ -11,14 +11,6 @@ interface ISearchParams {
     country: string;
   }>;
 }
-const allHeaders = await headers();
-  const country = allHeaders.get("x-vercel-ip-country") ?? "US";
-  let finalUrl: string | null = null;
-  if (country) {
-    const url = new URL(process.env.NEXT_PUBLIC_WEBSITE_URL!);
-    url.searchParams.set("country", country);
-    finalUrl = url.toString();
-  }
 // Function to generate metadata
 export async function generateMetadata({ searchParams: mySearchParams }: ISearchParams) {
   const searchParams = await mySearchParams;

@@ -6,7 +6,6 @@ import {
     QueryClientProvider,
 } from "@tanstack/react-query";
 import axios from "axios";
-import { headers } from "next/headers";
 import React, { ReactNode, useState, useEffect } from "react";
 const QueryProvider = ({ children }: { children: ReactNode }) => {
     const [queryClient] = useState(

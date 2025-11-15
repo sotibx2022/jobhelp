@@ -3,12 +3,12 @@ import type { jobSalaryType } from "@/app/types/jobSalary"
 import type React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { type ChartConfig } from "@/components/ui/chart"
-import { 
-  Select, 
-  SelectItem, 
-  SelectContent, 
+import {
+  Select,
+  SelectItem,
+  SelectContent,
   SelectTrigger,
-  SelectValue 
+  SelectValue
 } from "@/components/ui/select"
 import { useState } from "react"
 import BarChartContent from "./BarChartContent"
@@ -29,11 +29,11 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
     expert: 8,
   }
   const experienceColors: Record<string, string> = {
-  intern: "#ADD8E6",
-  junior: "#87CEEB",
-  senior: "#1E3A8A",
-  expert: "#00008B",
-}
+    intern: "#ADD8E6",
+    junior: "#87CEEB",
+    senior: "#1E3A8A",
+    expert: "#00008B",
+  }
   const experienceLabels: Record<string, string> = {
     intern: "Intern",
     junior: "Junior",
@@ -45,28 +45,28 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
       experience: "intern",
       label: experienceLabels["intern"],
       years: experienceYears["intern"],
-      salary: Number.parseInt(intern.replace(/,/g, ""), 10),
+      salary: intern,
       fill: experienceColors["intern"],
     },
     {
       experience: "junior",
       label: experienceLabels["junior"],
       years: experienceYears["junior"],
-      salary: Number.parseInt(junior.replace(/,/g, ""), 10),
+      salary: junior,
       fill: experienceColors["junior"],
     },
     {
       experience: "senior",
       label: experienceLabels["senior"],
       years: experienceYears["senior"],
-      salary: Number.parseInt(senior.replace(/,/g, ""), 10),
+      salary: senior,
       fill: experienceColors["senior"],
     },
     {
       experience: "expert",
       label: experienceLabels["expert"],
       years: experienceYears["expert"],
-      salary: Number.parseInt(expert.replace(/,/g, ""), 10),
+      salary: expert,
       fill: experienceColors["expert"],
     },
   ]
@@ -82,8 +82,8 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
         <div>
           <CardTitle className="secondaryHeading">Salary by Experience</CardTitle>
         </div>
-        <Select 
-          value={salaryDuration} 
+        <Select
+          value={salaryDuration}
           onValueChange={(value: "Hour" | "Month" | "Annual") => setSalaryDuration(value)}
         >
           <SelectTrigger className="w-[120px] sm:w-[140px]">
@@ -97,13 +97,13 @@ const SalaryBarChart: React.FC<ISalaryData> = ({ salaryData }) => {
         </Select>
       </CardHeader>
       <CardContent className="flex-1 p-0">
-        <BarChartContent 
-          chartConfig={chartConfig} 
-          chartData={chartData} 
+        <BarChartContent
+          chartConfig={chartConfig}
+          chartData={chartData}
           salaryDuration={salaryDuration}
           salaryByExperience={salaryByExperience}
           currency={currency}
-          averageSalary ={mid}
+          averageSalary={mid.toString()}
         />
       </CardContent>
     </Card>

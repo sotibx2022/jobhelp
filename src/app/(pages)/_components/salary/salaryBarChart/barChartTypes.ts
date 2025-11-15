@@ -1,11 +1,11 @@
 import { ChartConfig } from "@/components/ui/chart"
 // Salary by experience type
 export interface ISalaryByExperience {
-  intern: string
-  junior: string
-  mid: string
-  senior: string
-  expert: string
+  intern: number,
+  junior: number,
+  mid: number,
+  senior: number,
+  expert: number,
   currency: string
 }
 // Each item in chartData

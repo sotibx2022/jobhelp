@@ -38,27 +38,27 @@ const SalaryTrendChart: React.FC<ISalaryTrendChartProps> = ({ chartData }) => {
   const transformedData = [
     {
       experience: "intern",
-      salary: Number.parseInt(chartData.salaryByExperience.intern.replace(/,/g, "")),
+      salary: chartData.salaryByExperience.intern,
       fill: "var(--color-intern)",
     },
     {
       experience: "junior",
-      salary: Number.parseInt(chartData.salaryByExperience.junior.replace(/,/g, "")),
+      salary: chartData.salaryByExperience.junior,
       fill: "var(--color-junior)",
     },
     {
       experience: "mid",
-      salary: Number.parseInt(chartData.salaryByExperience.mid.replace(/,/g, "")),
+      salary: chartData.salaryByExperience.mid,
       fill: "var(--color-mid)",
     },
     {
       experience: "senior",
-      salary: Number.parseInt(chartData.salaryByExperience.senior.replace(/,/g, "")),
+      salary:chartData.salaryByExperience.senior,
       fill: "var(--color-senior)",
     },
     {
       experience: "expert",
-      salary: Number.parseInt(chartData.salaryByExperience.expert.replace(/,/g, "")),
+      salary: chartData.salaryByExperience.expert,
       fill: "var(--color-expert)",
     },
   ]
