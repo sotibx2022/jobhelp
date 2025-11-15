@@ -1,3 +1,4 @@
+import { clearRoadMapItems } from "@/app/redux/roadmapSlice";
 import { setToast } from "@/app/redux/toastSlice";
 import { setJobTitles } from "@/app/redux/userDetailsSlice";
 import { APIResponse, returnErrorObject } from "@/app/types/APIResponse";
@@ -38,6 +39,7 @@ export const useSaveRoadMapMutation = () => {
             queryClient.invalidateQueries({ queryKey: ['userDetails'] });
             dispatch(setJobTitles({ title: jobTitle, score }));
             dispatch(setToast({ toastType: 'success', message: response.message }));
+            dispatch(clearRoadMapItems())
         },
         onError: (error) => {
             dispatch(setToast({ toastType: 'error', message: error.message }));
