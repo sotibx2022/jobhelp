@@ -61,7 +61,7 @@ const LoginPage = () => {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <GoogleLogin />
+          {/* <GoogleLogin /> */}
           <AuthLinks component="login" />
         </CardFooter>
       </Card>
