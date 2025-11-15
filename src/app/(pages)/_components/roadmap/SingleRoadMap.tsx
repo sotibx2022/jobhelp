@@ -52,7 +52,7 @@ const SingleRoadMap: React.FC<SingleRoadMapProps> = ({
       <AccordionTrigger className="px-4 py-3 hover:no-underline">
         <div className="flex justify-between items-center w-full pr-4">
           {/* Left side: Title and Badge */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-col md:flex-row">
             {edit && addTopic ? (
               <AddTopic
                 defaultValue={content.actionTitle}
