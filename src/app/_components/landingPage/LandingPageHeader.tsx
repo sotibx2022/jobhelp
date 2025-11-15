@@ -4,7 +4,7 @@ import {Logo} from './../index'
 import UserDisplay from './UserDisplay/UserDisplay'
 const LandingPageHeader = () => {
   return (
-    <div className="mt-2 w-full flex flex-col md:flex-row">
+    <div className="mt-2 w-full flex  flex-col-reverse md:flex-row">
   {/* First row: Logo left */}
   <div className="flex justify-start">
     <Logo />
