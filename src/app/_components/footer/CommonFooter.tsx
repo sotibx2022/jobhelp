@@ -26,10 +26,6 @@ const CommonFooter = () => {
       icon: FileText,
     },
     {
-      title: "Job",
-      icon: Search,
-    },
-    {
       title: "Roadmap",
       icon: Map,
     },
@@ -50,7 +46,7 @@ const CommonFooter = () => {
             >
               <div className="flex justify-center">
                 <feature.icon
-                  className="w-8 h-8 text-muted-foreground group-hover:scale-110 transition-all duration-300"
+                  className="w-6 h-6 text-muted-foreground group-hover:scale-110 transition-all duration-300"
                 />
               </div>
               <div className="primaryParagraph">
