@@ -27,7 +27,7 @@ const SuccessToast: React.FC<{ message?: string }> = ({ message = "Success" }) =
           animate={isOpen ? { x: 0, opacity: 1 } : { x: "100vw", opacity: 0 }}
           exit={{ x: "100vw", opacity: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="fixed bottom-[20px] left-1/2 transform -translate-x-1/2 w-auto max-w-md"
+          className="fixed bottom-[20px] left-1/2 transform -translate-x-1/2 w-auto max-w-md z-50"
         >
           <div className="bg-white border-l-4 border-green-500 shadow-lg flex items-center gap-3 p-4 relative border-0">
             <div className="flex items-center gap-3 flex-1">

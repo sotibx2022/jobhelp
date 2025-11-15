@@ -48,7 +48,7 @@ const ShareProfileInfo = () => {
         dependencies: [copied]
     })
     return (
-        <div className='fixed top-1/2 transform -translate-y-1/2 right-0 flexCenter'>
+        <div className='fixed top-1/2 transform -translate-y-1/2 right-0 flexCenter z-10'>
             <div className="max-w-md mx-auto relative">
                 <Button variant={"outline"} className='absolute right-0 top-0' onClick={() => setVisibleComponent('shareButton')}>
                     <X />

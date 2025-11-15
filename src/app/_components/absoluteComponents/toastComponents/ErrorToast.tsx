@@ -29,7 +29,7 @@ const ErrorToast: React.FC<{ message?: string }> = ({ message = "error" }) => {
                     transition={{ duration: 0.5 }}
                     className='fixed bottom-[20px] left-1/2 transform -translate-x-1/2 w-auto max-w-md z-10'
                 >
-                    <div className='bg-white border-l-4 border-red-500 shadow-lg flex items-center gap-3 p-4 relative border-0'>
+                    <div className='bg-white border-l-4 border-red-500 shadow-lg flex items-center gap-3 p-4 relative border-0 z-10'>
                         <div className='flex items-center gap-3 flex-1'>
                             <ErrorCircleBig className='w-6 h-6 text-red-500 flex-shrink-0' />
                             <p className='text-gray-900 font-medium text-sm'>
