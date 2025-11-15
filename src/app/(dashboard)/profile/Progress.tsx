@@ -16,6 +16,7 @@ import { User } from "lucide-react";
 import { RootState } from "@/app/redux/store";
 import { deleteJobTitle } from "@/app/redux/userDetailsSlice";
 import { removeJobDetails, setJobDetails } from "@/app/redux/jobdetailsSlice";
+import { clearRoadMapItems } from "@/app/redux/roadmapSlice";
 interface ProgressCardProps {
   jobTitle: string;
   score: number;
@@ -63,6 +64,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
         queryClient.invalidateQueries({ queryKey: ['userDetails'] })
       } else {
         dispatch(setToast({ toastType: 'error', message: response.message }))
+        dispatch(clearRoadMapItems())
       }
     }
   })
