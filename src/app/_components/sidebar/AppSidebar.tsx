@@ -14,6 +14,7 @@ import {
   FileText,
   BriefcaseBusiness,
   Edit,
+  DollarSign,
 } from "lucide-react"
 import { SidebarItem } from "./SidebarItem";
 import { useSelector } from "react-redux";
@@ -26,6 +27,8 @@ import Link from "next/link";
 const sidebarItems = [
   { label: "Roadmap", icon: Route, href: "/roadmap" },
   { label: "Resume", icon: FileText, href: "/resume" },
+  { label: "Salary", icon: DollarSign, href: '/salary' },
+  { label: "Jobs", icon: BriefcaseBusiness, href: '/jobs' }
 ];
 const AppSidebar = () => {
   const { state, isMobile } = useSidebar()
@@ -55,7 +58,7 @@ const AppSidebar = () => {
             <BriefcaseBusiness />
             {jobTitle}
           </h2>
-          {user?.jobTitles && user?.jobTitles?.length > 0 && <Edit onClick={() => router.push('/profile')} className="linkText w-4 h-4 cursor-pointer"/>}
+          {user?.jobTitles && user?.jobTitles?.length > 0 && <Edit onClick={() => router.push('/profile')} className="linkText w-4 h-4 cursor-pointer" />}
         </div>
         <div className="sidebarProfile flex gap-2 items-center">
           <Link href="/profile" className="linkText capitalize">{user?.fullName || "Guest User"}</Link>
