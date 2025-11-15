@@ -7,16 +7,19 @@ export const config = {
 };
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  // Check if the path is an auth path
-  const authPath = ["login", "register", "reset"].some((p) => path.includes(p));
-  const restrictedPath = path.includes("profile");
+  // Define exact auth paths and restricted paths
+  const authPaths = ["/login", "/register", "/reset"];
+  const restrictedPaths = ["/profile"];
   // Validate token
   const isTokenValid = validateUserToken(request);
-  if (isTokenValid && authPath && path !== "/profile") {
+  // If user is logged in and trying to access auth pages, redirect to profile
+  if (isTokenValid && authPaths.includes(path)) {
     return NextResponse.redirect(new URL("/profile", request.url));
-  } else if (!isTokenValid && restrictedPath && path !== "/login") {
-    return NextResponse.redirect(new URL("/login", request.url));
-  } else {
-    return NextResponse.next();
   }
+  // If user is NOT logged in and trying to access restricted pages, redirect to login
+  if (!isTokenValid && restrictedPaths.some((p) => path.startsWith(p))) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+  // Otherwise, continue as normal
+  return NextResponse.next();
 }
