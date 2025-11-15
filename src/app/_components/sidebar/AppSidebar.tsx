@@ -37,7 +37,7 @@ const AppSidebar = () => {
   const searchParams = useSearchParams()
   const jobTitle = searchParams.get('jobtitle')
   const router = useRouter()
-  const LogOut = useLogout()
+  const logout = useLogout()
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -68,7 +68,7 @@ const AppSidebar = () => {
             </Link>
           )}
         </div>
-        {user ? <Button variant={'destructive'} onClick={() => LogOut.mutate}>Logout</Button> :
+        {user ? <Button variant={'destructive'} onClick={() => logout.mutate({ skipBroadcast: false })}>Logout</Button> :
           <Button variant={'secondary'} onClick={() => router.push('/register')}> Register</Button>}
       </SidebarFooter>
     </Sidebar>
