@@ -4,12 +4,21 @@ import { jobSalaryType } from "@/app/types/jobSalary";
 import { Salary } from "../_components";
 import { getQueryClient } from "@/hooks/getQueryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { headers } from "next/headers";
 interface ISearchParams {
   searchParams: Promise<{
     jobtitle: string;
     country: string;
   }>;
 }
+const allHeaders = await headers();
+  const country = allHeaders.get("x-vercel-ip-country") ?? "US";
+  let finalUrl: string | null = null;
+  if (country) {
+    const url = new URL(process.env.NEXT_PUBLIC_WEBSITE_URL!);
+    url.searchParams.set("country", country);
+    finalUrl = url.toString();
+  }
 // Function to generate metadata
 export async function generateMetadata({ searchParams: mySearchParams }: ISearchParams) {
   const searchParams = await mySearchParams;
@@ -45,13 +54,14 @@ const Page = async ({ searchParams: mySearchParams }: ISearchParams) => {
   const country = searchParams.country;
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
-    queryKey:['jobSalaryDetails',jobTitle,country],
-    queryFn:()=> getJobDetails<jobSalaryType>(
-    `${config.websiteUrl}/api/salary?jobtitle=${jobTitle}&country=${country}`)})
-    const dehydratedState = dehydrate(queryClient)
+    queryKey: ['jobSalaryDetails', jobTitle, country],
+    queryFn: () => getJobDetails<jobSalaryType>(
+      `${config.websiteUrl}/api/salary?jobtitle=${jobTitle}&country=${country}`)
+  })
+  const dehydratedState = dehydrate(queryClient)
   return (
     <HydrationBoundary state={dehydratedState}>
-    <Salary jobTitle={jobTitle} country={country}/>
+      <Salary jobTitle={jobTitle} country={country} />
     </HydrationBoundary>
   );
 };
