@@ -33,7 +33,7 @@ const page = () => {
           <>
             <h2 className="secondaryHeading">Skills of {userDetails?.fullName}</h2>
             {userDetails.jobTitles.map((singleJobTitle: SingleJobTitle, index: number) => (
-              <ProgressCard jobTitle={singleJobTitle.title} score={singleJobTitle.score} editValue={false} key={index} editable={false} userToken={userToken!} />
+              <ProgressCard jobTitle={singleJobTitle.title} score={singleJobTitle.score} editValue={false} key={index} editable={false} userToken={userToken!} shared={true} />
             ))}
           </>
         ) : (
