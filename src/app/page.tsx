@@ -6,11 +6,23 @@ import { getQueryClient } from '@/hooks/getQueryClient'
 import { dehydrate, hydrate, HydrationBoundary } from '@tanstack/react-query'
 import { getUserDetails } from './functions/queryFunctions/getUserDetails'
 import { SelectableCountries } from './(pages)/_components'
+import axios from 'axios'
 const Page = async () => {
   const queryClient = getQueryClient();
   queryClient.prefetchQuery({
     queryKey: ['userDetails'],
     queryFn: getUserDetails
+  })
+  queryClient.prefetchQuery({
+    queryKey: ['country'],
+    queryFn: async () => {
+      try {
+        const response = await axios.post("https://ipapi.co/json/");
+        return response.data.country_name;
+      } catch (error) {
+        return "United States";
+      }
+    }
   })
   const dehydratedState = dehydrate(queryClient)
   return (
