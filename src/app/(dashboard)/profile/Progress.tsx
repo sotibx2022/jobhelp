@@ -50,31 +50,31 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
       router.push(`/shared/roadmap?usertoken=${userToken}&jobtitle=${jobTitle}`)
     } else {
       router.push(`/roadmap?jobtitle=${jobTitle}`)
-      dispatch(setJobDetails({jobTitle}))
+      dispatch(setJobDetails({ jobTitle }))
     }
   }
   const deleteRoadMapMutation = useMutation({
-  mutationFn: async ({ jobTitle, userId }: { jobTitle: string; userId: string }) => {
-    const response = await axios.post(
-      '/api/deletedbcontent',
-      { jobTitle, userId },
-      {
-        validateStatus: () => true   // 👈 always resolve, never throw
+    mutationFn: async ({ jobTitle, userId }: { jobTitle: string; userId: string }) => {
+      const response = await axios.post(
+        '/api/deletedbcontent',
+        { jobTitle, userId },
+        {
+          validateStatus: () => true   // 👈 always resolve, never throw
+        }
+      );
+      return response.data;
+    },
+    onSuccess: (response: APIResponse<undefined>) => {
+      if (response.success) {
+        dispatch(setToast({ toastType: 'success', message: response.message }));
+        dispatch(deleteJobTitle(jobTitle));
+        queryClient.invalidateQueries({ queryKey: ['userDetails'] });
+      } else {
+        dispatch(setToast({ toastType: 'success', message: "Roadmap Item saved Locally, was deleted" }));
+        dispatch(clearRoadMapItems());
       }
-    );
-    return response.data;
-  },
-  onSuccess: (response: APIResponse<undefined>) => {
-    if (response.success) {
-      dispatch(setToast({ toastType: 'success', message: response.message }));
-      dispatch(deleteJobTitle(jobTitle));
-      queryClient.invalidateQueries({ queryKey: ['userDetails'] });
-    } else {
-      dispatch(setToast({ toastType: 'error', message: response.message }));
-      dispatch(clearRoadMapItems());
-    }
-  },
-});
+    },
+  });
   function deleteRoadMapItem(): void {
     deleteRoadMapMutation.mutate({ jobTitle, userId: user!._id });
     dispatch(removeJobDetails(""))
@@ -97,7 +97,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
                   <DeleteButton onClick={deleteRoadMapItem} />
                 </ButtonGroup>
               </div>
-            ):null}
+            ) : null}
           </div>
         )}
       </CardHeader>

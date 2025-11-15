@@ -20,13 +20,12 @@ export async function GET(req: NextRequest) {
       );
     }
     // Create a new JWT token for the user
-    const userToken = jwt.sign({ userId }, config.passwordSecret!);
     return NextResponse.json(
       {
         message: 'User token created successfully',
         status: 201,
         success: true,
-        data: userToken,
+        data: userId,
       } as APIResponseSuccess<string>,
     );
   } catch (error: any) {
@@ -52,17 +51,8 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    // Verify JWT token
-    let decoded;
-    try {
-      decoded = jwt.verify(userToken, config.passwordSecret!) as { userId: string };
-    } catch (jwtError: any) {
-      return NextResponse.json(
-        { message: "Invalid or expired token", success: false, status: 401, error: jwtError.message },
-        { status: 401 }
-      );
-    }
-    const userId = decoded.userId;
+    
+    let userId = userToken
     if (!userId) {
       return NextResponse.json(
         { message: "Invalid token payload", success: false, status: 401 },
