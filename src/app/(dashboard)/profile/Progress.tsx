@@ -54,20 +54,27 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
     }
   }
   const deleteRoadMapMutation = useMutation({
-    mutationFn: async ({ jobTitle, userId }: { jobTitle: string; userId: string }) => {
-      const response = await axios.post('/api/deletedbcontent', { jobTitle, userId })
-      return response.data;
-    }, onSuccess: (response: APIResponse<undefined>) => {
-      if (response.success) {
-        dispatch(setToast({ toastType: 'success', message: response.message }))
-        dispatch(deleteJobTitle(jobTitle))
-        queryClient.invalidateQueries({ queryKey: ['userDetails'] })
-      } else {
-        dispatch(setToast({ toastType: 'error', message: response.message }))
-        dispatch(clearRoadMapItems())
+  mutationFn: async ({ jobTitle, userId }: { jobTitle: string; userId: string }) => {
+    const response = await axios.post(
+      '/api/deletedbcontent',
+      { jobTitle, userId },
+      {
+        validateStatus: () => true   // 👈 always resolve, never throw
       }
+    );
+    return response.data;
+  },
+  onSuccess: (response: APIResponse<undefined>) => {
+    if (response.success) {
+      dispatch(setToast({ toastType: 'success', message: response.message }));
+      dispatch(deleteJobTitle(jobTitle));
+      queryClient.invalidateQueries({ queryKey: ['userDetails'] });
+    } else {
+      dispatch(setToast({ toastType: 'error', message: response.message }));
+      dispatch(clearRoadMapItems());
     }
-  })
+  },
+});
   function deleteRoadMapItem(): void {
     deleteRoadMapMutation.mutate({ jobTitle, userId: user!._id });
     dispatch(removeJobDetails(""))
