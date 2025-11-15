@@ -28,13 +28,10 @@ const page = () => {
     <div>
       <PagesHeader />
       {isPending && <ProfileSkleton />}
-      <div className="userProfile container">
-        {userDetails?.fullName}
-      </div>
       {!isPending && <div className="dbItems container">
         {userDetails && userDetails.jobTitles && userDetails.jobTitles.length > 0 ? (
           <>
-            <h2 className="secondaryHeading">Saved Job Titles</h2>
+            <h2 className="secondaryHeading">Skills of {userDetails?.fullName}</h2>
             {userDetails.jobTitles.map((singleJobTitle: SingleJobTitle, index: number) => (
               <ProgressCard jobTitle={singleJobTitle.title} score={singleJobTitle.score} editValue={false} key={index} editable={false} userToken={userToken!} />
             ))}

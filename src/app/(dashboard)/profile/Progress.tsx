@@ -25,6 +25,7 @@ interface ProgressCardProps {
   editable: boolean;
   userToken?: string;
   readOnly?: boolean;
+  shared?:boolean;
 }
 const ProgressCard: React.FC<ProgressCardProps> = ({
   jobTitle,
@@ -33,7 +34,8 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
   setEditChild,
   editable,
   userToken,
-  readOnly
+  readOnly,
+  shared=false,
 }) => {
   const dispatch = useDispatch()
   const queryClient = useQueryClient()
@@ -94,7 +96,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
               <div className="progressActions">
                 <ButtonGroup>
                   <ViewButton onClick={redirectToRoadMap} />
-                  <DeleteButton onClick={deleteRoadMapItem} />
+                  {!shared && <DeleteButton onClick={deleteRoadMapItem} />}
                 </ButtonGroup>
               </div>
             ) : null}
