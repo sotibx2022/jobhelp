@@ -10,7 +10,7 @@ export const SidebarItem = ({ label, icon: Icon, href, showText = true }: any) =
     <li>
       <Link
         href={`${href}?jobtitle=${jobTitleState}`}
-        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors cursor-pointer
+        className={`flex items-center gap-3  py-2 rounded-lg transition-colors cursor-pointer
           ${isActive
             ? "text-primary"
             : "hover:bg-muted text-muted-foreground"

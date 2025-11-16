@@ -15,6 +15,8 @@ import {
   BriefcaseBusiness,
   Edit,
   DollarSign,
+  LogOut,
+  UserPlus,
 } from "lucide-react"
 import { SidebarItem } from "./SidebarItem";
 import { useSelector } from "react-redux";
@@ -55,20 +57,26 @@ const AppSidebar = () => {
         <div className="sidebarFooterHeader flex gap-2">
           <h2 className="primaryPatagraph capitalize flex gap-2">
             <BriefcaseBusiness />
-            {jobTitle}
+            {showText && jobTitle}
           </h2>
           {user?.jobTitles && user?.jobTitles?.length > 0 && <Edit onClick={() => router.push('/profile')} className="linkText w-4 h-4 cursor-pointer" />}
         </div>
         <div className="sidebarProfile flex gap-2 items-center">
-          <Link href="/profile" className="linkText capitalize">{user?.fullName || "Guest User"}</Link>
+          {showText && <Link href="/profile" className="linkText capitalize">{user?.fullName || "Guest User"}</Link>}
           {user && (
             <Link href="/profile" className="linkText">
               <User className="w-4 h-4" />
             </Link>
           )}
         </div>
-        {user ? <Button variant={'destructive'} onClick={() => logout.mutate({ skipBroadcast: false })}>Logout</Button> :
-          <Button variant={'secondary'} onClick={() => router.push('/register')}> Register</Button>}
+        {user ? <Button variant={'destructive'} onClick={() => logout.mutate({ skipBroadcast: false })} className="flex gap-1 items-center">
+          <LogOut />
+          {showText && "Logout"}
+        </Button> :
+          <Button variant={'secondary'} onClick={() => router.push('/register')}>
+            {showText && "Register"}
+            <UserPlus />
+          </Button>}
       </SidebarFooter>
     </Sidebar>
   )
