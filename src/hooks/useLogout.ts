@@ -3,7 +3,7 @@ import { clearRoadMapItems } from "@/app/redux/roadmapSlice";
 import { setToast } from "@/app/redux/toastSlice";
 import { clearUserDetails } from "@/app/redux/userDetailsSlice";
 import { APIResponse, returnErrorObject } from "@/app/types/APIResponse";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Router } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ interface LogoutVariables {
     skipBroadcast?: boolean;
 }
 export const useLogout = () => {
+    const queryClient = useQueryClient()
     const path = usePathname()
     const authChannel = getAuthChannel();
     const dispatch = useDispatch();
@@ -21,11 +22,12 @@ export const useLogout = () => {
             const response = await axios.get("/api/logout");
             return response.data;
         },
-        onSuccess: (response: APIResponse<undefined>, variables: LogoutVariables) => {
+        onSuccess: async (response: APIResponse<undefined>, variables: LogoutVariables) => {
             if (response.success) {
                 // Clear all relevant Redux state
                 dispatch(clearUserDetails());
                 dispatch(clearRoadMapItems());
+                await queryClient.invalidateQueries({ queryKey: ['userDetails'], refetchType: 'active' })
                 // Broadcast logout to other tabs if needed
                 if (!variables.skipBroadcast) {
                     authChannel?.postMessage("logout");
