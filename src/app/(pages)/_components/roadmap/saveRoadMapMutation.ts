@@ -5,8 +5,10 @@ import { APIResponse, returnErrorObject } from "@/app/types/APIResponse";
 import { ContentUIType, IRoadMapContentsDBType } from "@/app/types/roadmapTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 export const useSaveRoadMapMutation = () => {
+    const router = useRouter();
     const dispatch = useDispatch();
     const queryClient = useQueryClient();
     return useMutation<
@@ -40,6 +42,7 @@ export const useSaveRoadMapMutation = () => {
             dispatch(setJobTitles({ title: jobTitle, score }));
             dispatch(setToast({ toastType: 'success', message: response.message }));
             dispatch(clearRoadMapItems())
+            router.push('/profile');
         },
         onError: (error) => {
             dispatch(setToast({ toastType: 'error', message: error.message }));
