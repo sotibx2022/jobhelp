@@ -22,7 +22,7 @@ const SearchBar: React.FC<{ jobTitle?: string }> = ({ jobTitle }) => {
     }, [searchParams])
     const doSubmit = () => {
         if (!searchValue.trim()) return;
-        localStorage.setItem('jobTitle', JSON.stringify('Maintenance planner'));
+        localStorage.setItem('jobTitle', JSON.stringify(searchValue));
         dispatch(addJobDetails({ jobTitle: searchValue }));
         router.push(`/roadmap?jobtitle=${encodeURIComponent(searchValue)}`);
     }
